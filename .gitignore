@@ -1,0 +1,16 @@
+myenv/
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+db.sqlite3
+db.sqlite3-journal
+
+# Frontend/node
+node_modules/
+
+# System files
+.DS_Store
