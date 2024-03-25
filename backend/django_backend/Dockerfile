@@ -1,10 +1,10 @@
-FROM python:3.9
+FROM python:3.12
 
 WORKDIR /app/backend
 
 COPY requirements.txt .
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-RUN python manage.py migrate
 
 COPY . .
 
