@@ -8,16 +8,16 @@
    Mac:
 
    ```bash
-   python3 -m virtualenv env
-   source env/bin/activate
+   python3 -m virtualenv myenv
+   source myenv/bin/activate
    pip install -r requirements.txt
    ```
 
    Windows:
 
    ```bash
-   python -m venv env
-   .\env\Scripts\activate
+   python -m venv myenv
+   .\myenv\Scripts\activate
    pip install -r requirements.txt
    ```
 
@@ -53,14 +53,14 @@ When you want to start the backend after pulling the latest code from the main b
    Mac:
 
    ```bash
-   source env/bin/activate
+   source myenv/bin/activate
    pip install -r requirements.txt
    ```
 
    Windows:
 
    ```bash
-   .\env\Scripts\activate
+   .\myenv\Scripts\activate
    pip install -r requirements.txt
    ```
 
