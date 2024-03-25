@@ -79,13 +79,12 @@ WSGI_APPLICATION = 'django_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-my_db_password = os.getenv('DB_PASSWORD')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'development',
         'USER': 'postgres',
-        'PASSWORD': my_db_password,  # Add your postgres user's password
+        'PASSWORD': ",;YN#2K~2K~xH?rS",  # Add your postgres user's password
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
