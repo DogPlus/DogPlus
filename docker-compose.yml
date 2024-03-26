@@ -16,6 +16,7 @@ services:
   frontend:
     build:
       context: ./frontend/dogplus-frontend
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     volumes:
