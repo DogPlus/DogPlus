@@ -82,11 +82,11 @@ WSGI_APPLICATION = 'django_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'development',
-        'USER': 'postgres',
-        'PASSWORD': ",;YN#2K~2K~xH?rS",  # Add your postgres user's password
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': 'dogplus_db',          # PostgreSQL database name
+        'USER': 'dog',                 # PostgreSQL username
+        'PASSWORD': 'plus',            # PostgreSQL password
+        'HOST': 'db',                  # This should match the service name defined in Docker Compose
+        'PORT': '5432',                # PostgreSQL port (default is 5432)
     }
 }
 

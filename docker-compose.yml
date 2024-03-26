@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: ./backend/django_backend/
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:
@@ -16,6 +16,7 @@ services:
   frontend:
     build:
       context: ./frontend/dogplus-frontend
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     volumes:
@@ -33,6 +34,6 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
-
+    
 volumes:
   db_data:
