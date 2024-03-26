@@ -19,8 +19,9 @@ import google.auth
 from google.cloud import secretmanager
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+SECRET_KEY = 'django-insecure-u4!&t@ga$9!dh#6wrtnu4x@^)_lxvt-2p1g(69+$^du4&eg1ns'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -46,7 +47,7 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 
     client = secretmanager.SecretManagerServiceClient()
-    settings_name = os.environ.get("SETTINGS_NAME", "django_settings")
+    settings_name = os.environ.get("SETTINGS_NAME", "django_settings-f21e")
     name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
     payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
 
