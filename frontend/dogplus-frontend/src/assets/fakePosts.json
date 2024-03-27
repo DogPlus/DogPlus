@@ -1,0 +1,14 @@
+[
+    {
+      "id": 1,
+      "author": "Sankeethan Sivachandran",
+      "text": "This is the first fake post."
+    },
+    {
+      "id": 2,
+      "author": "Vegard Sjåvik",
+      "text": "Here goes the second fake post.",
+      "image": "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg"
+    }
+]
+  
