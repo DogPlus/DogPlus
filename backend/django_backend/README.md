@@ -1,3 +1,23 @@
+# Running the backend on the cloud
+The setup for this project on Google Cloud Platform was made using [this guide](https://cloud.google.com/python/django/run). This website outlines alot of different steps needed to setup the application in the cloud. However, this is already done. So you can safely skip to the headline "Deploying the app to Cloud Run".Following is the commands you are required to run to deploy the backend. Make sure you are in the django_backend folder:
+
+## Updating the application on cloud
+1. Run the Cloud Build build and migration script:
+```sh 
+gcloud builds submit --config cloudmigrate.yaml
+```
+2. Deploy the service:
+```sh 
+gcloud run deploy api-service \
+    --platform managed \
+    --region europe-west12 \
+    --image gcr.io/dog-plus-polimi/api-service
+```
+
+## TODO:
+- [ ] Configure for production to avoid security issues
+- [ ] Make it easier to differentiate between local/remote development
+
 ## Setting up the backend
 
 ### Running the first time
