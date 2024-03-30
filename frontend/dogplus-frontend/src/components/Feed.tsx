@@ -5,6 +5,8 @@ interface Post {
   id: number;
   author: string;
   profile_pic: string;
+  like_count: number;
+  comment_count: number;
   date: string;
   text: string;
   image?: string;
@@ -41,11 +43,11 @@ const Feed: React.FC = () => {
         <div className="flex justify-between items-center">
             <button className="flex items-center mr-4 text-gray-700 hover:text-blue-600">
                 <i className="fas fa-thumbs-up mr-1"></i>
-                <span>Like</span>
+                <span>{post.like_count} likes</span>
             </button>
             <button className="flex items-center text-gray-700 hover:text-green-600">
               <i className="far fa-comment mr-1"></i>
-              <span>Comment</span>
+              <span>{post.comment_count} comment(s)</span>
             </button>
 
         </div>
