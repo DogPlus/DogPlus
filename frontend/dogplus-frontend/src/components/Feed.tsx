@@ -3,12 +3,16 @@ import postsData from '../assets/fakePosts.json';
 
 import { Post } from '../assets/interfaces'
 
-const Feed: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+interface FeedProps {
+  posts: Post[];
+}
+
+const Feed: React.FC<FeedProps> = ({ posts }) => {
+  const [localPosts, setLocalPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     // Simulating a fetch request
-    setPosts(postsData);
+    setLocalPosts(postsData);
   }, []);
 
   return (
