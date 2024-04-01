@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import postsData from '../assets/fakePosts.json';
 
-interface Post {
-  id: number;
-  author: string;
-  profile_pic: string;
-  like_count: number;
-  comment_count: number;
-  date: string;
-  text: string;
-  image?: string;
-}
+import { Post } from '../assets/interfaces'
 
 const Feed: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
