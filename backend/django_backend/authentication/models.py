@@ -1,6 +1,14 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import CustomUser
+from .permissions import IsServiceProvider
+from .serializers import ServiceProviderProfileSerializer
+from django.shortcuts import get_object_or_404
 class CustomUser(AbstractUser):
     USER = 1
     SERVICE_PROVIDER = 2
@@ -11,3 +19,26 @@ class CustomUser(AbstractUser):
         (ADMIN, 'Admin'),
     )
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=USER)
+
+class ServiceProviderProfileView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsServiceProvider]
+
+    def get(self, request):
+        """
+        Retrieve the service provider's profile information.
+        """
+        user = get_object_or_404(CustomUser, pk=request.user.pk)
+        serializer = ServiceProviderProfileSerializer(user)
+        return Response(serializer.data)
+
+    def post(self, request):
+        """
+        Update the service provider's profile information.
+        """
+        user = get_object_or_404(CustomUser, pk=request.user.pk)
+        serializer = ServiceProviderProfileSerializer(user, data=request.data, partial=True)  # Allow partial update
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
