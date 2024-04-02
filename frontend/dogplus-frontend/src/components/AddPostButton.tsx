@@ -35,6 +35,13 @@ export const AddPostButton: React.FC<AddPostButtonProps> = ({ onAddPost }) => {
 
   };
 
+    const handleCloseModal = (e: React.MouseEvent) => {
+        if (e.target === e.currentTarget) {
+            setShowModal(false);
+        }
+    };
+
+
   return (
     <div>
       <button onClick={() => setShowModal(true)} 
@@ -45,7 +52,7 @@ export const AddPostButton: React.FC<AddPostButtonProps> = ({ onAddPost }) => {
       </button>
 
       {showModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div onClick={handleCloseModal} className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
           <div className="relative top-20 mx-auto mt-20 p-5 border w-96 shadow-lg rounded-md bg-white">
 
             <button 
