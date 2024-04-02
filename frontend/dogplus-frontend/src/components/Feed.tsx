@@ -16,7 +16,7 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
   }, []);
 
   return (
-    <div>
+    <div className="pb-20">
       <h1 className="text-3xl font-bold ">Dog+</h1>
       {posts.map(post => (
 
