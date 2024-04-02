@@ -18,19 +18,19 @@ export const AddPostButton: React.FC<AddPostButtonProps> = ({ onAddPost }) => {
   const handlePost = () => {
     const newPost: Post = {
       id: Date.now(),
-      author: "Placeholder Author", // Example placeholder value
-      profile_pic: "https://example.com/profile.jpg", // Example placeholder URL
-      like_count: 0, // Initial like count
-      comment_count: 0, // Initial comment count
-      date: new Date().toISOString(), // Current date in ISO format
+      author: "Kari Nordmann",
+      profile_pic: "https://randomuser.me/api/portraits/women/14.jpg",
+      like_count: 0, 
+      comment_count: 0,
+      date: new Date().toISOString(), // Må formateres fra ISO til noe lesbart
       text: postText,
-      image: postImage, // This is optional; leave as is
+      image: postImage, 
     };
 
-    onAddPost(newPost); // Call the passed in function to add the post
-    setShowModal(false); // Close the modal
-    setPostText(''); // Reset the text
-    setPostImage(''); // Reset the image URL
+    onAddPost(newPost);
+    setShowModal(false);
+    setPostText('');
+    setPostImage('');
 
 
   };
