@@ -19,6 +19,16 @@
       "date": "March 17, 2024",
       "text": "Look at these cute dogs.",
       "image": "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg"
+    },
+    {
+      "id": 3,
+      "author_id": 3,
+      "author": "Brage Minge",
+      "profile_pic":"https://randomuser.me/api/portraits/men/20.jpg",
+      "like_count": 1,
+      "comment_count": 2,
+      "date": "March 12, 2024",
+      "text": "Does anyone know of a good veterinary close by?"
     }
 
 
