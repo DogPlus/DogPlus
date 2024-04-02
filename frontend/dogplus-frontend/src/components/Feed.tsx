@@ -38,7 +38,7 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
         <div className="flex justify-between items-center">
             <button className="flex items-center mr-4 text-gray-700 hover:text-blue-600">
                 <i className="fas fa-thumbs-up mr-1"></i>
-                <span>{post.like_count} likes</span>
+                <span>{post.like_count} like(s)</span>
             </button>
             <button className="flex items-center text-gray-700 hover:text-green-600">
               <i className="far fa-comment mr-1"></i>
