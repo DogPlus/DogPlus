@@ -5,10 +5,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import CustomUser
 from .permissions import IsServiceProvider
-from .serializers import ServiceProviderProfileSerializer
 from django.shortcuts import get_object_or_404
+
 class CustomUser(AbstractUser):
     USER = 1
     SERVICE_PROVIDER = 2
@@ -28,6 +27,7 @@ class ServiceProviderProfileView(APIView):
         """
         Retrieve the service provider's profile information.
         """
+        from .serializers import ServiceProviderProfileSerializer  # Moved here
         user = get_object_or_404(CustomUser, pk=request.user.pk)
         serializer = ServiceProviderProfileSerializer(user)
         return Response(serializer.data)
@@ -36,6 +36,7 @@ class ServiceProviderProfileView(APIView):
         """
         Update the service provider's profile information.
         """
+        from .serializers import ServiceProviderProfileSerializer  # Moved here
         user = get_object_or_404(CustomUser, pk=request.user.pk)
         serializer = ServiceProviderProfileSerializer(user, data=request.data, partial=True)  # Allow partial update
         if serializer.is_valid():
