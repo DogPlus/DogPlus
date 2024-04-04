@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserSerializer
+from .permissions import IsServiceProvider
+from .serializers import ServiceProviderProfileSerializer
 
 User = get_user_model()
 
@@ -32,3 +34,27 @@ class Logout(APIView):
         token = get_object_or_404(Token, user=request.user)
         token.delete()
         return Response({"detail": "Successfully logged out."}, status=status.HTTP_204_NO_CONTENT)
+
+class ServiceProviderProfileView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsServiceProvider]
+
+    def get(self, request, *args, **kwargs):
+        """
+        Retrieve the service provider's profile information.
+        """
+        user = request.user
+        serializer = ServiceProviderProfileSerializer(user)
+        return Response(serializer.data)
+
+    def patch(self, request, *args, **kwargs):
+        """
+        Update the service provider's profile information.
+        """
+        user = request.user
+        serializer = ServiceProviderProfileSerializer(user, data=request.data, partial=True)  # Allow partial updates
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
