@@ -1,12 +1,17 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 
 export const RegisterPage = () => {
-  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
-  const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [registerAsServiceProvider, setRegisterAsServiceProvider] =
+    useState<boolean>(false);
+  const [serviceProviderKey, setServiceProviderKey] = useState<string>("");
+  const handleServiceProviderKeyChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setServiceProviderKey(event.target.value);
   };
 
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -17,80 +22,143 @@ export const RegisterPage = () => {
     setPassword(event.target.value);
   };
 
+  const handleConfirmPasswordChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setConfirmPassword(event.target.value);
+  };
+
+  const passwordStrengthCheck = (password: string): boolean => {
+    // Example check: at least 8 characters, includes uppercase, lowercase, number, special character
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return regex.test(password);
+  };
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
+
+    // Check password strength
+    if (!passwordStrengthCheck(password)) {
+      setError(
+        "Password must be at least 8 characters long and include uppercase, lowercase and numbers."
+      );
+      return;
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     // Handle registration logic here
-    console.log(
-      `Registering with username: ${username}, email: ${email}, and password: ${password}`
-    );
+    console.log(`Registering with email: ${email}, password: ${password}`);
+    // Reset error state if successful
+    setError("");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Register
-          </h2>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
+    <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
+        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <h1 className="text-xl  leading-tight tracking-tight  font-extrabold text-dark-grey-900 md:text-2xl">
+            Create an account
+          </h1>
+          {error && <div className="text-red-500">{error}</div>}
+
+          <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="username" className="sr-only">
-                Username
+              <label className="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  className="form-checkbox"
+                  checked={registerAsServiceProvider}
+                  onChange={() =>
+                    setRegisterAsServiceProvider(!registerAsServiceProvider)
+                  }
+                />
+                <span className="ml-2">Register as Service Provider</span>
               </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                value={username}
-                onChange={handleUsernameChange}
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
-              />
             </div>
             <div>
-              <label htmlFor="email" className="sr-only">
-                Email
+              <label
+                htmlFor="email"
+                className="mb-2 text-sm text-start text-grey-900"
+              >
+                Your email
               </label>
               <input
-                id="email"
-                name="email"
                 type="email"
+                id="email"
+                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                placeholder="name@company.com"
+                required
                 value={email}
                 onChange={handleEmailChange}
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email"
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label
+                htmlFor="password"
+                className="mb-2 text-sm text-start text-grey-900"
+              >
                 Password
               </label>
               <input
-                id="password"
-                name="password"
                 type="password"
+                id="password"
+                placeholder="••••••••"
+                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                required
                 value={password}
                 onChange={handlePasswordChange}
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
               />
             </div>
-          </div>
-
-          <div>
+            <div>
+              <label
+                htmlFor="confirm-password"
+                className="mb-2 text-sm text-start text-grey-900"
+              >
+                Confirm password
+              </label>
+              <input
+                type="password"
+                id="confirm-password"
+                placeholder="••••••••"
+                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                required
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+              />
+            </div>
+            {/* Service Provider Key Input */}
+            {registerAsServiceProvider && (
+              <div>
+                <label
+                  htmlFor="service-provider-key"
+                  className="mb-2 text-sm text-start text-grey-900"
+                >
+                  Service Provider Key
+                </label>
+                <input
+                  type="text"
+                  id="service-provider-key"
+                  placeholder="Enter your service provider key"
+                  className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                  required={registerAsServiceProvider}
+                  value={serviceProviderKey}
+                  onChange={handleServiceProviderKeyChange}
+                />
+              </div>
+            )}
             <button
+              className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-purple-blue-600 focus:ring-4 focus:ring-purple-blue-100 bg-purple-blue-500"
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Register
+              Register user
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
