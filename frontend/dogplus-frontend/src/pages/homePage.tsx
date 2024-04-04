@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Feed from '../components/Feed';
 import { AddPostButton } from '../components/AddPostButton';
 import initialPosts from '../assets/fakePosts.json';
-import { Post } from '../assets/interfaces';
+import { Post } from '../types/post';
 
 export const HomePage = () => {
   const [posts, setPosts] = useState<Post[]>(initialPosts);

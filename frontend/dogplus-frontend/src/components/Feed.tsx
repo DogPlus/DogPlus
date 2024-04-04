@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import postsData from '../assets/fakePosts.json';
 
-import { Post } from '../assets/interfaces'
+import { Post } from '../types/post'
 
 interface FeedProps {
   posts: Post[];
