@@ -17,6 +17,7 @@ class CustomUser(AbstractUser):
         (SERVICE_PROVIDER, 'Service Provider'),
         (ADMIN, 'Admin'),
     )
+    serviceProviderKey = models.CharField(max_length=255, blank=True, null=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=USER)
 
 class ServiceProviderProfileView(APIView):
