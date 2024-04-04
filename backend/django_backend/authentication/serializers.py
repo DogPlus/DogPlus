@@ -12,3 +12,12 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
+
+class ServiceProviderProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User 
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']
+        read_only_fields = ['id', 'username']
+
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
