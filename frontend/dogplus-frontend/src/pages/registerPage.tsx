@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
+import { UserData } from "../types/user";
 
 export const RegisterPage = () => {
   const [email, setEmail] = useState<string>("");
@@ -29,7 +30,6 @@ export const RegisterPage = () => {
   };
 
   const passwordStrengthCheck = (password: string): boolean => {
-    // Example check: at least 8 characters, includes uppercase, lowercase, number, special character
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return regex.test(password);
   };
@@ -37,24 +37,53 @@ export const RegisterPage = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    // Check password strength
-    if (!passwordStrengthCheck(password)) {
-      setError(
-        "Password must be at least 8 characters long and include uppercase, lowercase and numbers."
-      );
-      return;
-    }
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    // Check if passwords match
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
+      // Check password strength
+      if (!passwordStrengthCheck(password)) {
+        setError(
+          "Password must be at least 8 characters long and include uppercase, lowercase and numbers."
+        );
+        return;
+      }
 
-    // Handle registration logic here
-    console.log(`Registering with email: ${email}, password: ${password}`);
-    // Reset error state if successful
-    setError("");
+      // Check if passwords match
+      if (password !== confirmPassword) {
+        setError("Passwords do not match.");
+        return;
+      }
+      // Reset error state if successful
+      setError("");
+
+      const userData: UserData = {
+        email,
+        password,
+        registerAsServiceProvider,
+        serviceProviderKey: registerAsServiceProvider
+          ? serviceProviderKey
+          : undefined,
+      };
+
+      try {
+        const response = await fetch("http://localhost:8000/register/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
   };
 
   return (
