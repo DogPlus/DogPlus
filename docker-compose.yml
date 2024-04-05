@@ -10,6 +10,10 @@ services:
       - ./backend/django_backend:/app/backend
     depends_on:
       - db
+    environment:
+      - GOOGLE_CLOUD_PROJECT="dog-plus-polimi"
+      - USE_LOCAL_DATABASE=True
+      - DEBUG=True
 
   frontend:
     build:

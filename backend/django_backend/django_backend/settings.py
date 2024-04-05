@@ -47,6 +47,7 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     # Pull secrets from Secret Manager
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 
+    print("Loading secrets from google cloud")
     client = secretmanager.SecretManagerServiceClient()
     settings_name = os.environ.get("SETTINGS_NAME", "django_settings-f21e")
     name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
@@ -54,7 +55,7 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
 
     env.read_env(io.StringIO(payload))
 else:
-    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found. If running on local computer (using docker compose), ensure you have the .env file in backend/django_backend/ folder. This can be found in secret manager in google cloud with name 'django_settings-f21e'." )
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
