@@ -1,14 +1,15 @@
-// Create an react Component
-
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import { Navbar } from '../components/common/navbar';
+import { Outlet, useLocation } from "react-router-dom";
+import { Navbar } from "../components/common/navbar";
 
 export const Layout = () => {
+  const location = useLocation();
+
   return (
     <div>
       <Outlet />
-      <Navbar />
+      {location.pathname !== "/auth" && location.pathname !== "/register" && (
+        <Navbar />
+      )}
     </div>
   );
 };
