@@ -15,8 +15,9 @@ gcloud run deploy api-service \
 ```
 
 ## TODO:
-- [ ] Configure for production to avoid security issues
+- [ ] Limit production database access
 - [ ] Make it easier to differentiate between local/remote development
+    - Docker compose should be local 
 
 ## Setting up the backend
 

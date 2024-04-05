@@ -21,7 +21,6 @@ from google.cloud import secretmanager
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = 'django-insecure-u4!&t@ga$9!dh#6wrtnu4x@^)_lxvt-2p1g(69+$^du4&eg1ns'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -40,7 +39,9 @@ except google.auth.exceptions.DefaultCredentialsError:
 if os.path.isfile(env_file):
     # Use a local secret file, if provided
 
+    print("Loading .env file")
     env.read_env(env_file)
+    # Get all loaded environment variables
 # ...
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     # Pull secrets from Secret Manager
@@ -54,6 +55,8 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     env.read_env(io.StringIO(payload))
 else:
     raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 ##### See https://cloud.google.com/python/django/run#csrf_configurations
 # SECURITY WARNING: It's recommended that you use this when
@@ -118,12 +121,26 @@ WSGI_APPLICATION = 'django_backend.wsgi.application'
 # Database
 # [START cloudrun_django_database_config]
 # Use django-environ to parse the connection string
-DATABASES = {"default": env.db()}
+if (os.getenv("USE_LOCAL_DATABASE", None)):
+    print("Using local database")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'dogplus_db',          # PostgreSQL database name
+            'USER': 'dog',                 # PostgreSQL username
+            'PASSWORD': 'plus',            # PostgreSQL password
+            'HOST': 'db',                  # This should match the service name defined in Docker Compose
+            'PORT': '5432',                # PostgreSQL port (default is 5432)
+        }
+    }
+else:
+    print("Using remote database")
+    DATABASES = {"default": env.db()}
 
-# If the flag as been set, configure to use proxy
-if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
-    DATABASES["default"]["HOST"] = "127.0.0.1"
-    DATABASES["default"]["PORT"] = 5432
+    # If the flag as been set, configure to use proxy
+    if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
+        DATABASES["default"]["HOST"] = "127.0.0.1"
+        DATABASES["default"]["PORT"] = 5432
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
