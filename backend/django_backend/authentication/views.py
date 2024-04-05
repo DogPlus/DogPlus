@@ -7,9 +7,13 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from backend.django_backend.authentication.models import CustomUser
 from .serializers import UserSerializer
 from .permissions import IsServiceProvider
 from .serializers import ServiceProviderProfileSerializer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
 User = get_user_model()
 
 class RegisterUserAPIView(APIView):
@@ -70,3 +74,19 @@ class ServiceProviderProfileView(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def pending_service_providers(request):
+        pending_users = CustomUser.objects.filter(role=CustomUser.SERVICE_PROVIDER, is_approved=False)
+        serializer = UserSerializer(pending_users, many=True)
+        return Response(serializer.data)
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def approve_service_provider(request, user_uuid):
+    user = get_object_or_404(CustomUser, uuid=user_uuid, role=CustomUser.SERVICE_PROVIDER)
+    user.is_approved = True
+    user.save()
+    return Response({'status': 'Service provider approved'})
