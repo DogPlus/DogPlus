@@ -24,7 +24,6 @@ class UserSerializer(serializers.ModelSerializer):
             user.serviceProviderKey = serviceProviderKey
             user.is_approved = None if user.role != User.SERVICE_PROVIDER else False
             user.save()
-            
         return user
 
     def validate_email(self, value):
@@ -38,6 +37,9 @@ class UserSerializer(serializers.ModelSerializer):
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError("This username is already taken.")
         return value
+    
+    def get_readable_role(self, obj):
+        return obj.get_role_display()
 
     
 class ServiceProviderProfileSerializer(serializers.ModelSerializer):
