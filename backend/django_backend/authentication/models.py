@@ -17,6 +17,7 @@ class CustomUser(AbstractUser):
         (SERVICE_PROVIDER, 'Service Provider'),
         (ADMIN, 'Admin'),
     )
+    serviceProviderKey = models.CharField(max_length=255, blank=True, null=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=USER)
 
 class ServiceProviderProfileView(APIView):
@@ -27,7 +28,7 @@ class ServiceProviderProfileView(APIView):
         """
         Retrieve the service provider's profile information.
         """
-        from .serializers import ServiceProviderProfileSerializer  # Moved here
+        from .serializers import ServiceProviderProfileSerializer  
         user = get_object_or_404(CustomUser, pk=request.user.pk)
         serializer = ServiceProviderProfileSerializer(user)
         return Response(serializer.data)
@@ -36,7 +37,7 @@ class ServiceProviderProfileView(APIView):
         """
         Update the service provider's profile information.
         """
-        from .serializers import ServiceProviderProfileSerializer  # Moved here
+        from .serializers import ServiceProviderProfileSerializer 
         user = get_object_or_404(CustomUser, pk=request.user.pk)
         serializer = ServiceProviderProfileSerializer(user, data=request.data, partial=True)  # Allow partial update
         if serializer.is_valid():

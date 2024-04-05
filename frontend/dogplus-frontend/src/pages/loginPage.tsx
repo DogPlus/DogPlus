@@ -1,9 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -13,12 +15,34 @@ export const LoginPage = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     console.log(
       `Logging in with username: ${username} and password: ${password}`
     );
-    // Handle login logic here
+    try {
+      const response = await fetch("http://localhost:8000/api/auth/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
+
+      const data = await response.json();
+      console.log("Login Successful:", data);
+
+      localStorage.setItem("token", data.token);
+
+      navigate("/home");
+    } catch (error) {
+      setErrorMessage("Login failed. Please check your username and password.");
+      console.error("An error occurred during login:", error);
+    }
   };
 
   return (
@@ -43,14 +67,14 @@ export const LoginPage = () => {
                   htmlFor="username"
                   className="mb-2 text-sm text-start text-grey-900"
                 >
-                  Email*
+                  Username*
                 </label>
                 <input
                   id="username"
-                  type="email"
+                  type="text"
                   value={username}
                   onChange={handleUsernameChange}
-                  placeholder="mail@example.com"
+                  placeholder="Insert username"
                   className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
                 />
                 <label
@@ -67,10 +91,14 @@ export const LoginPage = () => {
                   placeholder="Enter a password"
                   className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
                 />
-                {/* Additional UI elements here */}
+                {errorMessage && (
+                  <div className="mb-4 text-sm font-medium text-red-600">
+                    {errorMessage}
+                  </div>
+                )}
                 <button
                   className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-purple-blue-600 focus:ring-4 focus:ring-purple-blue-100 bg-purple-blue-500"
-                  type="button"
+                  type="submit"
                 >
                   Sign In
                 </button>

@@ -1,6 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-
+import { UserData } from "../types/user";
+import { useNavigate } from "react-router-dom";
 export const RegisterPage = () => {
+  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -8,6 +10,12 @@ export const RegisterPage = () => {
   const [registerAsServiceProvider, setRegisterAsServiceProvider] =
     useState<boolean>(false);
   const [serviceProviderKey, setServiceProviderKey] = useState<string>("");
+  const navigate = useNavigate();
+
+  const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
+
   const handleServiceProviderKeyChange = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
@@ -29,12 +37,11 @@ export const RegisterPage = () => {
   };
 
   const passwordStrengthCheck = (password: string): boolean => {
-    // Example check: at least 8 characters, includes uppercase, lowercase, number, special character
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d\W_]{8,}$/;
     return regex.test(password);
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Check password strength
@@ -50,11 +57,41 @@ export const RegisterPage = () => {
       setError("Passwords do not match.");
       return;
     }
-
-    // Handle registration logic here
-    console.log(`Registering with email: ${email}, password: ${password}`);
     // Reset error state if successful
     setError("");
+
+    const userData: UserData = {
+      username,
+      email,
+      password,
+      registerAsServiceProvider,
+      serviceProviderKey: registerAsServiceProvider
+        ? serviceProviderKey
+        : undefined,
+    };
+
+    try {
+      console.log("Userdata: " + JSON.stringify(userData));
+      const response = await fetch("http://localhost:8000/api/auth/register/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      localStorage.setItem("token", data.token);
+
+      navigate("/home");
+      console.log(data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -97,6 +134,24 @@ export const RegisterPage = () => {
                 onChange={handleEmailChange}
               />
             </div>
+            <div>
+              <label
+                htmlFor="username"
+                className="mb-2 text-sm text-start text-grey-900"
+              >
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                placeholder="Your username"
+                required
+                value={username}
+                onChange={handleUsernameChange}
+              />
+            </div>
+
             <div>
               <label
                 htmlFor="password"
