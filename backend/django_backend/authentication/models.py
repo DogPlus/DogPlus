@@ -28,7 +28,7 @@ class ServiceProviderProfileView(APIView):
         """
         Retrieve the service provider's profile information.
         """
-        from .serializers import ServiceProviderProfileSerializer  # Moved here
+        from .serializers import ServiceProviderProfileSerializer  
         user = get_object_or_404(CustomUser, pk=request.user.pk)
         serializer = ServiceProviderProfileSerializer(user)
         return Response(serializer.data)
@@ -37,7 +37,7 @@ class ServiceProviderProfileView(APIView):
         """
         Update the service provider's profile information.
         """
-        from .serializers import ServiceProviderProfileSerializer  # Moved here
+        from .serializers import ServiceProviderProfileSerializer 
         user = get_object_or_404(CustomUser, pk=request.user.pk)
         serializer = ServiceProviderProfileSerializer(user, data=request.data, partial=True)  # Allow partial update
         if serializer.is_valid():
