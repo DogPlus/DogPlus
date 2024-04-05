@@ -1,6 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { UserData } from "../types/user";
+import { UserData, UserRole } from "../types/user";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+
+const uuid = uuidv4();
+
 export const RegisterPage = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -60,10 +64,16 @@ export const RegisterPage = () => {
     // Reset error state if successful
     setError("");
 
+    const role = registerAsServiceProvider
+      ? UserRole.ServiceProvider
+      : UserRole.User;
+
     const userData: UserData = {
+      id: uuid,
       username,
       email,
       password,
+      role,
       registerAsServiceProvider,
       serviceProviderKey: registerAsServiceProvider
         ? serviceProviderKey
