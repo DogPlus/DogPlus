@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { UserData } from "../types/user";
 import { useNavigate } from "react-router-dom";
 export const RegisterPage = () => {
+  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -10,6 +11,10 @@ export const RegisterPage = () => {
     useState<boolean>(false);
   const [serviceProviderKey, setServiceProviderKey] = useState<string>("");
   const navigate = useNavigate();
+
+  const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
 
   const handleServiceProviderKeyChange = (
     event: ChangeEvent<HTMLInputElement>
@@ -56,6 +61,7 @@ export const RegisterPage = () => {
     setError("");
 
     const userData: UserData = {
+      username,
       email,
       password,
       registerAsServiceProvider,
@@ -128,6 +134,24 @@ export const RegisterPage = () => {
                 onChange={handleEmailChange}
               />
             </div>
+            <div>
+              <label
+                htmlFor="username"
+                className="mb-2 text-sm text-start text-grey-900"
+              >
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                placeholder="Your username"
+                required
+                value={username}
+                onChange={handleUsernameChange}
+              />
+            </div>
+
             <div>
               <label
                 htmlFor="password"

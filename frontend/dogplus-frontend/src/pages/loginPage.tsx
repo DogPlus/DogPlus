@@ -65,11 +65,11 @@ export const LoginPage = () => {
                   htmlFor="username"
                   className="mb-2 text-sm text-start text-grey-900"
                 >
-                  Email*
+                  Username*
                 </label>
                 <input
                   id="username"
-                  type="email"
+                  type="text"
                   value={username}
                   onChange={handleUsernameChange}
                   placeholder="mail@example.com"
