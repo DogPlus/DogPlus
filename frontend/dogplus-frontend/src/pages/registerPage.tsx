@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { UserData, UserRole } from "../types/user";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import useUser from "../hooks/useUser";
 
 const uuid = uuidv4();
 
@@ -15,6 +16,8 @@ export const RegisterPage = () => {
     useState<boolean>(false);
   const [serviceProviderKey, setServiceProviderKey] = useState<string>("");
   const navigate = useNavigate();
+
+  const { setUser } = useUser();
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -95,6 +98,8 @@ export const RegisterPage = () => {
       }
 
       const data = await response.json();
+      setUser(userData);
+
       localStorage.setItem("token", data.token);
 
       navigate("/home");
