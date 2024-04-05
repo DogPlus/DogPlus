@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { UserData } from "../types/user";
-
+import { useNavigate } from "react-router-dom";
 export const RegisterPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -9,6 +9,8 @@ export const RegisterPage = () => {
   const [registerAsServiceProvider, setRegisterAsServiceProvider] =
     useState<boolean>(false);
   const [serviceProviderKey, setServiceProviderKey] = useState<string>("");
+  const navigate = useNavigate();
+
   const handleServiceProviderKeyChange = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
@@ -34,56 +36,56 @@ export const RegisterPage = () => {
     return regex.test(password);
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
+    // Check password strength
+    if (!passwordStrengthCheck(password)) {
+      setError(
+        "Password must be at least 8 characters long and include uppercase, lowercase and numbers."
+      );
+      return;
+    }
 
-      // Check password strength
-      if (!passwordStrengthCheck(password)) {
-        setError(
-          "Password must be at least 8 characters long and include uppercase, lowercase and numbers."
-        );
-        return;
-      }
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+    // Reset error state if successful
+    setError("");
 
-      // Check if passwords match
-      if (password !== confirmPassword) {
-        setError("Passwords do not match.");
-        return;
-      }
-      // Reset error state if successful
-      setError("");
-
-      const userData: UserData = {
-        email,
-        password,
-        registerAsServiceProvider,
-        serviceProviderKey: registerAsServiceProvider
-          ? serviceProviderKey
-          : undefined,
-      };
-
-      try {
-        const response = await fetch("http://localhost:8000/register/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.error("Error:", error);
-      }
+    const userData: UserData = {
+      email,
+      password,
+      registerAsServiceProvider,
+      serviceProviderKey: registerAsServiceProvider
+        ? serviceProviderKey
+        : undefined,
     };
+
+    try {
+      console.log("Userdata: " + JSON.stringify(userData));
+      const response = await fetch("http://localhost:8000/register/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      localStorage.setItem("token", data.token);
+
+      navigate("/home");
+      console.log(data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
