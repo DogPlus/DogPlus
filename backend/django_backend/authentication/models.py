@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .permissions import IsServiceProvider
 from django.shortcuts import get_object_or_404
-
+import uuid
 class CustomUser(AbstractUser):
     USER = 1
     SERVICE_PROVIDER = 2
@@ -17,8 +17,10 @@ class CustomUser(AbstractUser):
         (SERVICE_PROVIDER, 'Service Provider'),
         (ADMIN, 'Admin'),
     )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     serviceProviderKey = models.CharField(max_length=255, blank=True, null=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=USER)
+    is_approved = models.BooleanField(default=False, null=True, blank=True)
 
 class ServiceProviderProfileView(APIView):
     authentication_classes = [TokenAuthentication]

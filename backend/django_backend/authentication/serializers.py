@@ -14,16 +14,15 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password', 'role', 'serviceProviderKey')
+        fields = ('id', 'uuid', 'username', 'email', 'password', 'role', 'serviceProviderKey')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         serviceProviderKey = validated_data.pop('serviceProviderKey', None)
-        
         user = User.objects.create_user(**validated_data)
-        
         if user.role == User.SERVICE_PROVIDER and serviceProviderKey:
             user.serviceProviderKey = serviceProviderKey
+            user.is_approved = None if user.role != User.SERVICE_PROVIDER else False
             user.save()
             
         return user
@@ -44,8 +43,8 @@ class UserSerializer(serializers.ModelSerializer):
 class ServiceProviderProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'serviceProviderKey']
-        read_only_fields = ['id', 'username', 'serviceProviderKey'] 
+        fields = ['id','uuid', 'username', 'email', 'first_name', 'last_name', 'serviceProviderKey']
+        read_only_fields = ['id','uuid', 'username', 'serviceProviderKey'] 
 
     def update(self, instance, validated_data):
         # Custom update logic can be added here if needed
