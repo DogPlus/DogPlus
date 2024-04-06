@@ -65,15 +65,18 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # running in production. The URL will be known once you first deploy
 # to Cloud Run. This code takes the URL and converts it to both these settings formats.
 CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL", default=None)
-if CLOUDRUN_SERVICE_URL:
+CLOUDRUN_API_URL = env("CLOUDRUN_API_URL", default=None)
+if CLOUDRUN_SERVICE_URL and CLOUDRUN_API_URL:
     print("Using CLOUDRUN allowed hosts")
-    ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
     CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    CORS_ALLOWED_ORIGINS = [CLOUDRUN_SERVICE_URL]
+    ALLOWED_HOSTS = [urlparse(CLOUDRUN_API_URL).netloc]
 else:
     print("Using default allowed hosts (all hosts allowed)")
-    CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+    CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
     ALLOWED_HOSTS = ["*"]
 # [END cloudrun_django_csrf]
 
