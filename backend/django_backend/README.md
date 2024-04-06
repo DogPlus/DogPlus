@@ -14,14 +14,11 @@ gcloud run deploy api-service \
     --image gcr.io/dog-plus-polimi/api-service
 ```
 
-## TODO:
-- [ ] Limit production database access
-- [ ] Make it easier to differentiate between local/remote development
-    - Docker compose should be local 
 
-## Setting up the backend
 
-### Running the first time
+# Local development
+
+## Running the first time
 
 1. Set up virtual environment
    Make sure you are in the `backend` directory and run these commands:
