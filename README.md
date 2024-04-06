@@ -38,6 +38,23 @@ This project is a full-stack web application built with Django and React. It con
 - Backend API: http://localhost:8000
 - Frontend UI: http://localhost:3000
 
+### Interacting with docker
+Since docker is a containerized environment, to interact with docker you need to run commands inside the given docker container.
+
+This can be done like this:
+```sh
+docker compose exec <Name of container> <command to run>
+```
+
+To find the name of the container look into `docker-compose.yml`. The names of the containers at the time of writing is:
+- db
+- backend
+- frontend
+
+Command to run can be whatever. For instance to drop into a shell in the container backend run:
+```sh
+docker compose exec backend sh
+```
 ### Prerequisites
 - Docker
 - Docker Compose   
