@@ -28,11 +28,14 @@ export const AdminDashboard = () => {
   }, []);
 
   const approveServiceProvider = (userId: string) => {
-    const url = `http://localhost:8000/api/auth//service-providers/approve/${userId}`;
+    const token = localStorage.getItem("token");
+    const url = `http://localhost:8000/api/auth/service-providers/approve/${userId}`;
+
     fetch(url, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
       },
     })
       .then(() => {
