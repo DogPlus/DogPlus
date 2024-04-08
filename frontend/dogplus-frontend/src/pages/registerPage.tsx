@@ -72,7 +72,7 @@ export const RegisterPage = () => {
 
     try {
       console.log("Userdata: " + JSON.stringify(userData));
-      const response = await fetch("http://localhost:8000/api/auth/register/", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/auth/register/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,6 +81,7 @@ export const RegisterPage = () => {
       });
 
       if (!response.ok) {
+        console.log("Response: " + response.status);
         throw new Error("Network response was not ok");
       }
 
