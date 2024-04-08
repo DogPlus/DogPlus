@@ -5,9 +5,20 @@ export const AdminDashboard = () => {
   const [serviceProviders, setServiceProviders] = useState<UserData[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/service-providers/pending")
-      .then((response) => response.json())
-      .then(setServiceProviders);
+    fetch("http://localhost:8000/api/auth/service-providers/pending/")
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setServiceProviders(data);
+        } else {
+          console.error("Expected an array, but received:", data);
+          setServiceProviders([]);
+        }
+      });
   }, []);
 
   const approveServiceProvider = (userId: string) => {
