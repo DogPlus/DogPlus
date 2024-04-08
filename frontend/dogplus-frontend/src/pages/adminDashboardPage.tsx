@@ -28,18 +28,14 @@ export const AdminDashboard = () => {
   }, []);
 
   const approveServiceProvider = (userId: string) => {
-    // Placeholder URL - replace with your actual endpoint
     const url = `http://localhost:8000/api/auth//service-providers/approve/${userId}`;
     fetch(url, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        // Include authorization token if needed
       },
     })
       .then(() => {
-        // Update the UI accordingly
-        // For simplicity, you could refetch the serviceProviders list or update the state directly
         setServiceProviders(
           serviceProviders.filter((user) => user.id !== userId)
         );
