@@ -5,12 +5,18 @@ export const AdminDashboard = () => {
   const [serviceProviders, setServiceProviders] = useState<UserData[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/auth/service-providers/pending/")
+    const token = localStorage.getItem("token");
+    fetch("http://localhost:8000/api/auth/service-providers/pending/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+    })
       .then((response) => {
         console.log(response);
         return response.json();
       })
-
       .then((data) => {
         if (Array.isArray(data)) {
           setServiceProviders(data);
