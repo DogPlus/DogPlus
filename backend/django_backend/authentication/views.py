@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from backend.django_backend.authentication.models import CustomUser
+from .models import CustomUser
 from .serializers import UserSerializer
 from .permissions import IsServiceProvider
 from .serializers import ServiceProviderProfileSerializer
