@@ -6,6 +6,7 @@ import { LoginPage } from "./pages/loginPage";
 import { RegisterPage } from "./pages/registerPage";
 import { ServiceProviderPage } from "./pages/serviceProviderPage";
 import { UserPage } from "./pages/userPage";
+import { AdminDashboard } from "./pages/adminDashboardPage";
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route path="admin" element={<AdminDashboard />} />
+
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>
     </Routes>
