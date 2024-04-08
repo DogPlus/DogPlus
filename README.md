@@ -87,9 +87,13 @@ This script will first ask you to login to google by opening a browser window. L
 After running the script successfully, the frontend part of the application is not yet correctly published. To finish the process, follow these steps:
 1. Go to [the cloud run dashboard](https://console.cloud.google.com/run?project=dog-plus-polimi)
 2. Click 'Edit and deply new reviosion'.
-3. Edit the 'Container Image URL' with the container you just created. This should be under 'Artifact Registry' -> 'europe-west8-docker.pkg.dev/dog-plus-polimi/dogplus-frontend-repository' -> 'dogplus-react-app'
+3. Edit the 'Container Image URL' with the container you just created:
+- Click "Select" under "Container Image URL"
+![bilde](https://github.com/DogPlus/DogPlus/assets/40039543/0109866b-7f6f-424d-8f6e-bcf81869cfe1)
+- Under 'Artifact Registry' -> 'europe-west8-docker.pkg.dev/dog-plus-polimi/dogplus-frontend-repository' -> 'dogplus-react-app', select the image with the tag 'latest'
+![bilde](https://github.com/DogPlus/DogPlus/assets/40039543/f5fabd67-b531-4487-98a0-9423fad18637)
+- Click "Select".
 
-Then select the one with the tag 'latest'
 4. Click 'Deploy'
 5. In a couple of seconds a URL will appear which you can follow to see the webpage.
 
