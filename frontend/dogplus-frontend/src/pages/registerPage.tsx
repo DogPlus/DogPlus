@@ -48,31 +48,27 @@ export const RegisterPage = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Check password strength
     if (!passwordStrengthCheck(password)) {
       setError(
-        "Password must be at least 8 characters long and include uppercase, lowercase and numbers."
+        "Password must be at least 8 characters long and include uppercase, lowercase, and numbers."
       );
       return;
     }
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
-    // Reset error state if successful
-    setError("");
 
-    const role = registerAsServiceProvider
-      ? UserRole.ServiceProvider
-      : UserRole.User;
+    setError("");
 
     const userData: UserCreationData = {
       username,
       email,
       password,
-      role,
+      role: registerAsServiceProvider
+        ? UserRole.ServiceProvider
+        : UserRole.User,
       registerAsServiceProvider,
       serviceProviderKey: registerAsServiceProvider
         ? serviceProviderKey
@@ -80,7 +76,6 @@ export const RegisterPage = () => {
     };
 
     try {
-      console.log("Userdata: " + JSON.stringify(userData));
       const response = await fetch("http://localhost:8000/api/auth/register/", {
         method: "POST",
         headers: {
@@ -94,22 +89,25 @@ export const RegisterPage = () => {
       }
 
       const data = await response.json();
-      const userDataWithID: UserData = {
-        id: data.uuid,
-        username: data.username,
-        email: data.email,
-        role: data.role,
-        isApproved: data.is_approved,
-        password: data.password,
-      };
-      setUser(userDataWithID);
 
-      localStorage.setItem("token", data.token);
-
-      navigate("/home");
-      console.log(data);
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        const userDataWithID: UserData = {
+          id: data.uuid,
+          username: data.username,
+          email: data.email,
+          role: data.role,
+          isApproved: data.is_approved,
+          password: data.password,
+        };
+        setUser(userDataWithID);
+        navigate("/home");
+      } else {
+        navigate("/registration-pending"); // Example path, adjust as needed
+      }
     } catch (error) {
-      console.error("Error:", error);
+      setError("An error occurred during registration. Please try again.");
+      console.error("Registration error:", error);
     }
   };
 

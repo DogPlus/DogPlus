@@ -32,11 +32,15 @@ class RegisterUserAPIView(APIView):
 
         if serializer.is_valid():
             user = serializer.save()
-            token, created = Token.objects.get_or_create(user=user)
-            return Response(
-                {**serializer.data, "token": token.key},
-                status=status.HTTP_201_CREATED
-            )
+            if user.role == CustomUser.SERVICE_PROVIDER and not user.is_approved:
+                # For service providers, do not return a token until they are approved
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                token, created = Token.objects.get_or_create(user=user)
+                return Response(
+                    {**serializer.data, "token": token.key},
+                    status=status.HTTP_201_CREATED
+                )
         print("Serializer errors:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
