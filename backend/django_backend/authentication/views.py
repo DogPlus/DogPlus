@@ -37,7 +37,14 @@ class LoginAPIView(APIView):
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)
+
         if user:
+            # Check if the user is approved (for roles that require approval)
+            if hasattr(user, 'is_approved') and not user.is_approved:
+                # User is found but not approved yet
+                return Response({"detail": "Account not approved yet. Please wait for an administrator to approve your account."}, status=status.HTTP_403_FORBIDDEN)
+            
+            # User is approved or does not require approval; proceed with login
             token, _ = Token.objects.get_or_create(user=user)
             return Response({"token": token.key}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
@@ -69,7 +76,7 @@ class ServiceProviderProfileView(APIView):
         """
         user = request.user
         serializer = ServiceProviderProfileSerializer(user, data=request.data, partial=True)  # Allow partial updates
-        if serializer.is_valid():
+        if serializer.is_valid():   
             serializer.save()
             return Response(serializer.data)
         else:
