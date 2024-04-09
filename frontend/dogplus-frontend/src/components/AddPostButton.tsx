@@ -19,7 +19,7 @@ export const AddPostButton: React.FC<AddPostButtonProps> = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorizatoin": "Token "+ localStorage.getItem("token") //må kanskje endres?
+          "Authorization": "Token "+ localStorage.getItem("token") //må kanskje endres?
         },
         body: JSON.stringify({
           author: 5, // må endres til get user id
