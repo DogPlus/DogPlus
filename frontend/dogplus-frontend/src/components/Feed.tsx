@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import postsData from '../assets/fakePosts.json';
+import React from 'react';
 
 import { Post } from '../types/post'
 
@@ -8,12 +7,6 @@ interface FeedProps {
 }
 
 const Feed: React.FC<FeedProps> = ({ posts }) => {
-  const [localPosts, setLocalPosts] = useState<Post[]>([]);
-
-  useEffect(() => {
-    // Simulating a fetch request
-    setLocalPosts(postsData);
-  }, []);
 
   return (
     <div className="pb-20">
