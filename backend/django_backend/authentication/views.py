@@ -28,7 +28,8 @@ class RegisterUserAPIView(APIView):
         else:
             request.data['is_approved'] = False  # Require admin approval for service providers
 
-            serializer = UserSerializer(data=request.data)
+        serializer = UserSerializer(data=request.data)
+
         if serializer.is_valid():
             user = serializer.save()
             token, created = Token.objects.get_or_create(user=user)
@@ -37,6 +38,7 @@ class RegisterUserAPIView(APIView):
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LoginAPIView(APIView):
     permission_classes = []
