@@ -14,7 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['uuid', 'username', 'email', 'password', 'role', 'serviceProviderKey']
+        fields = ['uuid', 'username', 'email', 'password', 'role', 'is_approved','serviceProviderKey']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -45,7 +45,7 @@ class UserSerializer(serializers.ModelSerializer):
 class ServiceProviderProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['uuid', 'username', 'email', 'password', 'role', 'serviceProviderKey']
+        fields = ['uuid', 'username', 'email', 'password', 'role', 'is_approved', 'serviceProviderKey']
         read_only_fields = ['uuid', 'username', 'serviceProviderKey'] 
 
     def update(self, instance, validated_data):
