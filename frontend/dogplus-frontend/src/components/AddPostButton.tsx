@@ -11,9 +11,6 @@ export const AddPostButton: React.FC<AddPostButtonProps> = ({ onAddPost }) => {
   const [postText, setPostText] = useState('');
   const [postImage, setPostImage] = useState('');
 
-  interface AddPostButtonProps {
-    onAddPost: (newPost: Post) => void;
-  }
 
   const handlePost = () => {
     const newPost: Post = {
