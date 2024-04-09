@@ -25,12 +25,9 @@ function App() {
           }
         />
         <Route
-          path="serviceproviderdashboard"
+          path="serviceproviders"
           element={
-            <RequireAuth
-              requireServiceProviderApproval={true}
-              requiredRoles={[UserRole.ServiceProvider]}
-            >
+            <RequireAuth>
               <ServiceProviderPage />
             </RequireAuth>
           }
