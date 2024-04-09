@@ -16,15 +16,12 @@ export const AdminDashboard = () => {
       },
     })
       .then((response) => {
-        console.log(response);
         return response.json();
       })
       .then((data) => {
         if (Array.isArray(data)) {
-          console.log("Serviceproviders:" + JSON.stringify(data));
-          setServiceProviders(data);
+          setServiceProviders(data.map((item) => ({ ...item, id: item.uuid })));
         } else {
-          console.error("Expected an array, but received:", data);
           setServiceProviders([]);
         }
       });
@@ -32,7 +29,7 @@ export const AdminDashboard = () => {
 
   const approveServiceProvider = (userId: string) => {
     const token = localStorage.getItem("token");
-    const url = `http://localhost:8000/api/auth/service-providers/approve/${userId}`;
+    const url = `http://localhost:8000/api/auth/service-providers/approve/${userId}/`;
 
     fetch(url, {
       method: "PATCH",
@@ -51,7 +48,7 @@ export const AdminDashboard = () => {
 
   const rejectServiceProvider = (userId: string) => {
     const token = localStorage.getItem("token");
-    const url = `http://localhost:8000/api/auth/service-providers/delete/${userId}`;
+    const url = `http://localhost:8000/api/auth/service-providers/delete/${userId}/`;
 
     fetch(url, {
       method: "DELETE",

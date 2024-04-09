@@ -4,6 +4,7 @@ from .views import (
     RegisterUserAPIView,
     Logout,
     ServiceProviderProfileView,
+    delete_service_provider,
     pending_service_providers,  # Ensure this is imported
     approve_service_provider  # Ensure this is imported
 )
@@ -16,5 +17,6 @@ urlpatterns = [
     path('logout/', Logout.as_view(), name='logout'),
     path('service-provider/profile/', ServiceProviderProfileView.as_view(), name='service_provider_profile'),
     path('service-providers/pending/', pending_service_providers, name='pending_service_providers'),
-    path('service-provider/approve/<uuid:user_uuid>/', approve_service_provider, name='approve_service_provider'),
+    path('service-providers/approve/<uuid:user_uuid>/', approve_service_provider, name='approve_service_provider'),
+    path('service-providers/delete/<uuid:user_uuid>/', delete_service_provider, name='delete_service_provider'),
 ]
