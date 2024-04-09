@@ -1,11 +1,15 @@
 
-export interface Post {
-    id: number;
-    author: string;
-    profile_pic: string;
-    like_count: number;
-    comment_count: number;
-    date: string;
-    text: string;
-    image?: string;
+
+export interface NewPost{
+  author: string,
+  date: string
+  text: string,
+  image?: string,
+}
+
+export interface Post extends NewPost {
+  id: number,
+  profile_pic: string;
+  like_count: number;
+  comment_count: number;
   }
