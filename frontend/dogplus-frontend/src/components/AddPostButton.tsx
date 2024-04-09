@@ -9,7 +9,7 @@ interface AddPostButtonProps {
 export const AddPostButton: React.FC<AddPostButtonProps> = () => {
   const [showModal, setShowModal] = useState(false);
   const [postText, setPostText] = useState('');
-  const [postImage, setPostImage] = useState<File | null>(null);
+  const [postImage, setPostImage] = useState<File | "">("");
 
 
   const handlePost = async () => {
@@ -39,7 +39,7 @@ export const AddPostButton: React.FC<AddPostButtonProps> = () => {
 
     setShowModal(false);
     setPostText('');
-    setPostImage(null);
+    setPostImage('');
 
 
   };
@@ -57,7 +57,7 @@ export const AddPostButton: React.FC<AddPostButtonProps> = () => {
           setPostImage(file);
         } else {
           alert("Please select an image file.");
-          setPostImage(null)
+          setPostImage('')
         }
       }
     };
