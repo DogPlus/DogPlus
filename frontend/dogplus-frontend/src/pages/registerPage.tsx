@@ -95,7 +95,7 @@ export const RegisterPage = () => {
 
       const data = await response.json();
       const userDataWithID: UserData = {
-        id: data.id,
+        id: data.uuid,
         username: data.username,
         email: data.email,
         role: data.role,
