@@ -22,7 +22,7 @@ export const AddPostButton: React.FC<AddPostButtonProps> = () => {
           "Authorization": "Token "+ localStorage.getItem("token") //må kanskje endres?
         },
         body: JSON.stringify({
-          author: 5, // må endres til get user id
+          author: 1, // må endres til get user id
           date: new Date().toISOString(), //må formateres penere
           text: postText,
           image: postImage
