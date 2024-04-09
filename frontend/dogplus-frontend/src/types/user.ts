@@ -4,6 +4,7 @@ export interface UserData {
   email: string;
   password: string;
   role: UserRole;
+  isApproved?: boolean;
 }
 
 export interface UserCreationData {
