@@ -34,7 +34,7 @@ const RequireAuth: React.FC<RequireAuthProps> = ({
 
   // Check for required roles if specified
   if (requiredRoles && user && !requiredRoles.includes(user.role)) {
-    return <Navigate to="/not-authorized" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   return <>{children}</>;
