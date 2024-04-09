@@ -14,6 +14,9 @@ export interface UserCreationData {
   registerAsServiceProvider: boolean;
   serviceProviderKey?: string;
 }
+export interface ServiceProviderData extends UserData {
+  serviceProviderKey?: string;
+}
 
 export enum UserRole {
   User = 1,

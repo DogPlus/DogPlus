@@ -4,25 +4,22 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-from django.contrib.auth import get_user_model
-from rest_framework import serializers
-
-User = get_user_model()
-
 class UserSerializer(serializers.ModelSerializer):
-    serviceProviderKey = serializers.CharField(write_only=True, required=False)
+    serviceProviderKey = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = User
-        fields = ['uuid', 'username', 'email', 'password', 'role', 'is_approved','serviceProviderKey']
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ['uuid', 'username', 'email', 'password', 'role', 'is_approved', 'serviceProviderKey']
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'serviceProviderKey': {'required': False, 'allow_blank': True}
+        }
 
     def create(self, validated_data):
         serviceProviderKey = validated_data.pop('serviceProviderKey', None)
         user = User.objects.create_user(**validated_data)
         if user.role == User.SERVICE_PROVIDER and serviceProviderKey:
             user.serviceProviderKey = serviceProviderKey
-            user.is_approved = None if user.role != User.SERVICE_PROVIDER else False
             user.save()
         return user
 
@@ -37,16 +34,14 @@ class UserSerializer(serializers.ModelSerializer):
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError("This username is already taken.")
         return value
-    
-    def get_readable_role(self, obj):
-        return obj.get_role_display()
 
-    
 class ServiceProviderProfileSerializer(serializers.ModelSerializer):
+    serviceProviderKey = serializers.CharField(source='serviceproviderkey', read_only=True)
+
     class Meta:
         model = User
-        fields = ['uuid', 'username', 'email', 'password', 'role', 'is_approved', 'serviceProviderKey']
-        read_only_fields = ['uuid', 'username', 'serviceProviderKey'] 
+        fields = ['uuid', 'username', 'email', 'role', 'is_approved', 'serviceProviderKey']
+        read_only_fields = ['uuid', 'username', 'email', 'role', 'is_approved', 'serviceProviderKey']
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
