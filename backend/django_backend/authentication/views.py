@@ -20,7 +20,15 @@ class RegisterUserAPIView(APIView):
     permission_classes = []
 
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        register_as_service_provider = request.data.get('registerAsServiceProvider', False)
+
+        # Automatically approve users who are not registering as service providers
+        if not register_as_service_provider:
+            request.data['is_approved'] = True
+        else:
+            request.data['is_approved'] = False  # Require admin approval for service providers
+
+            serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             token, created = Token.objects.get_or_create(user=user)
