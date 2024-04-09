@@ -15,7 +15,7 @@ export const AddPostButton: React.FC<AddPostButtonProps> = () => {
   const handlePost = async () => {
     
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/posts/`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/create-post/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
