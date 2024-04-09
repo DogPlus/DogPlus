@@ -3,8 +3,15 @@ export interface UserData {
   username: string;
   email: string;
   password: string;
-  registerAsServiceProvider: boolean;
   role: UserRole;
+}
+
+export interface UserCreationData {
+  username: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  registerAsServiceProvider: boolean;
   serviceProviderKey?: string;
 }
 

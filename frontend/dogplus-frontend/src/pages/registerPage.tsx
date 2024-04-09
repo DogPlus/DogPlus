@@ -1,10 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { UserData, UserRole } from "../types/user";
+import { UserCreationData, UserData, UserRole } from "../types/user";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import useUser from "../hooks/useUser";
-
-const uuid = uuidv4();
 
 export const RegisterPage = () => {
   const [username, setUsername] = useState<string>("");
@@ -71,8 +68,7 @@ export const RegisterPage = () => {
       ? UserRole.ServiceProvider
       : UserRole.User;
 
-    const userData: UserData = {
-      id: uuid,
+    const userData: UserCreationData = {
       username,
       email,
       password,
@@ -98,7 +94,14 @@ export const RegisterPage = () => {
       }
 
       const data = await response.json();
-      setUser(userData);
+      const userDataWithID: UserData = {
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        role: data.role,
+        password: data.password,
+      };
+      setUser(userDataWithID);
 
       localStorage.setItem("token", data.token);
 
