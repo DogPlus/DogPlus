@@ -7,6 +7,8 @@ import { RegisterPage } from "./pages/registerPage";
 import { ServiceProviderPage } from "./pages/serviceProviderPage";
 import { UserPage } from "./pages/userPage";
 import { AdminDashboard } from "./pages/adminDashboardPage";
+import { ApprovalPendingPage } from "./pages/approvalPendingPage";
+import { UserRole } from "./types/user";
 
 function App() {
   return (
@@ -22,14 +24,12 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route
-          path="serviceproviders"
-          element={
-            <RequireAuth>
-              <ServiceProviderPage />
-            </RequireAuth>
-          }
-        />
+        <RequireAuth
+          requireServiceProviderApproval={true}
+          requiredRoles={[UserRole.ServiceProvider]}
+        >
+          <ServiceProviderPage />
+        </RequireAuth>
         <Route
           path="user"
           element={
@@ -38,7 +38,15 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route path="admin" element={<AdminDashboard />} />
+        <Route
+          path="admin"
+          element={
+            <RequireAuth requiredRoles={[UserRole.Admin]}>
+              <AdminDashboard />
+            </RequireAuth>
+          }
+        />
+        <Route path="approval-pending" element={<ApprovalPendingPage />} />
 
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>
