@@ -1,12 +1,12 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import useUser from "./hooks/useUser"; // Adjust the import path as necessary
+import useUser from "./hooks/useUser";
 import { UserRole } from "./types/user";
 
 interface RequireAuthProps {
   children: React.ReactNode;
-  requireServiceProviderApproval?: boolean; // New prop for service provider approval
-  requiredRoles?: UserRole[]; // Array of roles allowed to access the route
+  requireServiceProviderApproval?: boolean;
+  requiredRoles?: UserRole[];
 }
 
 const RequireAuth: React.FC<RequireAuthProps> = ({
@@ -37,7 +37,6 @@ const RequireAuth: React.FC<RequireAuthProps> = ({
     return <Navigate to="/not-authorized" replace />;
   }
 
-  // If everything checks out, render children
   return <>{children}</>;
 };
 
