@@ -1,6 +1,6 @@
 import React from "react";
 
-export const approvalPendingPage = () => {
+export const ApprovalPendingPage = () => {
   return (
     <div>
       <h1>Approval Pending</h1>
