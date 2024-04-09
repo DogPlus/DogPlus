@@ -27,5 +27,4 @@ class AllPostsFromSpecificUserAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']
-        user = get_object_or_404(User, pk=user_id)
-        return Post.objects.filter(author=user)
+        return Post.objects.filter(author=user_id)
