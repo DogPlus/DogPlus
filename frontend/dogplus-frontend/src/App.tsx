@@ -6,6 +6,7 @@ import { LoginPage } from "./pages/loginPage";
 import { RegisterPage } from "./pages/registerPage";
 import { ServiceProviderPage } from "./pages/serviceProviderPage";
 import { UserPage } from "./pages/userPage";
+import { ServiceProviderBookingPage } from "./pages/serviceProviderBookingPage";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route path="serviceproviders/:id/booking" element={<ServiceProviderBookingPage />} />
         <Route
           path="user"
           element={
