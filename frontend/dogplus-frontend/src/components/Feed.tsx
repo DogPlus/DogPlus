@@ -18,7 +18,7 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
         <img className="w-12 h-12 rounded-full mr-3" src={post.profile_pic} alt="Profile Image" />
         <div>
             <h2 className="text-lg font-semibold">{post.author}</h2>
-            <p className="text-gray-500 text-sm">Published on {post.date}</p>
+            <p className="text-gray-500 text-sm">Published on {post.date_posted}</p>
         </div>
     </div>
     <p className="text-gray-700 mb-4">

@@ -2,7 +2,7 @@
 
 export interface NewPost{
   author: string,
-  date: string
+  date_posted: string
   text: string,
   image?: string,
 }

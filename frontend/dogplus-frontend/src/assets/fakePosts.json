@@ -6,7 +6,7 @@
       "profile_pic":"https://randomuser.me/api/portraits/men/22.jpg",
       "like_count": 5,
       "comment_count": 0,
-      "date": "March 25, 2024",
+      "date_posted": "March 25, 2024",
       "text": "I love my dog."
     },
     {
@@ -16,7 +16,7 @@
       "profile_pic":"https://randomuser.me/api/portraits/men/21.jpg",
       "like_count": 143,
       "comment_count": 35,
-      "date": "March 17, 2024",
+      "date_posted": "March 17, 2024",
       "text": "Look at these cute dogs.",
       "image": "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg"
     },
@@ -27,7 +27,7 @@
       "profile_pic":"https://randomuser.me/api/portraits/men/20.jpg",
       "like_count": 1,
       "comment_count": 2,
-      "date": "March 12, 2024",
+      "date_posted": "March 12, 2024",
       "text": "Does anyone know of a good veterinary close by?"
     }
 
