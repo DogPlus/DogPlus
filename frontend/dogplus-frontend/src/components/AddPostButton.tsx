@@ -1,33 +1,45 @@
 import React, { useState } from 'react';
 
-import { Post } from '../types/post'
+import { NewPost, Post } from '../types/post'
 
 interface AddPostButtonProps {
     onAddPost: (newPost: Post) => void;
   }
 
-export const AddPostButton: React.FC<AddPostButtonProps> = ({ onAddPost }) => {
-    const [showModal, setShowModal] = useState(false);
+export const AddPostButton: React.FC<AddPostButtonProps> = () => {
+  const [showModal, setShowModal] = useState(false);
   const [postText, setPostText] = useState('');
-  const [postImage, setPostImage] = useState('');
+  const [postImage, setPostImage] = useState<File | null>(null);
 
 
-  const handlePost = () => {
-    const newPost: Post = {
-      id: Date.now(),
-      author: "Kari Nordmann",
-      profile_pic: "https://randomuser.me/api/portraits/women/14.jpg",
-      like_count: 0, 
-      comment_count: 0,
-      date: new Date().toISOString(), // Må formateres fra ISO til noe lesbart
-      text: postText,
-      image: postImage, 
-    };
+  const handlePost = async () => {
+    
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/posts/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorizatoin": "Token "+ localStorage.getItem("token") //må kanskje endres?
+        },
+        body: JSON.stringify({
+          author: 5, // må endres til get user id
+          date: new Date().toISOString(), //må formateres penere
+          text: postText,
+          image: postImage
+        }),
+      });
+      if(!response.ok){
+        throw new Error("Failed to create new post")
+      }
+    }
+    catch (e) {
+      console.log("Error while posting: ", e)
+    }
+  
 
-    onAddPost(newPost);
     setShowModal(false);
     setPostText('');
-    setPostImage('');
+    setPostImage(null);
 
 
   };
@@ -38,6 +50,18 @@ export const AddPostButton: React.FC<AddPostButtonProps> = ({ onAddPost }) => {
         }
     };
 
+    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files && event.target.files[0]) {
+        const file = event.target.files[0];
+        if (file.type.match('image.*')) { // Basic check for an image file
+          setPostImage(file);
+        } else {
+          alert("Please select an image file.");
+          setPostImage(null)
+        }
+      }
+    };
+
 
   return (
     <div>
@@ -45,7 +69,7 @@ export const AddPostButton: React.FC<AddPostButtonProps> = ({ onAddPost }) => {
         className="p-0 w-12 h-12 bg-blue-500 text-white 
         rounded-full fixed bottom-20 right-5 flex items-center 
         justify-center text-2xl">
-        <i className="fas fa-plus"></i> {/* Font Awesome Plus Icon */}
+        <i className="fas fa-plus"></i> 
       </button>
 
       {showModal && (
@@ -55,7 +79,7 @@ export const AddPostButton: React.FC<AddPostButtonProps> = ({ onAddPost }) => {
             <button 
               onClick={() => setShowModal(false)} 
               className="absolute top-0 left-0 mt-2 ml-2 text-gray-700 hover:text-gray-900">
-              <i className="fas fa-times"></i> {/* Or use "X" if not using Font Awesome */}
+              <i className="fas fa-times"></i> 
             </button>
 
 
@@ -69,10 +93,10 @@ export const AddPostButton: React.FC<AddPostButtonProps> = ({ onAddPost }) => {
                   className="border p-2 w-full"
                 />
                 <input
-                  type="text"
-                  placeholder="Image URL (optional)"
-                  value={postImage}
-                  onChange={(e) => setPostImage(e.target.value)}
+                  type="file"
+                  placeholder="Upload an image (optional)"
+                  onChange={handleImageUpload}
+                  accept="image/png, image/jpeg, image/jpg"
                   className="border p-2 w-full mt-2"
                 />
               </div>
