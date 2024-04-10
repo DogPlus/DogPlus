@@ -38,6 +38,23 @@ This project is a full-stack web application built with Django and React. It con
 - Backend API: http://localhost:8000
 - Frontend UI: http://localhost:3000
 
+### Interacting with database - Using pgadmin
+In the docker compose file we have a pgadmin container. After running:
+```bash
+docker compose up -d
+```
+Follow these steps to get acces to the database:
+
+1. You can access this interface at the following link http://localhost:8888.
+2. Click the "Servers" dropdown to the left
+3. Here you should see an entry "DogPlus Local Server" - Click this
+4. Enter the password "plus"
+
+This should connect you to the local database
+
+
+
+
 ### Interacting with docker
 Since docker is a containerized environment, to interact with docker you need to run commands inside the given docker container.
 
