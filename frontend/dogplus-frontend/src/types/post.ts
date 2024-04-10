@@ -1,13 +1,9 @@
 
-
-export interface NewPost{
+export interface Post  {
   author: string,
   date_posted: string
   text: string,
   image?: string,
-}
-
-export interface Post extends NewPost {
   id: number,
   profile_pic: string;
   like_count: number;

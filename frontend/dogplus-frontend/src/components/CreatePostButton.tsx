@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { NewPost, Post } from '../types/post'
+import { Post } from '../types/post'
 
 interface CreatePostButtonProps {
     onCreatePost: (newPost: Post) => void;
