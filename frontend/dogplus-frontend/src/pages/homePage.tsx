@@ -14,7 +14,7 @@ export const HomePage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/create-post/`, { // jeg skjønner ikke hvorfor det er /api/feed/create-post/ her
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/posts/user/1/`, { //TODO change to an endpoint that fetcehs from following list
           method: "GET",
           headers: {
             "Content-Type": "application/json",
