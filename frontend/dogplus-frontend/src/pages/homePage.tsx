@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Feed from '../components/Feed';
 import { AddPostButton } from '../components/AddPostButton';
-import initialPosts from '../assets/fakePosts.json';
 import { Post } from '../types/post';
 
 export const HomePage = () => {
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   const handleAddPost = (newPost: Post) => {
-    setPosts([newPost, ...posts]); // Add the new post to the end of the posts list
+    setPosts(prevPosts => [newPost, ...prevPosts]);
   };
 
   useEffect(() => {
@@ -17,8 +16,7 @@ export const HomePage = () => {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/posts/user/1/`, { //TODO change to an endpoint that fetcehs from following list
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Token "+ localStorage.getItem("token") //må kanskje endres?
+            "Authorization": "Token "+ localStorage.getItem("token")
           },
         });
 
