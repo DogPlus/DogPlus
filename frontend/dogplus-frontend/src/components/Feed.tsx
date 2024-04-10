@@ -19,7 +19,7 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
         <div>
             <h2 className="text-lg font-semibold">{post.author}</h2>
             <p className="text-gray-500 text-sm">Published on {
-  `${new Date(post.date_posted).getDate()}/${new Date(post.date_posted).getMonth() + 1}/${new Date(post.date_posted).getFullYear()} ${new Date(post.date_posted).getHours()}:${new Date(post.date_posted).getMinutes().toString().padStart(2, '0')}`
+  `${new Date(post.date_posted).getDate()}/${new Date(post.date_posted).getMonth() + 1}/${new Date(post.date_posted).getFullYear()} ${new Date(post.date_posted).getHours().toString().padStart(2, '0')}:${new Date(post.date_posted).getMinutes().toString().padStart(2, '0')}`
 }
 </p>
         </div>
