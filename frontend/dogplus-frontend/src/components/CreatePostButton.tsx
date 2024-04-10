@@ -92,13 +92,13 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = () => {
                   onChange={(e) => setPostText(e.target.value)}
                   className="border p-2 w-full"
                 />
-                <input
+                {/* <input
                   type="file"
                   placeholder="Upload an image (optional)"
                   onChange={handleImageUpload}
                   accept="image/png, image/jpeg, image/jpg"
                   className="border p-2 w-full mt-2"
-                />
+                /> */}
               </div>
               <button
                 onClick={handleCreatePost}
