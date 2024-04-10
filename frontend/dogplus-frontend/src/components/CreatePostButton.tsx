@@ -6,7 +6,7 @@ interface CreatePostButtonProps {
     onCreatePost: (newPost: Post) => void;
   }
 
-export const CreatePostButton: React.FC<CreatePostButtonProps> = () => {
+export const CreatePostButton: React.FC<CreatePostButtonProps> = ({ onCreatePost }) => {
   const [showModal, setShowModal] = useState(false);
   const [postText, setPostText] = useState('');
   const [postImage, setPostImage] = useState<File | "">("");
@@ -31,6 +31,10 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = () => {
       if(!response.ok){
         throw new Error("Failed to create new post")
       }
+
+      const newPost = await response.json();
+      onCreatePost(newPost);
+      
     }
     catch (e) {
       console.log("Error while posting: ", e)
