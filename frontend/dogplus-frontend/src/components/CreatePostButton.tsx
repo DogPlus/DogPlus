@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 
 import { NewPost, Post } from '../types/post'
 
-interface AddPostButtonProps {
-    onAddPost: (newPost: Post) => void;
+interface CreatePostButtonProps {
+    onCreatePost: (newPost: Post) => void;
   }
 
-export const AddPostButton: React.FC<AddPostButtonProps> = () => {
+export const CreatePostButton: React.FC<CreatePostButtonProps> = () => {
   const [showModal, setShowModal] = useState(false);
   const [postText, setPostText] = useState('');
   const [postImage, setPostImage] = useState<File | "">("");
 
 
-  const handlePost = async () => {
+  const handleCreatePost = async () => {
     
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/create-post/`, {
@@ -101,7 +101,7 @@ export const AddPostButton: React.FC<AddPostButtonProps> = () => {
                 />
               </div>
               <button
-                onClick={handlePost}
+                onClick={handleCreatePost}
                 className="mt-4 bg-blue-500 text-white p-2 rounded"
               >
                 Post

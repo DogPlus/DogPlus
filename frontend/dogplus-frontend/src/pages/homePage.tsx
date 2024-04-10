@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Feed from '../components/Feed';
-import { AddPostButton } from '../components/AddPostButton';
+import { CreatePostButton } from '../components/CreatePostButton';
 import { Post } from '../types/post';
 
 export const HomePage = () => {
@@ -34,7 +34,7 @@ export const HomePage = () => {
 
   return (
     <div>
-      <AddPostButton onAddPost={handleAddPost} />
+      <CreatePostButton onCreatePost={handleAddPost} />
       <Feed posts={posts} />
     </div>
   );
