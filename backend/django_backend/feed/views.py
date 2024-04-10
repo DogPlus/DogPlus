@@ -27,4 +27,4 @@ class AllPostsFromSpecificUserAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']
-        return Post.objects.filter(author=user_id)
+        return Post.objects.filter(author=user_id).order_by('-date_posted')
