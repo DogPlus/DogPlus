@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['uuid', 'username', 'email', 'password', 'role', 'is_approved', 'serviceProviderKey']
+        fields = ['id', 'username', 'email', 'password', 'role', 'is_approved', 'serviceProviderKey']
         extra_kwargs = {
             'password': {'write_only': True},
             'serviceProviderKey': {'required': False, 'allow_blank': True}
@@ -40,8 +40,8 @@ class ServiceProviderProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['uuid', 'username', 'email', 'role', 'is_approved', 'serviceProviderKey']
-        read_only_fields = ['uuid', 'username', 'email', 'role', 'is_approved', 'serviceProviderKey']
+        fields = ['id', 'username', 'email', 'role', 'is_approved', 'serviceProviderKey']
+        read_only_fields = ['id', 'username', 'email', 'role', 'is_approved', 'serviceProviderKey']
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
