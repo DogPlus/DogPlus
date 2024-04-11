@@ -4,28 +4,23 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-from django.contrib.auth import get_user_model
-from rest_framework import serializers
-
-User = get_user_model()
-
 class UserSerializer(serializers.ModelSerializer):
-    serviceProviderKey = serializers.CharField(write_only=True, required=False)
+    serviceProviderKey = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password', 'role', 'serviceProviderKey')
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ['uuid', 'username', 'email', 'password', 'role', 'is_approved', 'serviceProviderKey']
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'serviceProviderKey': {'required': False, 'allow_blank': True}
+        }
 
     def create(self, validated_data):
         serviceProviderKey = validated_data.pop('serviceProviderKey', None)
-        
         user = User.objects.create_user(**validated_data)
-        
         if user.role == User.SERVICE_PROVIDER and serviceProviderKey:
             user.serviceProviderKey = serviceProviderKey
             user.save()
-            
         return user
 
     def validate_email(self, value):
@@ -40,13 +35,13 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("This username is already taken.")
         return value
 
-    
 class ServiceProviderProfileSerializer(serializers.ModelSerializer):
+    serviceProviderKey = serializers.CharField(source='serviceproviderkey', read_only=True)
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'serviceProviderKey']
-        read_only_fields = ['id', 'username', 'serviceProviderKey'] 
+        fields = ['uuid', 'username', 'email', 'role', 'is_approved', 'serviceProviderKey']
+        read_only_fields = ['uuid', 'username', 'email', 'role', 'is_approved', 'serviceProviderKey']
 
     def update(self, instance, validated_data):
-        # Custom update logic can be added here if needed
         return super().update(instance, validated_data)

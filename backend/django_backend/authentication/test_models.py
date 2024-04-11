@@ -17,3 +17,4 @@ class CustomUserModelTests(TestCase):
 
         self.assertEqual(service_provider.role, User.SERVICE_PROVIDER, "Explicit role should be 'Service Provider'")
         self.assertEqual(admin_user.role, User.ADMIN, "Explicit role should be 'Admin'")
+
