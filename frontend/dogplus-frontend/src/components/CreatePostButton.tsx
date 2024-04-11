@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import UserContext from '../context/UserContext';
 
 import { Post } from '../types/post'
 
@@ -13,7 +14,6 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({ onCreatePost
 
 
   const handleCreatePost = async () => {
-    
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/create-post/`, {
         method: "POST",
@@ -22,7 +22,7 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({ onCreatePost
           "Authorization": "Token "+ localStorage.getItem("token") //må kanskje endres?
         },
         body: JSON.stringify({
-          author: 1, // må endres til get user id
+          author: localStorage.getItem("user_id"), // må endres til get user id
           date: new Date().toISOString(), //må formateres penere
           text: postText,
           image: postImage
