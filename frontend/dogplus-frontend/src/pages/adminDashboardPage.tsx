@@ -8,13 +8,16 @@ export const AdminDashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:8000/api/auth/service-providers/pending/", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${token}`,
-      },
-    })
+    fetch(
+      `${process.env.REACT_APP_BACKEND_HOST}/api/auth/service-providers/pending/`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+      }
+    )
       .then((response) => {
         return response.json();
       })
@@ -29,7 +32,7 @@ export const AdminDashboard = () => {
 
   const approveServiceProvider = (userId: string) => {
     const token = localStorage.getItem("token");
-    const url = `http://localhost:8000/api/auth/service-providers/approve/${userId}/`;
+    const url = `${process.env.REACT_APP_BACKEND_HOST}/api/auth/service-providers/approve/${userId}`;
 
     fetch(url, {
       method: "PATCH",
@@ -48,7 +51,7 @@ export const AdminDashboard = () => {
 
   const rejectServiceProvider = (userId: string) => {
     const token = localStorage.getItem("token");
-    const url = `http://localhost:8000/api/auth/service-providers/delete/${userId}/`;
+    const url = `${process.env.REACT_APP_BACKEND_HOST}/api/auth/service-providers/delete/${userId}`;
 
     fetch(url, {
       method: "DELETE",
