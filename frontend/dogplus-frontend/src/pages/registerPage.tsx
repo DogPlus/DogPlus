@@ -107,7 +107,7 @@ export const RegisterPage = () => {
         setUser(userDataWithID);
         navigate("/home");
       } else {
-        navigate("/registration-pending"); // Example path, adjust as needed
+        navigate("/approval-pending");
       }
     } catch (error) {
       setError("An error occurred during registration. Please try again.");
