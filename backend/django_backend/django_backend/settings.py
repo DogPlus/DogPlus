@@ -30,6 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 env = environ.Env(DEBUG=(bool, True))
 env_file = os.path.join(BASE_DIR, ".env")
+DEBUG = True
 
 DEBUG = os.environ.get("DEBUG", False)
 print(f"DEBUG MODE:", DEBUG)
