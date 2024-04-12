@@ -41,7 +41,6 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
 
   const isLiked = (post: Post) => {
     const liked = likedPosts.some(likedPost => likedPost.id === post.id);
-    console.log(`Checking if post is liked: ${post.id} is: ${liked}`)
     return liked;
   }
   if (loading) {
