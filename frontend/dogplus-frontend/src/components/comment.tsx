@@ -20,7 +20,7 @@ export const CommentComponent: React.FC<CommentProps> = ({comment}) => {
 
   return (
     <div key={comment.id} className="flex items-center w-100 mb-5">
-      <div className="w-10 h-10 bg-purple-500 rounded-full" />
+      <img className="w-12 h-12 rounded-full mr-3" src={undefined} alt="Profile Image" />
       <div className="ml-5 flex flex-col">
         <p className='text-sm text-gray-700'>{comment.author.substring(0,15)} - {formattedDate}</p>
         <p className='text-base'>{comment.text}</p>
