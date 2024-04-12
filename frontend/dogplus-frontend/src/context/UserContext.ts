@@ -7,6 +7,11 @@ interface UserContextType {
   setUser: Dispatch<SetStateAction<UserData | null>>;
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+const initialContextValue: UserContextType = {
+  user: null,
+  setUser: () => {}, // Provide a dummy function for setUser
+};
+
+const UserContext = createContext<UserContextType>(initialContextValue);
 
 export default UserContext;

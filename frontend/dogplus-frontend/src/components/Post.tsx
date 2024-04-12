@@ -52,7 +52,6 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
     }
   };
 
-    console.log(liked)
     return (
       <div className="bg-white rounded-lg shadow-md border p-4 mt-4">
         <div className="flex items-center mb-4">

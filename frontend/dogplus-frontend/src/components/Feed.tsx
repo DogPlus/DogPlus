@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Post } from '../types/post'
+import { Loading } from './common/loading';
 import { PostCard } from './Post';
 
 interface FeedProps {
@@ -9,13 +10,13 @@ interface FeedProps {
 
 const Feed: React.FC<FeedProps> = ({ posts }) => {
   const [likedPosts, setLikedPosts] = React.useState<Post[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
-  const user_id = 1
 
   useEffect(() => {
     const fetchLikedPosts = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/posts/liked_by/${user_id}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/posts/liked_by/${localStorage.getItem("user_id")}`, {
           method: "GET",
           headers: {
             "Authorization": `Token ${localStorage.getItem("token")}`
@@ -28,6 +29,7 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
 
         const data = await response.json();
         setLikedPosts(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching liked posts:", error);
       }
@@ -35,10 +37,14 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
 
     fetchLikedPosts(); // Call the async function immediately
 
-  }, [user_id]);
+  }, []);
 
   const isLiked = (post: Post) => {
-    return likedPosts.some(likedPost => likedPost.id === post.id);
+    const liked = likedPosts.some(likedPost => likedPost.id === post.id);
+    return liked;
+  }
+  if (loading) {
+    return <><Loading /></>;
   }
 
   return (

@@ -37,6 +37,7 @@ export const LoginPage = () => {
       console.log("Login Successful:", data);
 
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user_id", data.user_id);
 
       navigate("/home");
     } catch (error) {

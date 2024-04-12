@@ -96,8 +96,9 @@ export const RegisterPage = () => {
 
       if (data.token) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user_id", data.id);
         const userDataWithID: UserData = {
-          id: data.uuid,
+          id: data.id,
           username: data.username,
           email: data.email,
           role: data.role,
