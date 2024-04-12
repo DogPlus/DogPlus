@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Post } from '../types/post'
+import { Loading } from './common/loading';
 import { PostCard } from './Post';
 
 interface FeedProps {
@@ -9,6 +10,7 @@ interface FeedProps {
 
 const Feed: React.FC<FeedProps> = ({ posts }) => {
   const [likedPosts, setLikedPosts] = React.useState<Post[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
 
   useEffect(() => {
@@ -27,6 +29,7 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
 
         const data = await response.json();
         setLikedPosts(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching liked posts:", error);
       }
@@ -37,7 +40,12 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
   }, []);
 
   const isLiked = (post: Post) => {
-    return likedPosts.some(likedPost => likedPost.id === post.id);
+    const liked = likedPosts.some(likedPost => likedPost.id === post.id);
+    console.log(`Checking if post is liked: ${post.id} is: ${liked}`)
+    return liked;
+  }
+  if (loading) {
+    return <><Loading /></>;
   }
 
   return (
