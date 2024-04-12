@@ -14,6 +14,7 @@ class Post(models.Model):
     image = models.URLField(blank=True, null=True)
     date_posted = models.DateTimeField(auto_now_add=True)
     like_count = models.IntegerField(default=0)
+    liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
     comment_count = models.IntegerField(default=0)
 
     def __str__(self):
