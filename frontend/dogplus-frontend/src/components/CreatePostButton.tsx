@@ -23,7 +23,6 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({ onCreatePost
       const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/create-post/`, {
         method: "POST",
         headers: {
-          "Content-Type": "multipart/form-data",
           "Authorization": "Token "+ localStorage.getItem("token") //må kanskje endres?
         },
         body: form_data,
