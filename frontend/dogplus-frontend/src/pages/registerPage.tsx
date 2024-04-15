@@ -96,8 +96,9 @@ export const RegisterPage = () => {
 
       if (data.token) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user_id", data.id);
         const userDataWithID: UserData = {
-          id: data.uuid,
+          id: data.id,
           username: data.username,
           email: data.email,
           role: data.role,
@@ -107,7 +108,7 @@ export const RegisterPage = () => {
         setUser(userDataWithID);
         navigate("/home");
       } else {
-        navigate("/registration-pending"); // Example path, adjust as needed
+        navigate("/approval-pending");
       }
     } catch (error) {
       setError("An error occurred during registration. Please try again.");

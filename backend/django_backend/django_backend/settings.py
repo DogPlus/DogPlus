@@ -30,6 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 env = environ.Env(DEBUG=(bool, True))
 env_file = os.path.join(BASE_DIR, ".env")
+DEBUG = True
 
 # Attempt to load the Project ID into the environment, safely failing on error.
 try:
@@ -96,6 +97,7 @@ INSTALLED_APPS = [
     'authentication',
     'services',
     'bookings',
+    'feed'
 ]
 
 MIDDLEWARE = [
