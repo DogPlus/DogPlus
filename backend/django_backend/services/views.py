@@ -2,12 +2,14 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from backend.django_backend.authentication.permissions import IsServiceProvider
-from backend.django_backend.bookings.models import Booking
-from backend.django_backend.bookings.serializers import BookingSerializer
+from authentication.permissions import IsServiceProvider 
+from bookings.models import Booking  
+from bookings.serializers import BookingSerializer  
 from .models import Service
 from .serializers import ServiceSerializer
 from rest_framework import status
+
+
 
 class ServiceCreateUpdateView(APIView):
     permission_classes = [IsAuthenticated, IsServiceProvider]
