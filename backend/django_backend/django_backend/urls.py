@@ -22,5 +22,5 @@ urlpatterns = [
     path('api/auth/', include('authentication.urls')), 
     path('api/services/', include('services.urls')),
     path('api/feed/', include('feed.urls')),
-
+    path('api/booking/', include('bookings.urls'))
 ]

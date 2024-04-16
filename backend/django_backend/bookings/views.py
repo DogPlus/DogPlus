@@ -1,12 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from backend.django_backend.authentication.models import CustomUser
+from authentication.models import CustomUser
 from .serializers import BookingSerializer
 from rest_framework import status
 
 
-class CreateBookingAPIView(APIView):
+class BookingView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
@@ -29,3 +29,10 @@ class CreateBookingAPIView(APIView):
             serializer.save(user=request.user, service_provider=service_provider)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AvailableBookingsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        return JsonResponse(['13:00', '14:00'])
+
