@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+from .models import Booking
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -33,6 +35,45 @@ class BookingView(APIView):
 class AvailableBookingsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        return JsonResponse(['13:00', '14:00'])
+    def get_available_timeslots(self, service_provider_id, date, start_time):
+        # Parse date string to datetime object
+        date_obj = datetime.strptime(date, '%Y-%m-%d').date()
+        # Parse start time string to time object
+        start_time_obj = datetime.strptime(start_time, '%H:%M').time()
+        
+        # Get bookings for the service provider for the specified date
+        bookings = Booking.objects.filter(
+            service_provider_id=service_provider_id,
+            booking_date=date_obj
+        ).values_list('start_time', 'end_time')
 
+        # Generate list of all possible timeslots in 30-minute intervals for the specified date
+        start_time = datetime.combine(date_obj, start_time_obj)
+        end_time = datetime.combine(date_obj, start_time_obj) + timedelta(hours=3)
+        timeslots = []
+        current_time = start_time
+        while current_time < end_time:
+            timeslots.append(current_time.time())
+            current_time += timedelta(minutes=30)
+        
+        # Filter out timeslots that are already booked
+        available_timeslots = []
+        for timeslot in timeslots:
+            is_booked = any(
+                booking[0] <= timeslot < booking[1] for booking in bookings
+            )
+            if not is_booked:
+                available_timeslots.append(timeslot.strftime('%H:%M'))
+
+        return available_timeslots
+
+    def get(self, request, service_provider_id, *args, **kwargs):
+        date = request.query_params.get('date')
+        start_time = request.query_params.get('start_time')
+        if not date:
+            return Response({"error": "Date parameter is missing"}, status=400)
+        if not start_time:
+            return Response({"error": "start_time parameter is missing"}, status=400)
+
+        available_timeslots = self.get_available_timeslots(service_provider_id, date, start_time)
+        return Response(available_timeslots)
