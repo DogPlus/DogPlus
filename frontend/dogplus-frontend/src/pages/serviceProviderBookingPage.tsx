@@ -3,12 +3,14 @@ import { Datepicker } from "flowbite-react";
 import TimePicker from '../components/common/timepicker';
 import TimeSelector from '../components/common/timeselector';
 import { useParams } from 'react-router-dom';
+import { Loading } from '../components/common/loading';
 
 export const ServiceProviderBookingPage = () => {
   const [selectedStartTime, setSelectedStartTime]= React.useState<string>("12:00");
   const [selectedDate, setSelectedDate]= React.useState<string>(new Date().toISOString().split('T')[0]); // [YYYY-MM-DD
   const [selectedTime, setSelectedTime]= React.useState<string | null>(null);
-  const [availableTimeslots, setAvailableTimeslots]= React.useState<string[]>([]);
+  const [availableTimeslots, setAvailableTimeslots]= React.useState<string[] | null>();
+  const [serivceTimeInterval, setSerivceTimeInterval]= React.useState<number | null>();
 
   const { id } = useParams();
 
@@ -21,10 +23,10 @@ export const ServiceProviderBookingPage = () => {
     const fetchAvailableTimes = async () => { 
       // Fetch available timeslots for the selected date
       try {
-        const response = await fetch(`api/booking/available/${id}?date=${selectedDate}&start_time=${selectedStartTime}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/booking/available/${id}?date=${selectedDate}&start_time=${selectedStartTime}`, {
           method: 'GET',
           headers: {
-            'Authorization': `Token ${localStorage.getItem("token")}}`,
+            'Authorization': `Token ${localStorage.getItem("token")}`,
           },
         });
 
@@ -32,13 +34,18 @@ export const ServiceProviderBookingPage = () => {
           throw new Error('Failed to fetch available timeslots');
         }
         const data = await response.json();
-        setAvailableTimeslots(data);
+        setAvailableTimeslots(data.timeslots);
+        setSerivceTimeInterval(data.interval);
       } catch (error) {
         console.error(error);
       }
     }
     fetchAvailableTimes();
   }, [selectedStartTime, selectedDate, id]);
+
+  if (!serivceTimeInterval || !availableTimeslots) {
+    return <Loading />;
+  }
 
   return (
     <div className="m-3">
@@ -56,7 +63,7 @@ export const ServiceProviderBookingPage = () => {
         <TimeSelector selectedTime={selectedStartTime} onTimeChange={setSelectedStartTime} />
       </div>
       <div className="mb-3">
-        <TimePicker selectedTime={selectedTime} startTime={selectedStartTime} availableTimes={availableTimeslots} onTimeChange={onTimeChange} />
+        <TimePicker selectedTime={selectedTime} startTime={selectedStartTime} availableTimes={availableTimeslots} interval={serivceTimeInterval} onTimeChange={onTimeChange} />
       </div>
       <button
         className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-purple-blue-600 focus:ring-4 focus:ring-purple-blue-100 bg-purple-blue-500"

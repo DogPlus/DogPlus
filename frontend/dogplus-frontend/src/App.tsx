@@ -33,7 +33,14 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route path="serviceproviders/services/:id/booking" element={<ServiceProviderBookingPage />} />
+        <Route 
+          path="serviceproviders/services/:id/booking" 
+          element={
+              <RequireAuth>
+                <ServiceProviderBookingPage />
+              </RequireAuth>
+          } 
+        />
 
         <Route
           path="user"

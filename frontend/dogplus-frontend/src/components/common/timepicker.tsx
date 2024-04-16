@@ -4,17 +4,18 @@ interface TimePickerProps {
   selectedTime: string | null;
   availableTimes: string[];
   startTime: string;
+  interval: number;
   onTimeChange: (time: string) => void;
 }
 
-const TimePicker: React.FC<TimePickerProps> = ({ selectedTime, availableTimes, startTime, onTimeChange }) => {
+const TimePicker: React.FC<TimePickerProps> = ({ selectedTime, availableTimes, startTime, interval, onTimeChange }) => {
   // Generating time slots from 08:00 to 20:00 in 30-minute intervals
   const generateTimeSlots = (): string[] => {
     const start_hour = parseInt(startTime.split(":")[0]);
     const start_minute = parseInt(startTime.split(":")[1]);
     const timeSlots: string[] = [];
     for (let hour = start_hour; hour <= 20; hour++) {
-      for (let minute = start_minute; minute < 60; minute += 15) {
+      for (let minute = start_minute; minute < 60; minute += interval) {
         const formattedHour = hour.toString().padStart(2, "0");
         const formattedMinute = minute.toString().padStart(2, "0");
         const time = `${formattedHour}:${formattedMinute}`;
