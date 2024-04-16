@@ -35,7 +35,7 @@ class BookingView(APIView):
 class AvailableBookingsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get_available_timeslots(self, service_provider_id, date, start_time):
+    def get_available_timeslots(self, service_id, date, start_time):
         # Parse date string to datetime object
         date_obj = datetime.strptime(date, '%Y-%m-%d').date()
         # Parse start time string to time object
@@ -43,18 +43,20 @@ class AvailableBookingsView(APIView):
         
         # Get bookings for the service provider for the specified date
         bookings = Booking.objects.filter(
-            service_provider_id=service_provider_id,
+            service_id=service_id,
             booking_date=date_obj
         ).values_list('start_time', 'end_time')
 
         start_time = datetime.combine(date_obj, start_time_obj)
         end_time = datetime.combine(date_obj, start_time_obj) + timedelta(hours=3)
+        interval = Service.objects.get(id=service_id).session_time
+        
         timeslots = generate_possible_timeslots(start_time, end_time, interval=30)
         # Filter out timeslots that are already booked
         available_timeslots = filter_out_unavailable_timeslots(bookings, timeslots)
         return available_timeslots
 
-    def get(self, request, service_provider_id, *args, **kwargs):
+    def get(self, request, service_id, *args, **kwargs):
         date = request.query_params.get('date')
         start_time = request.query_params.get('start_time')
         if not date:
@@ -62,5 +64,5 @@ class AvailableBookingsView(APIView):
         if not start_time:
             return Response({"error": "start_time parameter is missing"}, status=400)
 
-        available_timeslots = self.get_available_timeslots(service_provider_id, date, start_time)
+        available_timeslots = self.get_available_timeslots(service_id, date, start_time)
         return Response(available_timeslots)

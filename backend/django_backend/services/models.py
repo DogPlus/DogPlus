@@ -28,7 +28,7 @@ class Service(models.Model):
     price_type = models.CharField(max_length=20, editable=False)
     fixed_price = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     price_per_session = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
-    session_time = models.IntegerField(help_text="Duration of each session in minutes (if applicable)", blank=True, null=True)
+    session_time = models.IntegerField(help_text="Duration of each session in minutes", default=30)
 
     def save(self, *args, **kwargs):
         # Automatically set price type based on the service name
