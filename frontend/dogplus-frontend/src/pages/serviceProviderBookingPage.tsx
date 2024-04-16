@@ -5,6 +5,19 @@ import TimeSelector from '../components/common/timeselector';
 import { useParams } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
 
+
+function addMinutesToTime(time: string, minutes: number) {
+    var parts = time.split(":");
+    var hours = Number(parts[0]);
+    var mins = Number(parts[1]);
+
+    mins += minutes;
+    hours += Math.floor(mins / 60);
+    mins %= 60;
+
+    return (hours.toString().padStart(2, '0') + ":" + mins.toString().padStart(2, '0'));
+}
+
 export const ServiceProviderBookingPage = () => {
   const [selectedStartTime, setSelectedStartTime]= React.useState<string>("12:00");
   const [selectedDate, setSelectedDate]= React.useState<string>(new Date().toISOString().split('T')[0]); // [YYYY-MM-DD
@@ -18,10 +31,8 @@ export const ServiceProviderBookingPage = () => {
     setSelectedTime(time);
   };
 
-  // TODO: Fetch avaialable times for the selected date
   useEffect(() => {
     const fetchAvailableTimes = async () => { 
-      // Fetch available timeslots for the selected date
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/booking/available/${id}?date=${selectedDate}&start_time=${selectedStartTime}`, {
           method: 'GET',
@@ -42,6 +53,42 @@ export const ServiceProviderBookingPage = () => {
     }
     fetchAvailableTimes();
   }, [selectedStartTime, selectedDate, id]);
+
+  const onSubmitBooking = async () => {
+    if (!selectedTime) {
+      alert('Please select a time slot');
+      return;
+    }
+    if (!serivceTimeInterval) {
+      throw new Error('Service time interval not set');
+    }
+
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/booking/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          booking_date: selectedDate,
+          start_time: selectedTime,
+          end_time: addMinutesToTime(selectedTime, serivceTimeInterval),
+          service: id,
+          user: localStorage.getItem("user_id"),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to book timeslot');
+      }
+
+      alert('Booking successful');
+    } catch (error) {
+      console.error(error);
+      alert('Failed to book timeslot');
+    }
+  }
 
   if (!serivceTimeInterval || !availableTimeslots) {
     return <Loading />;
@@ -68,6 +115,7 @@ export const ServiceProviderBookingPage = () => {
       <button
         className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-purple-blue-600 focus:ring-4 focus:ring-purple-blue-100 bg-purple-blue-500"
         type="submit"
+        onClick={onSubmitBooking}
       >
         Book
       </button>
