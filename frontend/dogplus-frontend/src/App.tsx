@@ -7,6 +7,9 @@ import { RegisterPage } from "./pages/registerPage";
 import { ServiceProviderPage } from "./pages/serviceProviderPage";
 import { UserPage } from "./pages/userPage";
 import { ServiceProviderBookingPage } from "./pages/serviceProviderBookingPage";
+import { AdminDashboard } from "./pages/adminDashboardPage";
+import { ApprovalPendingPage } from "./pages/approvalPendingPage";
+import { UserRole } from "./types/user";
 
 function App() {
   return (
@@ -31,6 +34,7 @@ function App() {
           }
         />
         <Route path="serviceproviders/:id/booking" element={<ServiceProviderBookingPage />} />
+
         <Route
           path="user"
           element={
@@ -39,6 +43,16 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="admin"
+          element={
+            <RequireAuth requiredRoles={[UserRole.Admin]}>
+              <AdminDashboard />
+            </RequireAuth>
+          }
+        />
+        <Route path="approval-pending" element={<ApprovalPendingPage />} />
+
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>
     </Routes>

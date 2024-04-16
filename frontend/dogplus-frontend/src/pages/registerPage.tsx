@@ -1,6 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { UserData } from "../types/user";
+import { UserCreationData, UserData, UserRole } from "../types/user";
 import { useNavigate } from "react-router-dom";
+import useUser from "../hooks/useUser";
+
 export const RegisterPage = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -11,6 +13,8 @@ export const RegisterPage = () => {
     useState<boolean>(false);
   const [serviceProviderKey, setServiceProviderKey] = useState<string>("");
   const navigate = useNavigate();
+
+  const { setUser } = useUser();
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -44,26 +48,27 @@ export const RegisterPage = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Check password strength
     if (!passwordStrengthCheck(password)) {
       setError(
-        "Password must be at least 8 characters long and include uppercase, lowercase and numbers."
+        "Password must be at least 8 characters long and include uppercase, lowercase, and numbers."
       );
       return;
     }
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
-    // Reset error state if successful
+
     setError("");
 
-    const userData: UserData = {
+    const userData: UserCreationData = {
       username,
       email,
       password,
+      role: registerAsServiceProvider
+        ? UserRole.ServiceProvider
+        : UserRole.User,
       registerAsServiceProvider,
       serviceProviderKey: registerAsServiceProvider
         ? serviceProviderKey
@@ -71,14 +76,16 @@ export const RegisterPage = () => {
     };
 
     try {
-      console.log("Userdata: " + JSON.stringify(userData));
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/auth/register/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_HOST}/api/auth/register/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
       if (!response.ok) {
         console.log("Response: " + response.status);
@@ -86,12 +93,26 @@ export const RegisterPage = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem("token", data.token);
 
-      navigate("/home");
-      console.log(data);
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user_id", data.id);
+        const userDataWithID: UserData = {
+          id: data.id,
+          username: data.username,
+          email: data.email,
+          role: data.role,
+          isApproved: data.is_approved,
+          password: data.password,
+        };
+        setUser(userDataWithID);
+        navigate("/home");
+      } else {
+        navigate("/approval-pending");
+      }
     } catch (error) {
-      console.error("Error:", error);
+      setError("An error occurred during registration. Please try again.");
+      console.error("Registration error:", error);
     }
   };
 
