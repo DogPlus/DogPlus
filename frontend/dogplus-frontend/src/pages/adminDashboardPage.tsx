@@ -23,7 +23,7 @@ export const AdminDashboard = () => {
       })
       .then((data) => {
         if (Array.isArray(data)) {
-          setServiceProviders(data.map((item) => ({ ...item, id: item.uuid })));
+          setServiceProviders(data.map((item) => ({ ...item, id: item.id })));
         } else {
           setServiceProviders([]);
         }
@@ -32,7 +32,7 @@ export const AdminDashboard = () => {
 
   const approveServiceProvider = (userId: string) => {
     const token = localStorage.getItem("token");
-    const url = `${process.env.REACT_APP_BACKEND_HOST}/api/auth/service-providers/approve/${userId}`;
+    const url = `${process.env.REACT_APP_BACKEND_HOST}/api/auth/service-providers/approve/${userId}/`;
 
     fetch(url, {
       method: "PATCH",
@@ -51,7 +51,7 @@ export const AdminDashboard = () => {
 
   const rejectServiceProvider = (userId: string) => {
     const token = localStorage.getItem("token");
-    const url = `${process.env.REACT_APP_BACKEND_HOST}/api/auth/service-providers/delete/${userId}`;
+    const url = `${process.env.REACT_APP_BACKEND_HOST}/api/auth/service-providers/delete/${userId}/`;
 
     fetch(url, {
       method: "DELETE",
