@@ -9,7 +9,7 @@ interface TimePickerProps {
 }
 
 const TimePicker: React.FC<TimePickerProps> = ({ selectedTime, availableTimes, startTime, interval, onTimeChange }) => {
-  // Generating time slots from 08:00 to 20:00 in 30-minute intervals
+  // Generating time slots from startTime to endTime in intervals
   const generateTimeSlots = (): string[] => {
     const start_hour = parseInt(startTime.split(":")[0]);
     const start_minute = parseInt(startTime.split(":")[1]);
@@ -27,8 +27,6 @@ const TimePicker: React.FC<TimePickerProps> = ({ selectedTime, availableTimes, s
 
   // Check if a time slot is available
   const isAvailable = (time: string): boolean => {
-    // You can implement your own logic to check availability here
-    // For demonstration purposes, let's consider all time slots available
     return availableTimes.includes(time);
   };
 
