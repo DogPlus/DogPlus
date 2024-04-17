@@ -108,7 +108,7 @@ def pending_service_providers(request):
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def approve_service_provider(request, user_uuid):
-    user = get_object_or_404(CustomUser, uuid=user_uuid, role=CustomUser.SERVICE_PROVIDER)
+    user = get_object_or_404(CustomUser, id=user_uuid, role=CustomUser.SERVICE_PROVIDER)
     user.is_approved = True
     user.save()
     return Response({'status': 'Service provider approved'})
@@ -116,6 +116,6 @@ def approve_service_provider(request, user_uuid):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def delete_service_provider(request, user_uuid):
-    user = get_object_or_404(CustomUser, uuid=user_uuid, role=CustomUser.SERVICE_PROVIDER)
+    user = get_object_or_404(CustomUser, id=user_uuid, role=CustomUser.SERVICE_PROVIDER)
     user.delete()
     return Response({'status': 'Service provider deleted'}) 
