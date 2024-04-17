@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -23,15 +24,19 @@ class ServiceCreateUpdateView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def patch(self, request):
-        # Update existing service
-        service = get_object_or_404(Service, service_provider=request.user)
+    def patch(self, request, pk=None):
+        try:
+            service = Service.objects.get(pk=pk, service_provider=request.user)
+        except Service.DoesNotExist:
+            raise Http404("Service not found")
+        
         serializer = ServiceSerializer(service, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ServiceProviderDashboardView(APIView):
     permission_classes = [IsAuthenticated, IsServiceProvider]
