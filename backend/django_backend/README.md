@@ -48,7 +48,18 @@ gcloud run deploy api-service \
 3. Create a super user
 
    ```bash
-   python manage.py createsuperuser
+   Create ADMIN user:
+
+   1. docker-compose exec backend python3 manage.py createsuperuser
+   2. docker-compose exec backend python3 manage.py shell
+   3. Execute each line at the time:
+   
+   from django.contrib.auth import get_user_model
+   User = get_user_model()
+   user = User.objects.get(username='your_superuser_username')
+   user.role = User.ADMIN  # Assuming 'ADMIN' corresponds to the appropriate choice in your ROLE_CHOICES
+   user.is_approved = True  # If you want to mark the user as approved
+   user.save()
    ```
 
    **NB**: When you type your password, it might look like nothing is happening, but it is.
