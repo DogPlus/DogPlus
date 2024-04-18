@@ -92,8 +92,8 @@ class ServiceProviderDashboardViewTest(TestCase):
         # Create some bookings for the service provider by the test user
         self.booking1 = Booking.objects.create(
             service=self.service,
-            user=self.test_user,  # test user as the customer
-            service_provider=self.service_provider,  # service provider managing the service
+            user=self.test_user, 
+            service_provider=self.service_provider, 
             booking_date=timezone.now() + timezone.timedelta(days=1),
             start_time=timezone.now().time(),
             end_time=(timezone.now() + timezone.timedelta(hours=1)).time(),
@@ -101,8 +101,8 @@ class ServiceProviderDashboardViewTest(TestCase):
         )
         self.booking2 = Booking.objects.create(
             service=self.service,
-            user=self.test_user,  # test user as the customer
-            service_provider=self.service_provider,  # service provider managing the service
+            user=self.test_user,  
+            service_provider=self.service_provider,  
             booking_date=timezone.now() + timezone.timedelta(days=2),
             start_time=timezone.now().time(),
             end_time=(timezone.now() + timezone.timedelta(hours=1)).time(),
