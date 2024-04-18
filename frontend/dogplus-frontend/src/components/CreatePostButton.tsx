@@ -9,24 +9,23 @@ interface CreatePostButtonProps {
 
 export const CreatePostButton: React.FC<CreatePostButtonProps> = ({ onCreatePost }) => {
   const [showModal, setShowModal] = useState(false);
-  const [postText, setPostText] = useState('');
-  const [postImage, setPostImage] = useState<File | "">("");
+  const [postText, setPostText] = useState<string>('');
+  const [postImage, setPostImage] = useState<File | null>();
 
 
   const handleCreatePost = async () => {
     try {
+      let form_data = new FormData();
+      if(postImage) {
+        form_data.append("image", postImage, postImage.name)
+      }
+      form_data.append("text", postText)
       const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/create-post/`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           "Authorization": "Token "+ localStorage.getItem("token") //må kanskje endres?
         },
-        body: JSON.stringify({
-          author: localStorage.getItem("user_id"), // må endres til get user id
-          date: new Date().toISOString(), //må formateres penere
-          text: postText,
-          image: postImage
-        }),
+        body: form_data,
       });
       if(!response.ok){
         throw new Error("Failed to create new post")
@@ -43,7 +42,7 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({ onCreatePost
 
     setShowModal(false);
     setPostText('');
-    setPostImage('');
+    setPostImage(null);
 
 
   };
@@ -61,7 +60,7 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({ onCreatePost
           setPostImage(file);
         } else {
           alert("Please select an image file.");
-          setPostImage('')
+          setPostImage(null)
         }
       }
     };
@@ -96,13 +95,13 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({ onCreatePost
                   onChange={(e) => setPostText(e.target.value)}
                   className="border p-2 w-full"
                 />
-                {/* <input
+                <input
                   type="file"
                   placeholder="Upload an image (optional)"
                   onChange={handleImageUpload}
                   accept="image/png, image/jpeg, image/jpg"
                   className="border p-2 w-full mt-2"
-                /> */}
+                />
               </div>
               <button
                 onClick={handleCreatePost}

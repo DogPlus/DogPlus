@@ -15,7 +15,9 @@ class CreatePostAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = PostSerializer(data=request.data)
+        request.data['author'] = request.user.id
+
+        serializer = PostSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -98,6 +98,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'authentication',
+    'services',
+    'bookings',
     'feed'
 ]
 
@@ -203,16 +205,39 @@ USE_I18N = True
 
 USE_TZ = True
 
+STATIC_URL = '/static/'
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-#### See https://cloud.google.com/python/django/run#cloud-stored_static
-# Define static storage via django-storages[google]
-GS_BUCKET_NAME = env("GS_BUCKET_NAME")
-STATIC_URL = "/static/"
-DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
-STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
-GS_DEFAULT_ACL = "publicRead"
+if (os.getenv("USE_LOCAL_DATABASE", None)):
+    # If using local database, use local static files
+    print("[STATIC]: Using local static files")
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+else:
+    # https://docs.djangoproject.com/en/5.0/howto/static-files/
+    #### See https://cloud.google.com/python/django/run#cloud-stored_static
+    # Define static storage via django-storages[google]
+    GS_BUCKET_NAME = env("GS_BUCKET_NAME")
+    STATIC_URL = "/static/"
+    DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+    STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+    GS_DEFAULT_ACL = "publicRead"
+
+
+MEDIA_URL = '/media/'
+if os.getenv("USE_LOCAL_DATABASE"):
+    # If using local database, use local media files
+    print("[MEDIA]: Using local media files")
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+else:
+    # If not using local database, use Google Cloud Storage for media files
+    # Configure Google Cloud Storage settings here
+    print("[MEDIA]: Using remote media files")
+    GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME")
+    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/rest_framework/img/"
+    DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+    GS_DEFAULT_ACL = "publicRead"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

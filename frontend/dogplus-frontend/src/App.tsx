@@ -6,6 +6,7 @@ import { LoginPage } from "./pages/loginPage";
 import { RegisterPage } from "./pages/registerPage";
 import { ServiceProviderPage } from "./pages/serviceProviderPage";
 import { UserPage } from "./pages/userPage";
+import { ServiceProviderBookingPage } from "./pages/serviceProviderBookingPage";
 import { AdminDashboard } from "./pages/adminDashboardPage";
 import { ApprovalPendingPage } from "./pages/approvalPendingPage";
 import { UserRole } from "./types/user";
@@ -32,6 +33,14 @@ function App() {
               <ServiceProviderPage />
             </RequireAuth>
           }
+        />
+        <Route 
+          path="serviceproviders/services/:id/booking" 
+          element={
+              <RequireAuth>
+                <ServiceProviderBookingPage />
+              </RequireAuth>
+          } 
         />
 
         <Route
