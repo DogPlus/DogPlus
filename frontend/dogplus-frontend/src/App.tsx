@@ -12,7 +12,7 @@ import { ApprovalPendingPage } from "./pages/approvalPendingPage";
 import { UserRole } from "./types/user";
 import { PostDetailPage } from "./pages/postDetailPage";
 
-import { lazy } from "react";
+import { Suspense, lazy } from "react";
 const ServiceProviderDashboard = lazy(
   () => import("./pages/serviceProvider/serviceProviderDashboard")
 );
@@ -50,11 +50,12 @@ function App() {
           path="serviceprovider/dashboard"
           element={
             <RequireAuth requiredRoles={[UserRole.ServiceProvider]}>
-              <ServiceProviderDashboard />
+              <Suspense fallback={<div>Loading Dashboard...</div>}>
+                <ServiceProviderDashboard />
+              </Suspense>
             </RequireAuth>
           }
-        ></Route>
-
+        />
         <Route
           path="user"
           element={
