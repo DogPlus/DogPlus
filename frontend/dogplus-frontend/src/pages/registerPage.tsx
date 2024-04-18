@@ -105,7 +105,11 @@ export const RegisterPage = () => {
           isApproved: data.is_approved,
         };
         setUser(userDataWithID);
-        navigate("/home");
+        if (data.role === UserRole.Admin) {
+          navigate("/admin");
+        } else {
+          navigate("/home");
+        }
       } else {
         navigate("/approval-pending");
       }

@@ -47,6 +47,7 @@ export const LoginPage = () => {
         isApproved: data.is_approved,
       };
 
+      setUser(userData);
       if (data.role === UserRole.Admin) {
         navigate("/admin");
       } else {
