@@ -12,6 +12,10 @@ import { ApprovalPendingPage } from "./pages/approvalPendingPage";
 import { UserRole } from "./types/user";
 import { PostDetailPage } from "./pages/postDetailPage";
 
+import { lazy } from "react";
+const ServiceProviderDashboard = lazy(
+  () => import("./pages/serviceProvider/serviceProviderDashboard")
+);
 function App() {
   return (
     <Routes>
@@ -34,14 +38,22 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route 
-          path="serviceproviders/services/:id/booking" 
+        <Route
+          path="serviceproviders/services/:id/booking"
           element={
-              <RequireAuth>
-                <ServiceProviderBookingPage />
-              </RequireAuth>
-          } 
+            <RequireAuth>
+              <ServiceProviderBookingPage />
+            </RequireAuth>
+          }
         />
+        <Route
+          path="serviceprovider/dashboard"
+          element={
+            <RequireAuth requiredRoles={[UserRole.ServiceProvider]}>
+              <ServiceProviderDashboard />
+            </RequireAuth>
+          }
+        ></Route>
 
         <Route
           path="user"
@@ -61,11 +73,14 @@ function App() {
         />
         <Route path="approval-pending" element={<ApprovalPendingPage />} />
 
-        <Route path="post/:post_id" element={
-          <RequireAuth>
-            <PostDetailPage />
-          </RequireAuth>
-        } />
+        <Route
+          path="post/:post_id"
+          element={
+            <RequireAuth>
+              <PostDetailPage />
+            </RequireAuth>
+          }
+        />
 
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>
