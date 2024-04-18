@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
-import { UserData } from "../types/user";
+import { UserData, UserRole } from "../types/user";
 
 export const LoginPage = () => {
   const [username, setUsername] = useState<string>("");
@@ -25,7 +25,9 @@ export const LoginPage = () => {
         `${process.env.REACT_APP_BACKEND_HOST}/api/auth/login/`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ username, password }),
         }
       );
@@ -45,9 +47,11 @@ export const LoginPage = () => {
         isApproved: data.is_approved,
       };
 
-      console.log("User data: ", userData);
-      setUser(userData);
-      navigate("/home");
+      if (data.role === UserRole.Admin) {
+        navigate("/admin");
+      } else {
+        navigate("/home");
+      }
     } catch (error) {
       setErrorMessage("Login failed. Please check your username and password.");
     }
