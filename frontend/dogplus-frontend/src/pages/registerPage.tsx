@@ -103,7 +103,6 @@ export const RegisterPage = () => {
           email: data.email,
           role: data.role,
           isApproved: data.is_approved,
-          password: data.password,
         };
         setUser(userDataWithID);
         navigate("/home");
