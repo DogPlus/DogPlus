@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 from .models import Post
-from .serializers import PostSerializer
+from .serializers import CommentSerializer, PostSerializer
 from django.contrib.auth.models import User
 
 class CreatePostAPIView(APIView):
@@ -30,6 +30,32 @@ class AllPostsFromSpecificUserAPIView(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         return Post.objects.filter(author=user_id).order_by('-date_posted')
+
+class PostDetailAPIView(APIView):
+    def get(self, request, post_id, format=None):
+        post = get_object_or_404(Post, pk=post_id)
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
+
+class PostCommentsAPIView(APIView):
+    def get(self, request, post_id, format=None):
+        post = get_object_or_404(Post, pk=post_id)
+        comments = post.comments.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, post_id, format=None):
+        post = get_object_or_404(Post, pk=post_id)
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                post.comment_count += 1
+                post.save()
+            except Exception as e:
+                return Response({'error': f'Error updating post {e}'}, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save(post=post, author=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LikePostAPIView(APIView):
     def post(self, request, post_id, format=None):

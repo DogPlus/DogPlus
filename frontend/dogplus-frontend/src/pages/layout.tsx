@@ -5,8 +5,10 @@ export const Layout = () => {
   const location = useLocation();
 
   return (
-    <div>
-      <Outlet />
+    <div className="flex flex-col h-screen">
+      <div className="flex-grow overflow-y-auto">
+        <Outlet />
+      </div>
       {location.pathname !== "/auth" && location.pathname !== "/register" && (
         <Navbar />
       )}

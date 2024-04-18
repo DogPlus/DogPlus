@@ -9,3 +9,11 @@ export interface Post  {
   like_count: number;
   comment_count: number;
   }
+
+export interface Comment {
+  id: number;
+  post: number;
+  author: string;
+  text: string;
+  created_at: string;
+}
