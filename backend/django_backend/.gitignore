@@ -1,4 +1,5 @@
 dog_venv/
 entities_info.txt
-media/
+media/*
+!media/profile_images/default_profileimg.png
 
