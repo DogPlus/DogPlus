@@ -10,6 +10,7 @@ import { ServiceProviderBookingPage } from "./pages/serviceProviderBookingPage";
 import { AdminDashboard } from "./pages/adminDashboardPage";
 import { ApprovalPendingPage } from "./pages/approvalPendingPage";
 import { UserRole } from "./types/user";
+import { PostDetailPage } from "./pages/postDetailPage";
 
 function App() {
   return (
@@ -59,6 +60,12 @@ function App() {
           }
         />
         <Route path="approval-pending" element={<ApprovalPendingPage />} />
+
+        <Route path="post/:post_id" element={
+          <RequireAuth>
+            <PostDetailPage />
+          </RequireAuth>
+        } />
 
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>

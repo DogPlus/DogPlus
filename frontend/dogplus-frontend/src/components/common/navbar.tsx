@@ -11,25 +11,37 @@ const navlink_active = "inline-flex flex-col items-center justify-center px-5 bg
 export const Navbar = () => {
 
   return (
-    <div className="fixed bottom-0 left-0 py-1 px-1 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
-        <nav className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium gap-4">
-            <NavLink to="/home" className={({isActive}) => 
-                  isActive ? navlink_active : navlink_default}>
-                <HomeIcon className="w-5 h-5" />
-                <span className="text-inherit">Home</span>
-            </NavLink>
-            <NavLink to="/serviceproviders" className={({isActive}) => 
-                  isActive ? navlink_active : navlink_default}>
-                <ServiceProviderIcon className="w-5 h-5" />
-                <span className="text-sm">Services</span>
-            </NavLink>
-            <NavLink to="/user" className={({isActive}) => 
-                  isActive ? navlink_active : navlink_default}>
-                <UserIcon className="w-5 h-5" />
-                <span className="text-sm">User</span>
-            </NavLink>
-        </nav>
-    </div>
+    <div className="py-1 px-1 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+              <nav className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium gap-4">
+                <NavLink
+                  to="/home"
+                  className={({ isActive }) =>
+                    isActive ? navlink_active : navlink_default
+                  }
+                >
+                  <HomeIcon className="w-5 h-5" />
+                  <span className="text-inherit">Home</span>
+                </NavLink>
+                <NavLink
+                  to="/serviceproviders"
+                  className={({ isActive }) =>
+                    isActive ? navlink_active : navlink_default
+                  }
+                >
+                  <ServiceProviderIcon className="w-5 h-5" />
+                  <span className="text-sm">Services</span>
+                </NavLink>
+                <NavLink
+                  to="/user"
+                  className={({ isActive }) =>
+                    isActive ? navlink_active : navlink_default
+                  }
+                >
+                  <UserIcon className="w-5 h-5" />
+                  <span className="text-sm">User</span>
+                </NavLink>
+              </nav>
+            </div>
   );
 };
 

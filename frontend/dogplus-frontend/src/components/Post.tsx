@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Post } from '../types/post';
 
 // Create props interface
@@ -10,6 +11,7 @@ interface PostProps {
 export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
     const [liked, setLiked] = React.useState(isLiked);
     const [likeCount, setLikeCount] = React.useState(post.like_count);
+    const navigate = useNavigate();
     
     const date: String = `${new Date(post.date_posted).getDate()}/${new Date(post.date_posted).getMonth() + 1}/${new Date(post.date_posted).getFullYear()} ${new Date(post.date_posted).getHours().toString().padStart(2, '0')}:${new Date(post.date_posted).getMinutes().toString().padStart(2, '0')}`
 
@@ -52,6 +54,11 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
     }
   };
 
+  const onComment = () => {
+    // Redirect to post detail page
+    navigate(`/post/${post.id}`);
+  }
+
     return (
       <div className="bg-white rounded-lg shadow-md border p-4 mt-4">
         <div className="flex items-center mb-4">
@@ -75,7 +82,9 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
                     <i className="fas fa-thumbs-up mr-1"></i>
                     <span>{likeCount} Like(s)</span>
                 </button>
-                <button className="flex items-center text-gray-700 hover:text-green-600">
+                <button 
+                  className="flex items-center text-gray-700 hover:text-green-600"
+                  onClick={onComment}>
                   <i className="far fa-comment mr-1"></i>
                   <span>{post.comment_count} Comment(s)</span>
                 </button>
