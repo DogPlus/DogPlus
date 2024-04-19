@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
-import { UserData, UserRole } from "../types/user";
+import { ServiceProviderData, UserData, UserRole } from "../types/user";
 
 export const LoginPage = () => {
   const [username, setUsername] = useState<string>("");
@@ -18,7 +18,7 @@ export const LoginPage = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       const response = await fetch(
@@ -39,7 +39,8 @@ export const LoginPage = () => {
       const data = await response.json();
       localStorage.setItem("token", data.token);
       localStorage.setItem("user_id", data.id);
-      const userData: UserData = {
+
+      let userData: UserData | ServiceProviderData = {
         id: data.id,
         username: data.username,
         email: data.email,
@@ -47,11 +48,24 @@ export const LoginPage = () => {
         isApproved: data.is_approved,
       };
 
+      if (data.role === UserRole.ServiceProvider) {
+        userData = {
+          ...userData,
+          ...(data.service && { service: data.service }),
+        };
+      }
+
       setUser(userData);
-      if (data.role === UserRole.Admin) {
-        navigate("/admin");
-      } else {
-        navigate("/home");
+
+      switch (data.role) {
+        case UserRole.Admin:
+          navigate("/admin");
+          break;
+        case UserRole.ServiceProvider:
+          navigate("/serviceprovider/dashboard");
+          break;
+        default:
+          navigate("/home");
       }
     } catch (error) {
       setErrorMessage("Login failed. Please check your username and password.");
