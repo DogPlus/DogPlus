@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
@@ -16,7 +17,6 @@ class ServiceCreateUpdateView(APIView):
     permission_classes = [IsAuthenticated, IsServiceProvider]
 
     def post(self, request):
-        # Service creation
         serializer = ServiceSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save(service_provider=request.user)
@@ -28,12 +28,15 @@ class ServiceCreateUpdateView(APIView):
         try:
             service = Service.objects.get(pk=pk, service_provider=request.user)
         except Service.DoesNotExist:
-            raise Http404("Service not found")
+            return Response({'detail': 'Service not found'}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = ServiceSerializer(service, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            try:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except ValidationError as e:
+                return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -42,15 +45,18 @@ class ServiceProviderDashboardView(APIView):
     permission_classes = [IsAuthenticated, IsServiceProvider]
 
     def get(self, request):
-        # Retrieve service provider's service and bookings
         user = request.user
-        service = get_object_or_404(Service, service_provider=user)
-        bookings = Booking.objects.filter(service_provider=user).order_by('-booking_date')
-
-        service_data = ServiceSerializer(service).data
-        bookings_data = BookingSerializer(bookings, many=True).data
+        try:
+            service = Service.objects.get(service_provider=user)
+            service_data = ServiceSerializer(service).data
+            bookings = Booking.objects.filter(service_provider=user).order_by('-booking_date')
+            bookings_data = BookingSerializer(bookings, many=True).data
+        except Service.DoesNotExist:
+            service_data = None 
+            bookings_data = []
 
         return Response({
             'service': service_data,
             'bookings': bookings_data
         })
+
