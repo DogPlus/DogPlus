@@ -1,57 +1,57 @@
-import { useEffect, useState } from "react";
-import { ServiceData } from "../../types/service";
+import React, { useEffect, useState } from "react";
+import { ServiceCreationData, ServiceData } from "../../types/service";
 import useUser from "../../hooks/useUser";
+import CreateServiceModal from "./createServiceModal";
 
-const ServiceProviderDashboard = () => {
+const ServiceProviderDashboard: React.FC = () => {
   const [service, setService] = useState<ServiceData | undefined>(undefined);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const { user } = useUser();
-  useEffect(() => {
-    const fetchService = async () => {
-      try {
-        const response = await fetch(
-          `/api/service-provider/${user?.id}/service`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Service not found");
-        }
-        const data = await response.json();
-        setService(data);
-      } catch (error) {
-        console.error(error);
-        setService(undefined);
-      }
-    };
 
-    fetchService();
-  }, [user?.id]);
+  const handleSaveService = async (serviceData: ServiceCreationData) => {
+    try {
+      const response = await fetch(
+        `/api/service-provider/${user?.id}/service`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(serviceData),
+        }
+      );
+      if (!response.ok) throw new Error("Failed to create service");
+      const data: ServiceData = await response.json();
+      setService(data);
+      setModalOpen(false);
+    } catch (error) {
+      console.error("Error creating service:", error);
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
-      {!service && (
-        <div className="absolute inset-0 bg-white bg-opacity-75 flex justify-center items-center">
-          <div className="p-5 bg-white border border-grey-500 rounded-lg">
-            <h2 className="font-bold text-lg mb-4">
-              You need to create a service!
-            </h2>
-            <button
-              className="bg-purple-blue-500 hover:bg-purple-blue-600 text-white font-bold py-2 px-4 rounded"
-              onClick={() => console.log("Navigate to service creation page")}
-            >
-              Create Service
-            </button>
-          </div>
-        </div>
-      )}
-      {service && (
+      {!service ? (
+        <button
+          onClick={() => setModalOpen(true)}
+          className="bg-purple-blue-500 hover:bg-purple-blue-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Create Service
+        </button>
+      ) : (
         <div>
           <h1>{service.name}</h1>
           <p>{service.description}</p>
         </div>
+      )}
+      {user && (
+        <CreateServiceModal
+          isOpen={isModalOpen}
+          onClose={() => setModalOpen(false)}
+          onSave={handleSaveService}
+          serviceProviderId={user.id}
+        />
       )}
     </div>
   );
