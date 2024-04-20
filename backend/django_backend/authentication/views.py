@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import CustomUser
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserDetailSerializer
 from .permissions import IsServiceProvider
 from .serializers import ServiceProviderProfileSerializer
 from rest_framework.decorators import api_view, permission_classes
@@ -97,6 +97,13 @@ class ServiceProviderProfileView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class UserDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id, *args, **kwargs):
+        user = CustomUser.objects.get(id=user_id)
+        serializer = UserDetailSerializer(user)
+        return Response(serializer.data)
         
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAdminUser])
