@@ -10,17 +10,21 @@ const ServiceProviderDashboard: React.FC = () => {
 
   const handleSaveService = async (serviceData: ServiceCreationData) => {
     try {
+      console.log("serviceData", serviceData);
+      const token = localStorage.getItem("token");
+      console.log("token", token);
       const response = await fetch(
-        `/api/service-provider/${user?.id}/service`,
+        `${process.env.REACT_APP_BACKEND_HOST}/api/services/${user?.id}/service/`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(serviceData),
         }
       );
+
       if (!response.ok) throw new Error("Failed to create service");
       const data: ServiceData = await response.json();
       setService(data);
