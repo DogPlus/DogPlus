@@ -38,8 +38,8 @@ class Command(BaseCommand):
         # Create sample posts
         post1 = Post.objects.create(
             author=user1,
-            text="Sample post text",
-            image="https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*"
+            text="Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
+            image="post_images/sample_post_image.png"
         )
 
         # Write information to a text file

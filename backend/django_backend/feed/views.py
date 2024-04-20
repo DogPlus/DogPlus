@@ -51,18 +51,20 @@ class PostCommentsAPIView(APIView):
     def get(self, request, post_id, format=None):
         post = get_object_or_404(Post, pk=post_id)
         comments = post.comments.all()
-        serializer = CommentSerializer(comments, many=True)
+        serializer = CommentSerializer(comments, many=True, context={'request': request, 'nested': True})
         return Response(serializer.data)
 
     def post(self, request, post_id, format=None):
         post = get_object_or_404(Post, pk=post_id)
-        serializer = CommentSerializer(data=request.data)
+        serializer = CommentSerializer(data=request.data, context={'request': request, 'nested': True})
         if serializer.is_valid():
             try:
                 post.comment_count += 1
                 post.save()
             except Exception as e:
                 return Response({'error': f'Error updating post {e}'}, status=status.HTTP_400_BAD_REQUEST)
+            author_instance = CustomUser.objects.get(id=request.user.id)
+            serializer.validated_data['author'] = author_instance
             serializer.save(post=post, author=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -33,12 +33,13 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'post', 'author', 'text', 'created_at']
         read_only_fields = ['id', 'post', 'author', 'created_at']
 
-    def get_author_representation(self, obj):
+    def get_author(self, obj):
         if self.context.get('nested', False):
             return AuthorSerializer(obj.author, context=self.context).data
         return obj.author_id
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['author'] = self.get_author_representation(instance)
+        data['author'] = self.get_author(instance)
         return data
+
