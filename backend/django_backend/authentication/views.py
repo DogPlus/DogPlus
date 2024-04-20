@@ -104,6 +104,19 @@ class UserDetailView(APIView):
         user = CustomUser.objects.get(id=user_id)
         serializer = UserDetailSerializer(user, context={'request': request})
         return Response(serializer.data)
+
+
+    def post(self, request, user_id, format=None):
+            try:
+                user = CustomUser.objects.get(id=user_id)
+            except CustomUser.DoesNotExist:
+                return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+            serializer = UserDetailSerializer(user, data=request.data, context={'request': request}, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAdminUser])
