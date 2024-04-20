@@ -31,9 +31,8 @@ class ServiceAPITest(TestCase):
         # Authenticate as the service provider
         self.client.force_authenticate(user=self.service_provider)
 
-
     def test_service_creation(self):
-        url = reverse('service_create')
+        url = reverse('service_create', kwargs={'service_provider_id': self.service_provider.id})
         data = {
             'name': Service.DOG_TRAINING,
             'description': 'Basic obedience training.',
@@ -45,7 +44,6 @@ class ServiceAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_service_update(self):
-        # Create service instance before updating
         service = Service.objects.create(
             name=Service.DOG_TRAINING,
             service_provider=self.service_provider,
@@ -54,18 +52,16 @@ class ServiceAPITest(TestCase):
             price_per_session=25.00,
             session_time=45
         )
-
-        url = reverse('service_update', kwargs={'pk': service.id})
+        url = reverse('service_update', kwargs={'pk': service.id, 'service_provider_id': self.service_provider.id})
         update_data = {
-            'name': Service.DOG_TRAINING,  
+            'name': Service.DOG_TRAINING,
             'description': 'Updated description for training services',
             'price_per_session': 30.00,
             'session_time': 60
         }
-        # Authenticate as the service provider
-        self.client.force_authenticate(user=self.service_provider)
         response = self.client.patch(url, update_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 
 class ServiceProviderDashboardViewTest(TestCase):

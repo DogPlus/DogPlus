@@ -10,26 +10,35 @@ from bookings.serializers import BookingSerializer
 from .models import Service
 from .serializers import ServiceSerializer
 from rest_framework import status
+from django.contrib.auth import get_user_model
 
-
-
+User = get_user_model()
 class ServiceCreateUpdateView(APIView):
     permission_classes = [IsAuthenticated, IsServiceProvider]
 
-    def post(self, request):
+
+
+    def post(self, request, service_provider_id):
+        try:
+            service_provider = User.objects.get(pk=service_provider_id)
+        except User.DoesNotExist:
+            return Response({'detail': 'Service provider not found'}, status=status.HTTP_404_NOT_FOUND)
+
         serializer = ServiceSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save(service_provider=request.user)
+            serializer.save(service_provider=service_provider)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def patch(self, request, pk=None):
+
+    def patch(self, request, pk=None, service_provider_id=None):
         try:
-            service = Service.objects.get(pk=pk, service_provider=request.user)
-        except Service.DoesNotExist:
+            service_provider = User.objects.get(pk=service_provider_id)
+            service = Service.objects.get(pk=pk, service_provider=service_provider)
+        except (User.DoesNotExist, Service.DoesNotExist):
             return Response({'detail': 'Service not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = ServiceSerializer(service, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             try:
@@ -39,7 +48,6 @@ class ServiceCreateUpdateView(APIView):
                 return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class ServiceProviderDashboardView(APIView):
     permission_classes = [IsAuthenticated, IsServiceProvider]
