@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { UserRole } from "../types/user";
 
 export const LoginPage = () => {
   const [username, setUsername] = useState<string>("");
@@ -21,25 +22,31 @@ export const LoginPage = () => {
       `Logging in with username: ${username} and password: ${password}`
     );
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/auth/login/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_HOST}/api/auth/login/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Login failed");
       }
 
       const data = await response.json();
-      console.log("Login Successful:", data);
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user_id", data.user_id);
 
-      navigate("/home");
+      if (data.role === UserRole.Admin) {
+        navigate("/admin");
+      } else {
+        navigate("/home");
+      }
     } catch (error) {
       setErrorMessage("Login failed. Please check your username and password.");
       console.error("An error occurred during login:", error);
