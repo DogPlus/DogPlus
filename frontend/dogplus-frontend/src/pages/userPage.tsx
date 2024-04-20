@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
 import { User } from '../types/user';
 
 export const UserPage = () => {
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
   
   useEffect(() => {
     const fetchUser = async () => {
@@ -35,7 +37,7 @@ export const UserPage = () => {
     </div>
   </div>
   <div className="flex mb-2">
-    <button type="button" className="ml-auto text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Edit</button>
+    <button type="button" className="ml-auto text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" onClick={e => navigate(`/user/edit/${localStorage.getItem('user_id')}`)}>Edit</button>
   </div>
 </div>
   );
