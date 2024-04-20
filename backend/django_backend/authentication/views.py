@@ -102,7 +102,7 @@ class UserDetailView(APIView):
 
     def get(self, request, user_id, *args, **kwargs):
         user = CustomUser.objects.get(id=user_id)
-        serializer = UserDetailSerializer(user)
+        serializer = UserDetailSerializer(user, context={'request': request})
         return Response(serializer.data)
         
 @api_view(['GET'])

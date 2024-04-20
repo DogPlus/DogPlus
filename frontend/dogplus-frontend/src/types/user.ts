@@ -7,6 +7,13 @@ export interface UserData {
   isApproved?: boolean;
 }
 
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  profile_image: string;
+}
+
 export interface UserCreationData {
   username: string;
   email: string;
