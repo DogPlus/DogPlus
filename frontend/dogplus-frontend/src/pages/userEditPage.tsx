@@ -86,7 +86,7 @@ export const UserEditPage = () => {
           style={{ display: 'none' }}
           onChange={handleImageChange}
         />
-        <img src={user.profile_image} className="p-2" alt="Profile Image" />
+        <img src={user.profile_image} className="p-2 rounded-full" alt="Profile Image" />
       </div>
       <h2 className="text-2xl font-semibold">{user.username}</h2>
     </div>
