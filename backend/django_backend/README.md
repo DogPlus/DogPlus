@@ -52,7 +52,7 @@ gcloud run deploy api-service \
    docker-compose exec backend python3 manage.py shell
    ```
 
-   After entering the shell, execute each line at the time:
+   After entering the shell, execute each line at a time:
    ```bash
    
    from django.contrib.auth import get_user_model
