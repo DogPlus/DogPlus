@@ -48,11 +48,12 @@ gcloud run deploy api-service \
 3. Create a super user
 
    ```bash
-   Create ADMIN user:
+   docker-compose exec backend python3 manage.py createsuperuser
+   docker-compose exec backend python3 manage.py shell
+   ```
 
-   1. docker-compose exec backend python3 manage.py createsuperuser
-   2. docker-compose exec backend python3 manage.py shell
-   3. Execute each line at the time:
+   After entering the shell, execute each line at the time:
+   ```bash
    
    from django.contrib.auth import get_user_model
    User = get_user_model()
@@ -64,7 +65,7 @@ gcloud run deploy api-service \
 
    **NB**: When you type your password, it might look like nothing is happening, but it is.
 
-4. Start the server
+5. Start the server
    ```bash
    python manage.py runserver
    ```
