@@ -1,6 +1,9 @@
 
 export interface Post  {
-  author: string,
+  author: {
+    username: string,
+    profile_image: string
+  },
   date_posted: string
   text: string,
   image?: string,
