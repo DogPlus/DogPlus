@@ -37,6 +37,23 @@ class ServiceCreateUpdateView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ServiceDetail(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk, format=None):
+        # Retrieve service
+        service = get_object_or_404(Service, pk=pk)
+        serializer = ServiceSerializer(service)
+        return Response(serializer.data)
+
+class ServiceProviderServiceListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, service_provider_id, format=None):
+        # Retrieve service provider's service
+        service = get_object_or_404(Service, service_provider=service_provider_id)
+        serializer = ServiceSerializer(service)
+        return Response(serializer.data)
 
 class ServiceProviderDashboardView(APIView):
     permission_classes = [IsAuthenticated, IsServiceProvider]
