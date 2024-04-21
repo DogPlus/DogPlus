@@ -11,6 +11,7 @@ import { AdminDashboard } from "./pages/adminDashboardPage";
 import { ApprovalPendingPage } from "./pages/approvalPendingPage";
 import { UserRole } from "./types/user";
 import { PostDetailPage } from "./pages/postDetailPage";
+import { ServiceProviderDetailPage } from "./pages/serviceProviderDetailPage";
 
 function App() {
   return (
@@ -33,6 +34,14 @@ function App() {
               <ServiceProviderPage />
             </RequireAuth>
           }
+        />
+        <Route 
+          path="serviceproviders/:id" 
+          element={
+              <RequireAuth>
+                <ServiceProviderDetailPage />
+              </RequireAuth>
+          } 
         />
         <Route 
           path="serviceproviders/services/:id/booking" 

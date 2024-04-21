@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import ProviderCard from './ServiceProviderCard';  // Make sure to import the ProviderCard
 import { ServiceProvider } from '../types/serviceProvider';
+import { useNavigate } from 'react-router-dom';
 
 const ServiceProviderList: React.FC = () => {
     const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,7 +36,7 @@ const ServiceProviderList: React.FC = () => {
         <div>
             <ul>
                 {serviceProviders.map((serviceProvider) => (
-                    <li key={serviceProvider.id}>
+                    <li key={serviceProvider.id} onClick={(e)=>{navigate(`/serviceproviders/${serviceProvider.id}`)}}>
                         <ProviderCard serviceProvider={serviceProvider} />
                     </li>
                 ))}
