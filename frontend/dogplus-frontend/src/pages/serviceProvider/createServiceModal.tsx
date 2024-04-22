@@ -56,7 +56,6 @@ const CreateServiceModal = ({
           description,
           location,
           serviceProviderId,
-          priceType,
           fixedPrice: price,
         };
       } else {
@@ -69,7 +68,6 @@ const CreateServiceModal = ({
           description,
           location,
           serviceProviderId,
-          priceType,
           pricePerSession: price,
           sessionTime,
         };
