@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { ServiceCreationData, ServiceData } from "../../types/service";
+import {
+  ServiceCreationData,
+  ServiceData,
+  ServicePayload,
+} from "../../types/service";
 import useUser from "../../hooks/useUser";
 import CreateServiceModal from "./createServiceModal";
 
@@ -10,23 +14,43 @@ const ServiceProviderDashboard: React.FC = () => {
 
   const handleSaveService = async (serviceData: ServiceCreationData) => {
     try {
-      console.log("serviceData", serviceData);
       const token = localStorage.getItem("token");
-      console.log("token", token);
+
+      let payload: ServicePayload = {
+        name: serviceData.name,
+        description: serviceData.description,
+        location: serviceData.location,
+      };
+
+      if ("pricePerSession" in serviceData) {
+        payload.price_per_session = serviceData.pricePerSession;
+        payload.session_time = serviceData.sessionTime;
+      } else if ("fixedPrice" in serviceData) {
+        payload.fixed_price = serviceData.fixedPrice;
+      }
+
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_HOST}/api/services/${user?.id}/service/`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Token ${token}`,
           },
-          body: JSON.stringify(serviceData),
+          body: JSON.stringify(payload),
         }
       );
 
-      if (!response.ok) throw new Error("Failed to create service");
-      const data: ServiceData = await response.json();
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Failed to create service:", errorData);
+        throw new Error(
+          "Failed to create service: " + JSON.stringify(errorData)
+        );
+      }
+
+      const data = await response.json();
+      console.log("Service created successfully:", data);
       setService(data);
       setModalOpen(false);
     } catch (error) {
