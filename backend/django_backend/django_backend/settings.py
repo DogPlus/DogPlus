@@ -100,7 +100,8 @@ INSTALLED_APPS = [
     'authentication',
     'services',
     'bookings',
-    'feed'
+    'feed',
+    'providers'
 ]
 
 MIDDLEWARE = [
