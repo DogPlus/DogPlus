@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import useUser from "../hooks/useUser";
 import {
   FixedPriceService,
   PerSessionPriceService,
@@ -7,10 +8,9 @@ import {
   ServiceData,
   ServicePayload,
   ServiceType,
-} from "../../types/service";
-import useUser from "../../hooks/useUser";
-import CreateServiceModal from "./createServiceModal";
-import { Service } from "../../types/services";
+} from "../types/service";
+import CreateServiceModal from "../components/serviceProvider/CreateServiceModal";
+import ServiceDisplay from "../components/serviceProvider/ServiceDisplay";
 
 const ServiceProviderDashboard: React.FC = () => {
   const [service, setService] = useState<ServiceData | undefined>(undefined);
@@ -134,10 +134,7 @@ const ServiceProviderDashboard: React.FC = () => {
           Create Service
         </button>
       ) : (
-        <div>
-          <h1>{service.name}</h1>
-          <p>{service.description}</p>
-        </div>
+        <ServiceDisplay service={service} />
       )}
       {user && (
         <CreateServiceModal

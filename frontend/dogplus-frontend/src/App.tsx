@@ -15,7 +15,7 @@ import { ServiceProviderDetailPage } from "./pages/serviceProviderDetailPage";
 
 import { Suspense, lazy } from "react";
 const ServiceProviderDashboard = lazy(
-  () => import("./pages/serviceProvider/serviceProviderDashboard")
+  () => import("./pages/serviceProviderDashboard")
 );
 function App() {
   return (
