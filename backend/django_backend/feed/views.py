@@ -15,9 +15,15 @@ class CreatePostAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        request.data['author'] = request.user.id
+        # Create a mutable copy of the request.data
+        mutable_data = request.data.copy()
+        mutable_data['author'] = request.user.id
 
-        serializer = PostSerializer(data=request.data, context={'request': request})
+        # Check if 'image' is included in the form data
+        if 'image' in request.FILES:
+            mutable_data['image'] = request.FILES['image']
+
+        serializer = PostSerializer(data=mutable_data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
