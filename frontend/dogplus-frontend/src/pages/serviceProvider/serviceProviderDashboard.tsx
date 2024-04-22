@@ -1,16 +1,82 @@
 import React, { useEffect, useState } from "react";
 import {
+  FixedPriceService,
+  PerSessionPriceService,
+  PriceType,
   ServiceCreationData,
   ServiceData,
   ServicePayload,
+  ServiceType,
 } from "../../types/service";
 import useUser from "../../hooks/useUser";
 import CreateServiceModal from "./createServiceModal";
+import { Service } from "../../types/services";
 
 const ServiceProviderDashboard: React.FC = () => {
   const [service, setService] = useState<ServiceData | undefined>(undefined);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const { user } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      fetchService();
+    }
+  }, [user]);
+
+  const fetchService = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_HOST}/api/services/service/service_provider/${user?.id}/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        setService(undefined);
+        throw new Error("Failed to fetch service");
+      }
+
+      const data = await response.json();
+      if (data) {
+        let formattedService: ServiceData;
+        if (data.price_per_session !== null) {
+          formattedService = {
+            id: data.id,
+            name: data.name as ServiceType,
+            description: data.description,
+            location: data.location,
+            serviceProviderId: data.service_provider,
+            priceType: PriceType.PerSession,
+            pricePerSession: parseFloat(data.price_per_session),
+            sessionTime: data.session_time,
+          } as PerSessionPriceService;
+        } else if (data.fixed_price !== null) {
+          formattedService = {
+            id: data.id,
+            name: data.name as ServiceType,
+            description: data.description,
+            location: data.location,
+            serviceProviderId: data.service_provider,
+            priceType: PriceType.Fixed,
+            fixedPrice: parseFloat(data.fixed_price),
+          } as FixedPriceService;
+        } else {
+          throw new Error("Service pricing information is missing");
+        }
+        setService(formattedService);
+      } else {
+        setService(undefined);
+      }
+    } catch (error) {
+      console.error("Error fetching service:", error);
+    }
+  };
 
   const handleSaveService = async (serviceData: ServiceCreationData) => {
     try {
