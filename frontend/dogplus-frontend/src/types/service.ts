@@ -34,7 +34,6 @@ export interface BaseServiceCreation<T extends PriceType> {
   description: string;
   location: string;
   serviceProviderId: string;
-  priceType: T;
 }
 
 export interface FixedPriceServiceCreation
@@ -46,6 +45,14 @@ export interface PerSessionPriceServiceCreation
   extends BaseServiceCreation<PriceType.PerSession> {
   pricePerSession: number;
   sessionTime: number;
+}
+export interface ServicePayload {
+  name: ServiceType;
+  description: string;
+  location: string;
+  fixed_price?: number;
+  price_per_session?: number;
+  session_time?: number;
 }
 
 export type ServiceData = FixedPriceService | PerSessionPriceService;
