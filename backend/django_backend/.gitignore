@@ -1,5 +1,6 @@
 dog_venv/
 entities_info.txt
-media/post_images/*
+media/*
+!media/sample_post_image.jpg
 !media/default_profileimg.png
 
