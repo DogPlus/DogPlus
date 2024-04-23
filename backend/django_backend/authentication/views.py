@@ -7,13 +7,14 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from services.models import Service
+from services.serializers import ServiceSerializer
 from .models import CustomUser
 from .serializers import UserSerializer, UserDetailSerializer
 from .permissions import IsServiceProvider
 from .serializers import ServiceProviderProfileSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
 User = get_user_model()
 
 class RegisterUserAPIView(APIView):
@@ -45,6 +46,8 @@ class RegisterUserAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+
 class LoginAPIView(APIView):
     permission_classes = []
 
@@ -54,14 +57,27 @@ class LoginAPIView(APIView):
         user = authenticate(username=username, password=password)
 
         if user:
-            # Check if the user is approved (for roles that require approval)
             if hasattr(user, 'is_approved') and not user.is_approved:
-                # User is found but not approved yet
                 return Response({"detail": "Account not approved yet. Please wait for an administrator to approve your account."}, status=status.HTTP_403_FORBIDDEN)
             
-            # User is approved or does not require approval; proceed with login
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({"token": token.key, "user_id": user.id, "role": user.role}, status=status.HTTP_200_OK)
+
+            # Serialize user data
+            user_data = UserSerializer(user).data
+
+            # Attempt to fetch and serialize the service associated with the user
+            try:
+                service = Service.objects.get(service_provider=user)
+                service_data = ServiceSerializer(service).data
+            except Service.DoesNotExist:
+                service_data = None  # Explicitly setting service to None if not found
+
+            return Response({
+                **user_data,
+                "token": token.key,
+                "service": service_data  # Include service data in the response
+            }, status=status.HTTP_200_OK)
+
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
     
 class Logout(APIView):

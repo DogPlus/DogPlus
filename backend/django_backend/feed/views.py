@@ -16,9 +16,11 @@ class CreatePostAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        request.data['author'] = request.user.id
+        # Create a mutable copy of the request.data
+        mutable_data = request.data.copy()
+        mutable_data['author'] = request.user.id
 
-        serializer = PostSerializer(data=request.data, context={'request': request, 'nested': True})
+        serializer = PostSerializer(data=mutable_data, context={'request': request, 'nested': True})
         if serializer.is_valid():
             # Get the CustomUser instance corresponding to the request.user.id
             author_instance = CustomUser.objects.get(id=request.user.id)

@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { Datepicker } from "flowbite-react";
 import TimePicker from '../components/common/timepicker';
 import TimeSelector from '../components/common/timeselector';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
+import { Service } from '../types/services';
 
 
 function addMinutesToTime(time: string, minutes: number) {
@@ -24,8 +25,11 @@ export const ServiceProviderBookingPage = () => {
   const [selectedTime, setSelectedTime]= React.useState<string | null>(null);
   const [availableTimeslots, setAvailableTimeslots]= React.useState<string[] | null>();
   const [serivceTimeInterval, setSerivceTimeInterval]= React.useState<number | null>();
+  const [serviceInformation, setServiceInformation]= React.useState<Service>();
 
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   const onTimeChange = (time: string): any => {
     setSelectedTime(time);
@@ -53,6 +57,28 @@ export const ServiceProviderBookingPage = () => {
     }
     fetchAvailableTimes();
   }, [selectedStartTime, selectedDate, id]);
+
+  useEffect(() => {
+    const fetchServiceInformation = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/services/${id}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Token ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch service interval');
+        }
+        const data = await response.json();
+        setServiceInformation(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchServiceInformation();
+  }, [id]);
 
   const onSubmitBooking = async () => {
     if (!selectedTime) {
@@ -84,18 +110,36 @@ export const ServiceProviderBookingPage = () => {
       }
 
       alert('Booking successful');
+      navigate('/serviceproviders');
     } catch (error) {
       console.error(error);
       alert('Failed to book timeslot');
     }
   }
 
-  if (!serivceTimeInterval || !availableTimeslots) {
+  if (!serivceTimeInterval || !availableTimeslots || !serviceInformation) {
     return <Loading />;
   }
 
   return (
     <div className="m-3">
+        <div className="mb-3">
+          <h3 className="text-lg font-semibold mb-2">You are now booking Service</h3>
+          <div className="mb-2">
+            <h3 className="text-md font-semibold">{serviceInformation.name}</h3>
+            <p className="text-gray-600">{serviceInformation.description}</p>
+          </div>
+          <div className="mb-2">
+            <p><span className="font-semibold">Duration:</span> {serviceInformation.session_time} minutes</p>
+            {serviceInformation.fixed_price && (
+              <p><span className="font-semibold">Fixed price:</span> {serviceInformation.fixed_price}</p>
+            )}
+            {serviceInformation.price_per_session && (
+              <p><span className="font-semibold">Price per session:</span> {serviceInformation.price_per_session}</p>
+            )}
+            <p><span className="font-semibold">Location:</span> {serviceInformation.location}</p>
+          </div>
+        </div>
       <div className="grid grid-cols-2 gap-4 mb-3">
         <Datepicker 
           onSelectedDateChanged={(date) => {
