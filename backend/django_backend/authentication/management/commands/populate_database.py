@@ -39,7 +39,7 @@ class Command(BaseCommand):
         post1 = Post.objects.create(
             author=user1,
             text="Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-            image="sample_post_image.png"
+            image="sample_post_image.jpg"
         )
 
         # Write information to a text file
