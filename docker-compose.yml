@@ -3,7 +3,7 @@ services:
     build:
       context: ./backend/django_backend/
       dockerfile: Dockerfile.dev
-    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:
@@ -12,8 +12,6 @@ services:
       - db
     environment:
       - GOOGLE_CLOUD_PROJECT="dog-plus-polimi"
-      - USE_LOCAL_DATABASE=True
-      - DEBUG=True
 
   frontend:
     build:

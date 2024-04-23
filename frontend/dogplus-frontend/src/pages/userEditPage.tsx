@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
-import { User } from '../types/user';
+import { PublicUser } from '../types/user';
 
 export const UserEditPage = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<PublicUser | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {

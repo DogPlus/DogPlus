@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'role', 'is_approved', 'serviceProviderKey']
+        fields = ['id', 'username', 'email', 'profile_image', 'password', 'role', 'is_approved', 'serviceProviderKey']
         extra_kwargs = {
             'password': {'write_only': True},
             'serviceProviderKey': {'required': False, 'allow_blank': True}
