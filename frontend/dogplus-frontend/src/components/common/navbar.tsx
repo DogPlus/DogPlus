@@ -14,10 +14,9 @@ const navlink_active =
 
 export const Navbar = () => {
   const { user } = useUser();
-  console.log(user);
   return (
-    <div className="fixed bottom-0 left-0 py-1 px-1 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
-      <nav className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium gap-4">
+    <div className="py-1 px-1 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+        <nav className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium gap-4">
         <NavLink
           to="/home"
           className={({ isActive }) =>
