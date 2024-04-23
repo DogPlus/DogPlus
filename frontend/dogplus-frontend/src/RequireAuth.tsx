@@ -2,6 +2,7 @@ import React, { useEffect, useTransition } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import useUser from "./hooks/useUser";
 import { UserRole } from "./types/user";
+import { Loading } from "./components/common/loading";
 
 interface RequireAuthProps {
   children: React.ReactNode;
@@ -37,7 +38,7 @@ const RequireAuth: React.FC<RequireAuthProps> = ({
   }, [auth, user, requireServiceProviderApproval, requiredRoles, navigate]);
 
   if (!user || isPending) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return <>{children}</>;
