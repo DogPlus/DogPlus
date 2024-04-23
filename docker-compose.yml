@@ -12,6 +12,7 @@ services:
       - db
     environment:
       - GOOGLE_CLOUD_PROJECT="dog-plus-polimi"
+      - DEBUG=True
 
   frontend:
     build:
