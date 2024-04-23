@@ -1,5 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { UserCreationData, UserData, UserRole } from "../types/user";
+import {
+  ServiceProviderData,
+  UserCreationData,
+  UserData,
+  UserRole,
+} from "../types/user";
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
 
@@ -45,7 +50,7 @@ export const RegisterPage = () => {
     return regex.test(password);
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!passwordStrengthCheck(password)) {
@@ -88,27 +93,34 @@ export const RegisterPage = () => {
       );
 
       if (!response.ok) {
-        console.log("Response: " + response.status);
-        throw new Error("Network response was not ok");
+        const errorMsg = await response.text();
+        throw new Error(`Registration failed: ${errorMsg}`);
       }
 
       const data = await response.json();
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user_id", data.id);
 
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user_id", data.id);
-        const userDataWithID: UserData = {
-          id: data.id,
-          username: data.username,
-          email: data.email,
-          role: data.role,
-          isApproved: data.is_approved,
-          password: data.password,
-        };
-        setUser(userDataWithID);
-        navigate("/home");
+      // Set up new user data including service information for service providers
+      const newUser: UserData | ServiceProviderData = {
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        role: data.role,
+        isApproved: data.is_approved,
+        ...(data.role === UserRole.ServiceProvider && {
+          serviceProviderKey: serviceProviderKey,
+        }),
+      };
+
+      setUser(newUser);
+
+      if (data.role === UserRole.Admin) {
+        navigate("/admin");
+      } else if (data.role === UserRole.ServiceProvider) {
+        navigate("/serviceprovider/create-service");
       } else {
-        navigate("/approval-pending");
+        navigate("/home");
       }
     } catch (error) {
       setError("An error occurred during registration. Please try again.");

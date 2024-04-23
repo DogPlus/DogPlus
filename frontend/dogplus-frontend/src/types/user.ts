@@ -1,8 +1,9 @@
+import { ServiceData } from "./service";
+
 export interface UserData {
   id: string;
   username: string;
   email: string;
-  password: string;
   role: UserRole;
   isApproved?: boolean;
 }
@@ -17,6 +18,7 @@ export interface UserCreationData {
 }
 export interface ServiceProviderData extends UserData {
   serviceProviderKey?: string;
+  service?: ServiceData;
 }
 
 export enum UserRole {

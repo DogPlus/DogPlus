@@ -1,12 +1,14 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { UserRole } from "../types/user";
+import useUser from "../hooks/useUser";
+import { ServiceProviderData, UserData, UserRole } from "../types/user";
 
 export const LoginPage = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -16,11 +18,8 @@ export const LoginPage = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(
-      `Logging in with username: ${username} and password: ${password}`
-    );
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_HOST}/api/auth/login/`,
@@ -38,18 +37,38 @@ export const LoginPage = () => {
       }
 
       const data = await response.json();
-
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user_id", data.user_id);
+      localStorage.setItem("user_id", data.id);
 
-      if (data.role === UserRole.Admin) {
-        navigate("/admin");
-      } else {
-        navigate("/home");
+      let userData: UserData | ServiceProviderData = {
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        role: data.role,
+        isApproved: data.is_approved,
+      };
+
+      if (data.role === UserRole.ServiceProvider) {
+        userData = {
+          ...userData,
+          ...(data.service && { service: data.service }),
+        };
+      }
+
+      setUser(userData);
+
+      switch (data.role) {
+        case UserRole.Admin:
+          navigate("/admin");
+          break;
+        case UserRole.ServiceProvider:
+          navigate("/serviceprovider/dashboard");
+          break;
+        default:
+          navigate("/home");
       }
     } catch (error) {
       setErrorMessage("Login failed. Please check your username and password.");
-      console.error("An error occurred during login:", error);
     }
   };
 

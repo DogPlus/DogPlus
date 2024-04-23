@@ -1,5 +1,5 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
+import React, { useEffect, useTransition } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import useUser from "./hooks/useUser";
 import { UserRole } from "./types/user";
 
@@ -16,25 +16,28 @@ const RequireAuth: React.FC<RequireAuthProps> = ({
 }) => {
   const { user } = useUser();
   const auth = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const [isPending, startTransition] = useTransition();
 
-  // Redirect if not authenticated
-  if (!auth) {
-    return <Navigate to="/auth" replace />;
-  }
+  useEffect(() => {
+    startTransition(() => {
+      if (!auth) {
+        navigate("/auth", { replace: true });
+      } else if (
+        user &&
+        requireServiceProviderApproval &&
+        user.role === UserRole.ServiceProvider &&
+        !user.isApproved
+      ) {
+        navigate("/approval-pending", { replace: true });
+      } else if (requiredRoles && user && !requiredRoles.includes(user.role)) {
+        navigate("/home", { replace: true });
+      }
+    });
+  }, [auth, user, requireServiceProviderApproval, requiredRoles, navigate]);
 
-  // Redirect if service provider approval is required but the user is not approved yet
-  if (
-    user &&
-    requireServiceProviderApproval &&
-    user.role === UserRole.ServiceProvider &&
-    !user.isApproved
-  ) {
-    return <Navigate to="/approval-pending" replace />;
-  }
-
-  // Check for required roles if specified
-  if (requiredRoles && user && !requiredRoles.includes(user.role)) {
-    return <Navigate to="/home" replace />;
+  if (!user || isPending) {
+    return <div>Loading...</div>;
   }
 
   return <>{children}</>;
