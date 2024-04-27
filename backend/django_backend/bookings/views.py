@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from authentication.models import CustomUser
 from .serializers import BookingSerializer
 from rest_framework import status
+import stripe
 
 
 class BookingView(APIView):
@@ -108,3 +109,23 @@ class AvailableBookingsView(APIView):
             "timeslots": available_timeslots,
             "interval": interval
         })
+
+class PaymentAccount(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self):
+        try:
+            account = stripe.Account.create(
+              controller={
+                "fees": {
+                  "payer": "application"
+                },
+              },
+            )
+
+            return Response({
+              'account': account.id,
+            })
+        except Exception as e:
+            print('An error occurred when calling the Stripe API to create an account: ', e)
+            return Response({"error": str(e)}, status=500)
