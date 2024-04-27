@@ -1,5 +1,5 @@
 import React, { useEffect, useTransition } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useUser from "./hooks/useUser";
 import { UserRole } from "./types/user";
 import { Loading } from "./components/common/loading";
@@ -32,7 +32,7 @@ const RequireAuth: React.FC<RequireAuthProps> = ({
       ) {
         navigate("/approval-pending", { replace: true });
       } else if (requiredRoles && user && !requiredRoles.includes(user.role)) {
-        navigate("/home", { replace: true });
+        navigate("/", { replace: true });
       }
     });
   }, [auth, user, requireServiceProviderApproval, requiredRoles, navigate]);

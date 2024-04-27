@@ -65,7 +65,7 @@ export const LoginPage = () => {
           navigate("/serviceprovider/dashboard");
           break;
         default:
-          navigate("/home");
+          navigate("/");
       }
     } catch (error) {
       setErrorMessage("Login failed. Please check your username and password.");

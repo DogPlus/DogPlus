@@ -120,7 +120,7 @@ export const RegisterPage = () => {
       } else if (data.role === UserRole.ServiceProvider) {
         navigate("/serviceprovider/create-service");
       } else {
-        navigate("/home");
+        navigate("/");
       }
     } catch (error) {
       setError("An error occurred during registration. Please try again.");
