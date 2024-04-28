@@ -77,7 +77,7 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
         <div className="pt-4 mt-4 border-t border-gray-200">
             <div className="flex justify-between items-center">
                 <button 
-                  className={`flex items-center mr-4 ${liked ? 'text-blue-600' : 'text-gray-700'}`}
+                  className={`flex items-center mr-4 ${liked ? 'text-accent-0' : 'text-gray-700'}`}
                   onClick={onLike}>
                     <i className="fas fa-thumbs-up mr-1"></i>
                     <span>{likeCount} Like(s)</span>
