@@ -11,6 +11,7 @@ import {
 } from "../types/service";
 import CreateServiceModal from "../components/serviceProvider/CreateServiceModal";
 import ServiceDisplay from "../components/serviceProvider/ServiceDisplay";
+import { BookingsOverview } from "../components/serviceProvider/BookingsOverview";
 
 const ServiceProviderDashboard: React.FC = () => {
   const [service, setService] = useState<ServiceData | undefined>(undefined);
@@ -134,7 +135,10 @@ const ServiceProviderDashboard: React.FC = () => {
           Create Service
         </button>
       ) : (
-        <ServiceDisplay service={service} />
+        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+          <ServiceDisplay service={service} />
+          <BookingsOverview />
+        </div>
       )}
       {user && (
         <CreateServiceModal
