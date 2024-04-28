@@ -4,6 +4,7 @@ import { BookingData } from "../../types/booking";
 import { ServiceData } from "../../types/service";
 import { Loading } from "../common/loading";
 import { addDays, format, parseISO } from "date-fns";
+import ConfirmModal from "../ConfirmModal";
 
 interface DashboardData {
   service: ServiceData | null;
@@ -17,6 +18,10 @@ export const BookingsOverview = () => {
   );
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedBookingId, setSelectedBookingId] = useState<
+    string | undefined
+  >();
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -48,6 +53,7 @@ export const BookingsOverview = () => {
   }, [user]);
 
   const handleDeleteBooking = async (bookingId: string) => {
+    console.log("Deleting booking with id: ", bookingId);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_HOST}/api/booking/${bookingId}/`,
@@ -70,6 +76,7 @@ export const BookingsOverview = () => {
           (booking) => booking.id !== bookingId
         ),
       });
+      setModalOpen(false);
     } catch (error) {
       console.error("Error deleting booking:", error);
     }
@@ -113,6 +120,11 @@ export const BookingsOverview = () => {
       })
     : [];
 
+  const openModal = (bookingId: string) => {
+    setModalOpen(true);
+    setSelectedBookingId(bookingId);
+  };
+
   if (loading) return <Loading />;
   if (!dashboardData)
     return (
@@ -143,20 +155,25 @@ export const BookingsOverview = () => {
         bookingsForSelectedDate.map((booking) => (
           <div
             key={booking.id}
-            className="p-4 mb-3 bg-gray-100 rounded-md border border-gray-300"
+            className="p-4 mb-3 bg-gray-100 rounded-md border border-gray-300 flex justify-between items-center"
           >
-            <p className="text-gray-700">
-              <strong>User:</strong> {booking.user.username}
-            </p>
-            <p className="text-gray-700">
-              <strong>Date:</strong> {formatDate(booking.booking_date)}
-            </p>
-            <p className="text-gray-700">
-              <strong>Time:</strong> {formatTime(booking.start_time)} -{" "}
-              {formatTime(booking.end_time)}
-            </p>
-            <button onClick={() => handleDeleteBooking(booking.id)}>
-              Delete Booking
+            <div>
+              <p className="text-gray-700">
+                <strong>User:</strong> {booking.user.username}
+              </p>
+              <p className="text-gray-700">
+                <strong>Date:</strong> {formatDate(booking.booking_date)}
+              </p>
+              <p className="text-gray-700">
+                <strong>Time:</strong> {formatTime(booking.start_time)} -{" "}
+                {formatTime(booking.end_time)}
+              </p>
+            </div>
+            <button
+              onClick={() => openModal(booking.id)}
+              className="text-red-500 hover:text-red-700"
+            >
+              <i className="fas fa-trash"></i>
             </button>
           </div>
         ))
@@ -165,6 +182,11 @@ export const BookingsOverview = () => {
           No bookings available for selected date.
         </p>
       )}
+      <ConfirmModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={() => handleDeleteBooking(selectedBookingId ?? "")}
+      />
     </div>
   );
 };
