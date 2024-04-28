@@ -1,15 +1,21 @@
 # serializers.py
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from .models import CustomUser
 
 User = get_user_model()
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email', 'profile_image']
 
 class UserSerializer(serializers.ModelSerializer):
     serviceProviderKey = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'role', 'is_approved', 'serviceProviderKey']
+        fields = ['id', 'username', 'email', 'profile_image', 'password', 'role', 'is_approved', 'serviceProviderKey']
         extra_kwargs = {
             'password': {'write_only': True},
             'serviceProviderKey': {'required': False, 'allow_blank': True}

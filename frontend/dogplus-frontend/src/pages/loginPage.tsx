@@ -46,6 +46,7 @@ export const LoginPage = () => {
         email: data.email,
         role: data.role,
         isApproved: data.is_approved,
+        profile_image: data.profile_image,
       };
 
       if (data.role === UserRole.ServiceProvider) {
