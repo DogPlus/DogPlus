@@ -10,7 +10,7 @@ import { UserRole } from "../../types/user";
 const navlink_default =
   "inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group-hover:text-blue-600 text-gray-500 group text-m";
 const navlink_active =
-  "inline-flex flex-col items-center justify-center px-5 bg-accent-300 hover:bg-accent-50 group-hover:text-foreground text-foreground group font-bold rounded-lg text-m";
+  "inline-flex flex-col items-center justify-center px-5 bg-accent-0 hover:bg-accent-50 group-hover:text-foreground text-foreground group font-bold rounded-lg text-m";
 
 export const Navbar = () => {
   const { user } = useUser();
