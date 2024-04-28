@@ -5,7 +5,7 @@ export const Layout = () => {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen bg-background">
       <div className="flex-grow overflow-y-auto">
         <Outlet />
       </div>

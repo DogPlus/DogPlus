@@ -3,25 +3,32 @@ const flowbite = require("flowbite-react/tailwind");
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}", flowbite.content()],
   theme: {
-    extend: {
       colors: {
-        "purple-blue": {
-          500: "#581EF5", // Button color
-          600: "#5014f5", // Button hover color
-          100: "#5016f0", // Focus ring color
-        },
-        "dark-grey": {
-          900: "#1F2937", // Very dark grey for text
-        },
-        grey: {
-          500: "#A0AEC0", // Mid-light grey, used for borders
-          400: "#CBD5E0", // Light grey, used for input focus background
-          200: "#EDF2F7", // Very light grey, used for input background
-          600: "#4A5568", // Mid-dark grey, used for text
-          700: "#2D3748", // Darker grey, used for link text
-          900: "#171923", // Dark grey, used for paragraph text
-        },
+        'background': '#eff3f4',
+        'foreground': '#ecf3f3',
+        'accent': '#e89152',
+        'white': '#ecf3f3',
+        'skincolor': '#ecb485',
+        'orange': '#e89152',
+        'brown': '#874815',
+        'blue': '#8bafb4',
+        'yellow': '#fda43e',
       },
+      extend: {
+        colors: {
+          'brown': {
+            0: '#874815',
+            100: '#8a4d1b',
+            200: '#8b5221',
+            300: '#8b5627',
+            400: '#8c5a2d',
+            500: '#8d5e33',
+            600: '#8e6239',
+            700: '#8f6640',
+            800: '#8f6a46',
+            900: '#906e4c',
+          },
+        },
     },
   },
   plugins: [flowbite.plugin()],
