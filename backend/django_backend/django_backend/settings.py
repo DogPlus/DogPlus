@@ -101,7 +101,8 @@ INSTALLED_APPS = [
     'services',
     'bookings',
     'feed',
-    'providers'
+    'providers',
+    'social',
 ]
 
 MIDDLEWARE = [
