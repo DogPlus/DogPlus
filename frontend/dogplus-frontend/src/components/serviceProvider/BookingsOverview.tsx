@@ -47,6 +47,34 @@ export const BookingsOverview = () => {
     fetchDashboardData();
   }, [user]);
 
+  const handleDeleteBooking = async (bookingId: string) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_HOST}/api/booking/${bookingId}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete booking");
+      }
+
+      if (!dashboardData) return;
+      setDashboardData({
+        ...dashboardData,
+        bookings: dashboardData.bookings.filter(
+          (booking) => booking.id !== bookingId
+        ),
+      });
+    } catch (error) {
+      console.error("Error deleting booking:", error);
+    }
+  };
+
   const handleNextDay = () => {
     setSelectedDate(addDays(selectedDate, 1));
   };
@@ -92,7 +120,6 @@ export const BookingsOverview = () => {
         No data available.
       </div>
     );
-
   return (
     <div className="m-3 p-4 bg-white rounded-lg shadow-lg">
       <h2 className="text-xl font-bold text-gray-900 mb-4">
@@ -119,12 +146,18 @@ export const BookingsOverview = () => {
             className="p-4 mb-3 bg-gray-100 rounded-md border border-gray-300"
           >
             <p className="text-gray-700">
+              <strong>User:</strong> {booking.user.username}
+            </p>
+            <p className="text-gray-700">
               <strong>Date:</strong> {formatDate(booking.booking_date)}
             </p>
             <p className="text-gray-700">
               <strong>Time:</strong> {formatTime(booking.start_time)} -{" "}
               {formatTime(booking.end_time)}
             </p>
+            <button onClick={() => handleDeleteBooking(booking.id)}>
+              Delete Booking
+            </button>
           </div>
         ))
       ) : (
