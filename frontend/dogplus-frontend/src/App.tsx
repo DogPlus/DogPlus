@@ -11,6 +11,7 @@ import { AdminDashboard } from "./pages/adminDashboardPage";
 import { ApprovalPendingPage } from "./pages/approvalPendingPage";
 import { UserRole } from "./types/user";
 import { PostDetailPage } from "./pages/postDetailPage";
+import { UserEditPage } from "./pages/userEditPage";
 import { ServiceProviderDetailPage } from "./pages/serviceProviderDetailPage";
 
 import { Suspense, lazy } from "react";
@@ -73,6 +74,13 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route 
+          path="user/edit/:user_id" 
+          element={
+            <RequireAuth>
+              <UserEditPage />
+            </RequireAuth>
+          } />
         <Route
           path="admin"
           element={

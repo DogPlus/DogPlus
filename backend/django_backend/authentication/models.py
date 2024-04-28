@@ -21,6 +21,7 @@ class CustomUser(AbstractUser):
     serviceProviderKey = models.CharField(max_length=255, blank=True, null=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=USER)
     is_approved = models.BooleanField(default=False, null=True, blank=True)
+    profile_image = models.ImageField(default='default_profileimg.png', blank=True)
 
 class ServiceProviderProfileView(APIView):
     authentication_classes = [TokenAuthentication]
