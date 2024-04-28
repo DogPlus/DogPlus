@@ -123,7 +123,7 @@ export const LoginPage = () => {
                   </div>
                 )}
                 <button
-                  className="w-full bg-accent-0 px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-accent-600 focus:ring-4 focus:ring-accent-100"
+                  className="w-full bg-accent-0 px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-accent-400 focus:ring-4 focus:ring-accent-100"
                   type="submit"
                 >
                   Sign In
