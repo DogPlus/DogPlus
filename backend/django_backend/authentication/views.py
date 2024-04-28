@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from services.models import Service
 from services.serializers import ServiceSerializer
 from .models import CustomUser
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserDetailSerializer
 from .permissions import IsServiceProvider
 from .serializers import ServiceProviderProfileSerializer
 from rest_framework.decorators import api_view, permission_classes
@@ -113,6 +113,26 @@ class ServiceProviderProfileView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class UserDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id, *args, **kwargs):
+        user = CustomUser.objects.get(id=user_id)
+        serializer = UserDetailSerializer(user, context={'request': request})
+        return Response(serializer.data)
+
+
+    def post(self, request, user_id, format=None):
+            try:
+                user = CustomUser.objects.get(id=user_id)
+            except CustomUser.DoesNotExist:
+                return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+            serializer = UserDetailSerializer(user, data=request.data, context={'request': request}, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAdminUser])

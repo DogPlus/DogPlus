@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "../components/common/navbar";
+import InstallPWA from "../InstallPwa";
 
 export const Layout = () => {
   const location = useLocation();
@@ -12,6 +13,7 @@ export const Layout = () => {
       {location.pathname !== "/auth" && location.pathname !== "/register" && (
         <Navbar />
       )}
+      <InstallPWA />
     </div>
   );
 };
