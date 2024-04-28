@@ -23,7 +23,7 @@ class FollowAPIView(APIView):
     def delete(self, request, user_id):
         # Unfollow a user
         user_to_unfollow = get_object_or_404(User, id=user_id)
-        follow = get_object_or_404(Follow, follosewer=request.user, followed=user_to_unfollow)
+        follow = get_object_or_404(Follow, follower=request.user, followed=user_to_unfollow)
         follow.delete()
         return Response({"status": "unfollowed"})
 
