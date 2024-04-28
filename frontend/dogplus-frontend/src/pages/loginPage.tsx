@@ -81,17 +81,17 @@ export const LoginPage = () => {
                 onSubmit={handleSubmit}
                 className="flex flex-col w-full h-full pb-6 text-center rounded-3xl"
               >
-                <h3 className="mb-3 text-4xl font-extrabold text-brown-0">
+                <h3 className="mb-3 text-4xl font-extrabold text-textcolor-0">
                   Dog+
                 </h3>
                 <div className="flex items-center mb-3">
                   <hr className="h-0 border-b border-solid border-grey-500 grow" />
-                  <p className="mx-4 text-brown-600">Sign in</p>
+                  <p className="mx-4 text-textcolor-600">Sign in</p>
                   <hr className="h-0 border-b border-solid border-grey-500 grow" />
                 </div>
                 <label
                   htmlFor="username"
-                  className="mb-2 text-sm text-start text-brown-900"
+                  className="mb-2 text-sm text-start text-textcolor-900"
                 >
                   Username*
                 </label>
@@ -101,11 +101,11 @@ export const LoginPage = () => {
                   value={username}
                   onChange={handleUsernameChange}
                   placeholder="Insert username"
-                  className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-brown-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                  className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-textcolor-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
                 />
                 <label
                   htmlFor="password"
-                  className="mb-2 text-sm text-start text-brown-900"
+                  className="mb-2 text-sm text-start text-textcolor-900"
                 >
                   Password*
                 </label>
@@ -115,7 +115,7 @@ export const LoginPage = () => {
                   value={password}
                   onChange={handlePasswordChange}
                   placeholder="Enter a password"
-                  className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-brown-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                  className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-textcolor-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
                 />
                 {errorMessage && (
                   <div className="mb-4 text-sm font-medium text-red-600">
@@ -123,14 +123,14 @@ export const LoginPage = () => {
                   </div>
                 )}
                 <button
-                  className="w-full bg-accent px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-purple-blue-600 focus:ring-4 focus:ring-purple-blue-100 bg-purple-blue-500"
+                  className="w-full bg-accent-0 px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-accent-600 focus:ring-4 focus:ring-accent-100"
                   type="submit"
                 >
                   Sign In
                 </button>
-                <p className="text-sm leading-relaxed text-brown-900">
+                <p className="text-sm leading-relaxed text-textcolor-900">
                   Not registered yet?{" "}
-                  <NavLink to="/register" className="font-bold text-brown-700">
+                  <NavLink to="/register" className="font-bold text-textcolor-700">
                     Create an Account
                   </NavLink>
                 </p>
