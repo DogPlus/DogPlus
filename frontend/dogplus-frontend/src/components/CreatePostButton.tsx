@@ -68,7 +68,7 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
     <div>
       <button
         onClick={() => setShowModal(true)}
-        className="p-0 w-12 h-12 bg-blue-500 text-white 
+        className="p-0 w-12 h-12 bg-accent-0 text-white 
         rounded-full fixed bottom-20 right-5 flex items-center 
         justify-center text-2xl"
       >
