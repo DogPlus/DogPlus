@@ -1,4 +1,3 @@
-import React from "react";
 import { PublicUser } from "../types/user";
 
 interface UserCardProps {
@@ -24,7 +23,7 @@ const UserCard = (props: UserCardProps) => {
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         onClick={() => props.onFollow(props.user.id)}
       >
-        Follow
+        Add
       </button>
     </div>
   );
