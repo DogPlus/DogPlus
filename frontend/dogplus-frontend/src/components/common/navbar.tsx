@@ -15,7 +15,7 @@ const navlink_active =
 export const Navbar = () => {
   const { user } = useUser();
   return (
-    <div className="py-1 px-1 z-50 w-full h-16 bg-white border-t border-gray-200">
+    <div className="py-1 px-1 pb-3 z-50 w-full h-20 bg-white border-t border-gray-200">
         <nav className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium gap-4">
         <NavLink
           to="/"
@@ -24,7 +24,7 @@ export const Navbar = () => {
           }
         >
           <i className="fas fa-home" />
-          <span className="text-inherit">Home</span>
+          <span className="text-sm">Home</span>
         </NavLink>
         {user && user.role === UserRole.ServiceProvider && (
           <NavLink
