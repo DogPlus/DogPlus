@@ -40,9 +40,9 @@ def search_for_service_providers(request):
 
 
     # Filter service providers based on the query
-    # assuming the query can match either name or email or other fields
+    # assuming the query can match either name or email
 
-    # disclaimer, i dont known how well this will work on a big database
+    # disclaimer, i dont know how well this will work on a big database
 
     if query:
         service_providers = CustomUser.objects.filter(
@@ -58,7 +58,7 @@ def search_for_service_providers(request):
 
 def sanitize_query(query):
     # Remove any unwanted characters or potentially harmful SQL injection codes
-    # For example, strip out everything except alphanumeric characters and spaces
+    # For example, strip out everything except alphanumeric characters and spaces, and limit the length to 32 characters
     validator = RegexValidator(r'^[0-9a-zA-Z ]{0,32}$', 'Invalid or too many characters in query.')
     try:
         validator(query)
