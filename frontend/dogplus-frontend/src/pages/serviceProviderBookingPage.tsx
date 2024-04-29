@@ -124,21 +124,33 @@ export const ServiceProviderBookingPage = () => {
   return (
     <div className="m-3">
         <div className="mb-3">
-          <h3 className="text-lg font-semibold mb-2">You are now booking Service</h3>
+          <h3 className="text-lg font-semibold mb-2">Booking service:</h3>
           <div className="mb-2">
             <h3 className="text-md font-semibold">{serviceInformation.name}</h3>
             <p className="text-gray-600">{serviceInformation.description}</p>
           </div>
-          <div className="mb-2">
-            <p><span className="font-semibold">Duration:</span> {serviceInformation.session_time} minutes</p>
-            {serviceInformation.fixed_price && (
-              <p><span className="font-semibold">Fixed price:</span> {serviceInformation.fixed_price}</p>
-            )}
-            {serviceInformation.price_per_session && (
-              <p><span className="font-semibold">Price per session:</span> {serviceInformation.price_per_session}</p>
-            )}
-            <p><span className="font-semibold">Location:</span> {serviceInformation.location}</p>
-          </div>
+
+          <div className="flex flex-row">
+              <div className="flex flex-col gap-2">
+                <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
+                  <div className="fa-clock"/>
+                  {serviceInformation.session_time} minutes
+                </div>
+                <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
+                  <div className="fa-tag"/>
+                  {serviceInformation.fixed_price && (
+                    <p>Fixed: {serviceInformation.fixed_price} €</p>
+                  )}
+                  {serviceInformation.price_per_session && (
+                    <p>Per session: {serviceInformation.price_per_session} €</p>
+                  )}
+                </div>
+                <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
+                  <div className="fa-map-marker"/>
+                  {serviceInformation.location} 
+                </div>
+              </div>
+        </div>
         </div>
       <div className="grid grid-cols-2 gap-4 mb-3">
         <Datepicker 
@@ -157,7 +169,7 @@ export const ServiceProviderBookingPage = () => {
         <TimePicker selectedTime={selectedTime} startTime={selectedStartTime} availableTimes={availableTimeslots} interval={serivceTimeInterval} onTimeChange={onTimeChange} />
       </div>
       <button
-        className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-purple-blue-600 focus:ring-4 focus:ring-purple-blue-100 bg-purple-blue-500"
+        className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-accent-600 focus:ring-4 focus:ring-purple-blue-100 bg-accent-0"
         type="submit"
         onClick={onSubmitBooking}
       >
