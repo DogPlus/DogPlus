@@ -12,7 +12,7 @@ const ServiceProviderList: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/providers/service-providers/list/`,{ //TODO change to an endpoint using a user specific algorithm
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/providers/service-providers/list/`,{ 
                     method: "GET",
                     headers: {
                       "Authorization": "Token "+ localStorage.getItem("token")
@@ -31,6 +31,7 @@ const ServiceProviderList: React.FC = () => {
 
         fetchData();
     }, []);
+
 
     return (
         <div>
