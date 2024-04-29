@@ -12,7 +12,7 @@ class ServiceProviderDetail(APIView):
     def get(self, request, id, format=None):
         try:
             service_provider = CustomUser.objects.get(id=id)
-            serializer = UserSerializer(service_provider)
+            serializer = UserSerializer(service_provider, context={'request': request})
             return Response(serializer.data)
         except CustomUser.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
