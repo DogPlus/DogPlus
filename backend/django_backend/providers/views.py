@@ -20,5 +20,5 @@ class ServiceProviderDetail(APIView):
 @api_view(['GET'])
 def list_all_service_providers(request):
     service_providers = CustomUser.objects.filter(role=CustomUser.SERVICE_PROVIDER, is_approved=True)
-    serializer = UserSerializer(service_providers, many=True)
+    serializer = UserSerializer(service_providers, many=True, context={'request': request})
     return Response(serializer.data)

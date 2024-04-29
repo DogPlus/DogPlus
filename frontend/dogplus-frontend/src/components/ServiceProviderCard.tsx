@@ -17,17 +17,9 @@ const ServiceProviderCard: React.FC<ServiceProviderCardProps> = ({ serviceProvid
                       <div className="fa-suitcase"/>
                       Type
                     </div>
-                    <div className={`flex flex-row gap-4 bg-green-100 text-green-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-                      <div className="fa-clock"/>
-                      Duration
-                    </div>
-                    <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-                      <div className="fa-tag"/>
-                      Price
-                    </div>
                   </div>
               </div>
-              <div className="fa-arrow-right"/>
+              <div className="ml-auto fa-arrow-right"/>
           </div>
         </div>
     );
