@@ -4,7 +4,6 @@ from .models import Booking
 from authentication.serializers import UserSerializer  
 
 class BookingSerializer(serializers.ModelSerializer):
-    user = UserSerializer()  
     class Meta:
         model = Booking
         fields = ['id', 'booking_date', 'start_time', 'end_time', 'status', 'user', 'service', 'service_provider']
