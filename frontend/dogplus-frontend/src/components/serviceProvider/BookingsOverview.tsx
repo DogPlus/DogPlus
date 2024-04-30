@@ -134,9 +134,6 @@ export const BookingsOverview = () => {
     );
   return (
     <div className="m-3 p-4 bg-white rounded-lg shadow-lg">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">
-        Bookings Overview for {dashboardData?.service?.name || "Service"}
-      </h2>
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={handlePreviousDay}

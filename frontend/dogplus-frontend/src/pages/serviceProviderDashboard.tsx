@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 import useUser from "../hooks/useUser";
 import {
-  FixedPriceService,
-  PerSessionPriceService,
-  PriceType,
   ServiceCreationData,
-  ServiceData,
   ServicePayload,
-  ServiceType,
 } from "../types/service";
 import CreateServiceModal from "../components/serviceProvider/CreateServiceModal";
 import ServiceDisplay from "../components/serviceProvider/ServiceDisplay";
 import { BookingsOverview } from "../components/serviceProvider/BookingsOverview";
+import { ServiceCard } from "../components/ServiceCard";
+import { Service } from "../types/services";
+import { useNavigate } from "react-router-dom";
 
 const ServiceProviderDashboard: React.FC = () => {
-  const [service, setService] = useState<ServiceData | undefined>(undefined);
+  const [service, setService] = useState<Service | undefined>(undefined);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const { user } = useUser();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -44,36 +43,7 @@ const ServiceProviderDashboard: React.FC = () => {
       }
 
       const data = await response.json();
-      if (data) {
-        let formattedService: ServiceData;
-        if (data.price_per_session !== null) {
-          formattedService = {
-            id: data.id,
-            name: data.name as ServiceType,
-            description: data.description,
-            location: data.location,
-            serviceProviderId: data.service_provider,
-            priceType: PriceType.PerSession,
-            pricePerSession: parseFloat(data.price_per_session),
-            sessionTime: data.session_time,
-          } as PerSessionPriceService;
-        } else if (data.fixed_price !== null) {
-          formattedService = {
-            id: data.id,
-            name: data.name as ServiceType,
-            description: data.description,
-            location: data.location,
-            serviceProviderId: data.service_provider,
-            priceType: PriceType.Fixed,
-            fixedPrice: parseFloat(data.fixed_price),
-          } as FixedPriceService;
-        } else {
-          throw new Error("Service pricing information is missing");
-        }
-        setService(formattedService);
-      } else {
-        setService(undefined);
-      }
+      setService(data);
     } catch (error) {
       console.error("Error fetching service:", error);
     }
@@ -127,6 +97,9 @@ const ServiceProviderDashboard: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <h1 className="text-xl font-bold">Service Provider Dashboard</h1>
+      <p className="text-gray-600">Here you can manage your services and bookings</p>
+      <h1 className="text-lg font-semibold">Your services</h1>
       {!service ? (
         <button
           onClick={() => setModalOpen(true)}
@@ -136,8 +109,8 @@ const ServiceProviderDashboard: React.FC = () => {
         </button>
       ) : (
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-          <ServiceDisplay service={service} />
-          <BookingsOverview />
+
+          <ServiceCard  serviceProviderService={service} onClick={() => navigate(`/serviceprovider/dashboard/service/${service.id}`) } />
         </div>
       )}
       {user && (

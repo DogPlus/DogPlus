@@ -1,6 +1,7 @@
 import react, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
+import { ServiceCard } from '../components/ServiceCard';
 import { ServiceProvider } from '../types/serviceProvider';
 import { Service } from '../types/services';
 
@@ -81,38 +82,7 @@ export const ServiceProviderDetailPage = () => {
           <h3 className="text-lg font-semibold mb-2">Provided service(s)</h3>
 
           {serviceProviderService ? (
-                  <div 
-                    className="bg-white rounded-lg shadow-md border p-4 sm:mx-auto md:max-w-lg lg:max-w-xl" 
-                    onClick={(e) => navigate(`/serviceproviders/services/${serviceProviderService.id}/booking`)}>
-                    
-                    <div className="mb-2">
-                      <h3 className="text-md font-semibold">{serviceProviderService.name}</h3>
-                      <p className="text-gray-600">{serviceProviderService.description}</p>
-                    </div>
-                    <div className="flex flex-row">
-                        
-                        <div className="flex flex-col gap-2">
-                          <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-                            <div className="fa-clock"/>
-                            {serviceProviderService.session_time} minutes
-                          </div>
-                          <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-                            <div className="fa-tag"/>
-                            {serviceProviderService.fixed_price && (
-                              <p>Fixed: {serviceProviderService.fixed_price} €</p>
-                            )}
-                            {serviceProviderService.price_per_session && (
-                              <p>Per session: {serviceProviderService.price_per_session} €</p>
-                            )}
-                          </div>
-                          <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-                            <div className="fa-map-marker"/>
-                            {serviceProviderService.location} 
-                          </div>
-                        </div>
-                      <div className="ml-auto fa-arrow-right"/>
-                    </div>
-                  </div>
+                    <ServiceCard serviceProviderService={serviceProviderService} onClick={() => navigate(`/serviceproviders/services/${serviceProviderService.id}/booking`)}/>
                 ) : (
                   <div>
                     <p>This provider has not added any services yet.</p>

@@ -15,6 +15,7 @@ import { UserEditPage } from "./pages/userEditPage";
 import { ServiceProviderDetailPage } from "./pages/serviceProviderDetailPage";
 
 import { Suspense, lazy } from "react";
+import ServiceProviderServiceDashboard from "./pages/serviceProviderDashboardForServicePage";
 const ServiceProviderDashboard = lazy(
   () => import("./pages/serviceProviderDashboard")
 );
@@ -62,6 +63,16 @@ function App() {
             <RequireAuth requiredRoles={[UserRole.ServiceProvider]}>
               <Suspense fallback={<div>Loading Dashboard...</div>}>
                 <ServiceProviderDashboard />
+              </Suspense>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="serviceprovider/dashboard/service/:service_id"
+          element={
+            <RequireAuth requiredRoles={[UserRole.ServiceProvider]}>
+              <Suspense fallback={<div>Loading Dashboard...</div>}>
+                <ServiceProviderServiceDashboard />
               </Suspense>
             </RequireAuth>
           }
