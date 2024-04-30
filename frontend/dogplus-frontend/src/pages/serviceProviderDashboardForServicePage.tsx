@@ -1,5 +1,6 @@
 import { Label, Textarea } from "flowbite-react";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { Loading } from "../components/common/loading";
 import { BookingsOverview } from "../components/serviceProvider/BookingsOverview";
 import useUser from "../hooks/useUser";
@@ -41,6 +42,7 @@ const ServiceProviderServiceDashboard: React.FC = () => {
       setService(data);
     } catch (error) {
       console.error("Error fetching service:", error);
+      toast.error("Failed to fetch service");
     }
   };
 

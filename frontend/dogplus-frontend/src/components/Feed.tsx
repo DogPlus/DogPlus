@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 
 import { Post } from '../types/post'
 import { Loading } from './common/loading';
@@ -32,6 +33,7 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching liked posts:", error);
+        toast.error("Failed to see likes on posts");
       }
     };
 

@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
+import { toast } from "react-hot-toast";
 import {
   PriceType,
   ServiceCreationData,
@@ -43,7 +44,7 @@ const CreateServiceModal = ({
       (priceType === PriceType.Fixed && price <= 0) ||
       (priceType === PriceType.PerSession && (price <= 0 || sessionTime <= 0))
     ) {
-      alert("Please fill all required fields with valid values.");
+      toast("Please fill all required fields with valid values.");
       return;
     }
 

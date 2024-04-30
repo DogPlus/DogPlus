@@ -10,6 +10,7 @@ import { BookingsOverview } from "../components/serviceProvider/BookingsOverview
 import { ServiceCard } from "../components/ServiceCard";
 import { Service } from "../types/services";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const ServiceProviderDashboard: React.FC = () => {
   const [service, setService] = useState<Service | undefined>(undefined);
@@ -46,6 +47,7 @@ const ServiceProviderDashboard: React.FC = () => {
       setService(data);
     } catch (error) {
       console.error("Error fetching service:", error);
+      toast.error("Failed to fetch service");
     }
   };
 
@@ -81,6 +83,7 @@ const ServiceProviderDashboard: React.FC = () => {
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Failed to create service:", errorData);
+        toast.error("Failed to create service");
         throw new Error(
           "Failed to create service: " + JSON.stringify(errorData)
         );
@@ -88,10 +91,12 @@ const ServiceProviderDashboard: React.FC = () => {
 
       const data = await response.json();
       console.log("Service created successfully:", data);
+      toast("Successfully created service");
       setService(data);
       setModalOpen(false);
     } catch (error) {
       console.error("Error creating service:", error);
+      toast.error("Failed to create service");
     }
   };
 

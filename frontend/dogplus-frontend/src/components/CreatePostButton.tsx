@@ -59,7 +59,6 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
         // Basic check for an image file
         setPostImage(file);
       } else {
-        alert("Please select an image file.");
         setPostImage(null);
       }
     }

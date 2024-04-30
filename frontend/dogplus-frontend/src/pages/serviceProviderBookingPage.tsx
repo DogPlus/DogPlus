@@ -5,6 +5,7 @@ import TimeSelector from '../components/common/timeselector';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
 import { Service } from '../types/services';
+import { toast } from 'react-hot-toast';
 
 
 function addMinutesToTime(time: string, minutes: number) {
@@ -53,6 +54,7 @@ export const ServiceProviderBookingPage = () => {
         setSerivceTimeInterval(data.interval);
       } catch (error) {
         console.error(error);
+        toast.error("Failed to fetch available timeslots");
       }
     }
     fetchAvailableTimes();
@@ -69,12 +71,14 @@ export const ServiceProviderBookingPage = () => {
         });
 
         if (!response.ok) {
+          toast.error('Failed to fetch service interval');
           throw new Error('Failed to fetch service interval');
         }
         const data = await response.json();
         setServiceInformation(data);
       } catch (error) {
         console.error(error);
+        toast.error("Oops! Something went wrong on our side!")
       }
     }
     fetchServiceInformation();
@@ -82,10 +86,11 @@ export const ServiceProviderBookingPage = () => {
 
   const onSubmitBooking = async () => {
     if (!selectedTime) {
-      alert('Please select a time slot');
+      toast("Please select a time slot")
       return;
     }
     if (!serivceTimeInterval) {
+      toast.error('Failed to book timeslot. Try to refresh the page.');
       throw new Error('Service time interval not set');
     }
 
@@ -106,14 +111,15 @@ export const ServiceProviderBookingPage = () => {
       });
 
       if (!response.ok) {
+        toast.error('Failed to book timeslot');
         throw new Error('Failed to book timeslot');
       }
 
-      alert('Booking successful');
+      toast.success('Successfully booked timeslot');
       navigate('/serviceproviders');
     } catch (error) {
       console.error(error);
-      alert('Failed to book timeslot');
+      toast.error('Failed to book timeslot');
     }
   }
 

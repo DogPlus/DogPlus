@@ -3,6 +3,7 @@ import Feed from '../components/Feed';
 import { CreatePostButton } from '../components/CreatePostButton';
 import { Post } from '../types/post';
 import UserContext from '../context/UserContext';
+import { toast } from 'react-hot-toast';
 
 export const HomePage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -27,6 +28,7 @@ export const HomePage = () => {
         setPosts(data);
       } catch (error) {
         console.error("Error:", error);
+        toast.error("Failed to fetch posts");
       }
     };
 

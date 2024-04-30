@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Post } from '../types/post';
 
@@ -51,6 +52,7 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
       }
     } catch (error) {
       console.error("Error sending like/dislike request:", error);
+      toast.error("Failed to like/dislike post");
     }
   };
 

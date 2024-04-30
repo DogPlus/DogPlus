@@ -7,6 +7,7 @@ import {
 } from "../types/user";
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
+import { toast } from "react-hot-toast";
 
 export const RegisterPage = () => {
   const [username, setUsername] = useState<string>("");
@@ -126,6 +127,7 @@ export const RegisterPage = () => {
     } catch (error) {
       setError("An error occurred during registration. Please try again.");
       console.error("Registration error:", error);
+      toast.error("An error occurred during registration. Please try again.");
     }
   };
 
