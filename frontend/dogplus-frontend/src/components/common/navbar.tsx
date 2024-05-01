@@ -10,12 +10,12 @@ import { UserRole } from "../../types/user";
 const navlink_default =
   "inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group-hover:text-blue-600 text-gray-500 group text-m";
 const navlink_active =
-  "inline-flex flex-col items-center justify-center px-5 bg-blue-50 text-blue-500 stroke-blue-500 group text-m font-bold stroke-1 rounded-lg";
+  "inline-flex flex-col items-center justify-center px-5 bg-accent-0 hover:bg-accent-50 group-hover:text-foreground text-foreground group font-bold rounded-lg text-m";
 
 export const Navbar = () => {
   const { user } = useUser();
   return (
-    <div className="py-1 px-1 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+    <div className="py-1 px-1 pb-3 z-50 w-full min-h-20 bg-white border-t border-gray-200">
         <nav className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium gap-4">
         <NavLink
           to="/"
@@ -23,8 +23,8 @@ export const Navbar = () => {
             isActive ? navlink_active : navlink_default
           }
         >
-          <HomeIcon className="w-5 h-5" />
-          <span className="text-inherit">Home</span>
+          <i className="fas fa-home" />
+          <span className="text-sm">Home</span>
         </NavLink>
         {user && user.role === UserRole.ServiceProvider && (
           <NavLink
@@ -33,7 +33,7 @@ export const Navbar = () => {
               isActive ? navlink_active : navlink_default
             }
           >
-            <ServiceProviderIcon className="w-5 h-5" />
+            <i className="fas fa-briefcase" />
             <span className="text-sm">Dashboard</span>
           </NavLink>
         )}
@@ -44,7 +44,7 @@ export const Navbar = () => {
               isActive ? navlink_active : navlink_default
             }
           >
-            <ServiceProviderIcon className="w-5 h-5" />
+          <i className="fas fa-briefcase" />
             <span className="text-sm">Admin</span>
           </NavLink>
         )}
@@ -55,7 +55,7 @@ export const Navbar = () => {
               isActive ? navlink_active : navlink_default
             }
           >
-            <ServiceProviderIcon className="w-5 h-5" />
+            <i className="fas fa-briefcase" />
             <span className="text-sm">Services</span>
           </NavLink>
         )}
@@ -65,7 +65,7 @@ export const Navbar = () => {
             isActive ? navlink_active : navlink_default
           }
         >
-          <UserIcon className="w-5 h-5" />
+          <i className="fas fa-user" />
           <span className="text-sm">User</span>
         </NavLink>
       </nav>

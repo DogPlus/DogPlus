@@ -1,4 +1,6 @@
+import { Button, FileInput, Label, Modal, Textarea } from "flowbite-react";
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 
 import { Post } from "../types/post";
 
@@ -37,7 +39,8 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
       const newPost = await response.json();
       onCreatePost(newPost);
     } catch (e) {
-      console.log("Error while posting: ", e);
+      console.error("Error while posting: ", e);
+      toast.error("Failed to create new post");
     }
 
     setShowModal(false);
@@ -45,76 +48,78 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
     setPostImage(null);
   };
 
-  const handleCloseModal = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      setShowModal(false);
-    }
-  };
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      if (file.type.match("image.*")) {
-        // Basic check for an image file
-        setPostImage(file);
-      } else {
-        alert("Please select an image file.");
-        setPostImage(null);
-      }
-    }
-  };
-
   return (
     <div>
       <button
         onClick={() => setShowModal(true)}
-        className="p-0 w-12 h-12 bg-blue-500 text-white 
-        rounded-full fixed bottom-20 right-5 flex items-center 
+        className="p-0 w-12 h-12 bg-accent-0 text-white 
+        rounded-full fixed bottom-24 right-5 flex items-center 
         justify-center text-2xl"
       >
         <i className="fas fa-plus"></i>
       </button>
 
-      {showModal && (
-        <div
-          onClick={handleCloseModal}
-          className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
-        >
-          <div className="relative top-20 mx-auto mt-20 p-5 border w-96 shadow-lg rounded-md bg-white">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-0 left-0 mt-2 ml-2 text-gray-700 hover:text-gray-900"
-            >
-              <i className="fas fa-times"></i>
-            </button>
-
-            <div className="mt-3 text-center">
-              <div className="mt-2">
-                <input
-                  type="text"
+      <Modal show={showModal} position="center" size="xl" onClose={() => setShowModal(false)}>
+        <Modal.Header>
+          Create a new post
+        </Modal.Header>
+        <Modal.Body>
+                <div className="mb-2 block">
+                  <Label htmlFor="postText" value="Your Post Text" />
+                </div>
+                <Textarea
+                  id="postText"
+                  className="w-full text-md"
                   placeholder="Write something..."
-                  value={postText}
                   onChange={(e) => setPostText(e.target.value)}
-                  className="border p-2 w-full"
+                  rows={6}
+                  required
                 />
-                <input
-                  type="file"
-                  placeholder="Upload an image (optional)"
-                  onChange={handleImageUpload}
-                  accept="image/png, image/jpeg, image/jpg"
-                  className="border p-2 w-full mt-2"
-                />
-              </div>
+                {postImage && (
+                  <div>
+                    <img
+                      src={URL.createObjectURL(postImage)}
+                      alt="Post"
+                      className="w-full h-64 mt-2 object-cover rounded"
+                    />
+                    <Button
+                      onClick={() => setPostImage(null)}
+                      className="mt-2 bg-red-500 text-white p-2 rounded"
+                    >
+                      Remove image
+                    </Button>
+                  </div>
+                )}
+                {!postImage && (
+                  <div className="mt-2">
+                <div className="flex items-center justify-center w-full">
+                    <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                            </svg>
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Tap to upload Image to post</span></p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG or JPEG</p>
+                        </div>
+                        <input 
+                          id="dropzone-file" 
+                          type="file" 
+                          className="hidden"
+                          onChange={handleImageUpload}
+                          accept="image/png, image/jpeg, image/jpg"
+                        />
+                    </label>
+                </div>
+                </div>
+              )}
               <button
                 onClick={handleCreatePost}
-                className="mt-4 bg-blue-500 text-white p-2 rounded"
+                className="mt-4 bg-accent-0 text-white p-2 rounded w-full"
               >
                 Post
               </button>
-            </div>
-          </div>
-        </div>
-      )}
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

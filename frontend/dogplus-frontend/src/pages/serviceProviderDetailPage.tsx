@@ -1,6 +1,8 @@
 import react, { useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
+import { ServiceCard } from '../components/ServiceCard';
 import { ServiceProvider } from '../types/serviceProvider';
 import { Service } from '../types/services';
 
@@ -27,7 +29,8 @@ export const ServiceProviderDetailPage = () => {
               const data: ServiceProvider = await response.json();
               setServiceProvider(data);
           } catch (error) {
-              console.log(error);
+              console.error(error);
+              toast.error("Failed to fetch service provider");
           }
       };
 
@@ -50,7 +53,8 @@ export const ServiceProviderDetailPage = () => {
               const data: Service = await response.json();
               setServiceProviderService(data);
           } catch (error) {
-              console.log(error);
+              console.error(error);
+              toast.error("Failed to fetch service provider service");
           }
       };
 
@@ -62,43 +66,26 @@ export const ServiceProviderDetailPage = () => {
   }
 
   return (
-        <div className="bg-white rounded-lg shadow-md border p-4 mt-4 sm:mx-auto md:max-w-lg lg:max-w-xl">
+        <div className="m-4">
           <div className="flex items-center mb-4">
-              {/* <img className="w-12 h-12 rounded-full mr-3" src={provider.profile_pic} alt="Profile Image" /> //TODO: Add profile pic */} 
+              <img className="w-12 h-12 rounded-full mr-3" src={serviceProvider.profile_image} alt="Profile Image" />
               <div>
                   <h2 className="text-lg font-semibold">{serviceProvider.username}</h2>
-                  <p className="text-gray-500 text-sm">Contact: {serviceProvider.email}</p>
+                  <div className="flex flex-row">
+                    <div className={`flex flex-row gap-4 bg-blue-100 text-blue-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
+                      <div className="fa-suitcase"/>
+                      Type
+                    </div>
+                  </div>
               </div>
           </div>
           <p className="text-gray-700 mb-4">
             This part should contain the provider's bio, but we don't have that information yet.
           </p>
+          <h3 className="text-lg font-semibold mb-2">Provided service(s)</h3>
 
           {serviceProviderService ? (
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">Provided service</h3>
-                    <div className="mb-2">
-                      <h3 className="text-md font-semibold">{serviceProviderService.name}</h3>
-                      <p className="text-gray-600">{serviceProviderService.description}</p>
-                    </div>
-                    <div className="mb-2">
-                      <p><span className="font-semibold">Duration:</span> {serviceProviderService.session_time} minutes</p>
-                      {serviceProviderService.fixed_price && (
-                        <p><span className="font-semibold">Fixed price:</span> {serviceProviderService.fixed_price}</p>
-                      )}
-                      {serviceProviderService.price_per_session && (
-                        <p><span className="font-semibold">Price per session:</span> {serviceProviderService.price_per_session}</p>
-                      )}
-                      <p><span className="font-semibold">Location:</span> {serviceProviderService.location}</p>
-                    </div>
-                    <button 
-                      type="button" 
-                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                      onClick={() => navigate(`/serviceproviders/services/${serviceProviderService.id}/booking`)}
-                    >
-                      Book/Order
-                    </button>
-                  </div>
+                    <ServiceCard serviceProviderService={serviceProviderService} onClick={() => navigate(`/serviceproviders/services/${serviceProviderService.id}/booking`)}/>
                 ) : (
                   <div>
                     <p>This provider has not added any services yet.</p>

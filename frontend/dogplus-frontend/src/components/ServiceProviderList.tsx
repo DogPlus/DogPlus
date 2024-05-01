@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import ProviderCard from './ServiceProviderCard';  // Make sure to import the ProviderCard
 import { ServiceProvider } from '../types/serviceProvider';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const ServiceProviderList: React.FC = () => {
     const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>([]);
@@ -12,7 +13,7 @@ const ServiceProviderList: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/providers/service-providers/list/`,{ //TODO change to an endpoint using a user specific algorithm
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/providers/service-providers/list/`,{ 
                     method: "GET",
                     headers: {
                       "Authorization": "Token "+ localStorage.getItem("token")
@@ -25,12 +26,14 @@ const ServiceProviderList: React.FC = () => {
                 const data: ServiceProvider[] = await response.json();
                 setServiceProviders(data);
             } catch (error) {
-                console.log(error);
+                console.error(error);
+                toast.error("Failed to fetch service providers");
             }
         };
 
         fetchData();
     }, []);
+
 
     return (
         <div>

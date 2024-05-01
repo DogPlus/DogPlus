@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 
 import { Post } from '../types/post'
 import { Loading } from './common/loading';
@@ -32,6 +33,7 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching liked posts:", error);
+        toast.error("Failed to see likes on posts");
       }
     };
 
@@ -49,7 +51,6 @@ const Feed: React.FC<FeedProps> = ({ posts }) => {
 
   return (
     <div className="pb-20">
-      <h1 className="text-3xl font-bold ">Dog+</h1>
       {posts.map(post => (
         <PostCard key={post.id} post={post} isLiked={isLiked(post)}/>
       ))
