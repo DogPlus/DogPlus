@@ -56,7 +56,7 @@ export const BookingsOverview = () => {
   }, [user]);
 
   const handleDeleteBooking = async (bookingId: string) => {
-    console.log("Deleting booking with id: ", bookingId);
+    toast.success("Booking deleted successfully!")
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_HOST}/api/booking/${bookingId}/`,

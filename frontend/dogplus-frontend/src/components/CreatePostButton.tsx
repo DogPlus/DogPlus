@@ -1,5 +1,6 @@
 import { Button, FileInput, Label, Modal, Textarea } from "flowbite-react";
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 
 import { Post } from "../types/post";
 
@@ -38,32 +39,14 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
       const newPost = await response.json();
       onCreatePost(newPost);
     } catch (e) {
-      console.log("Error while posting: ", e);
+      console.error("Error while posting: ", e);
+      toast.error("Failed to create new post");
     }
 
     setShowModal(false);
     setPostText("");
     setPostImage(null);
   };
-
-  const handleCloseModal = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      setShowModal(false);
-    }
-  };
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      if (file.type.match("image.*")) {
-        // Basic check for an image file
-        setPostImage(file);
-      } else {
-        setPostImage(null);
-      }
-    }
-  };
-  console.log(postImage);
 
   return (
     <div>

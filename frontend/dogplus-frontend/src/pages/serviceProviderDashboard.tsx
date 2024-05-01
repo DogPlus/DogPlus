@@ -90,7 +90,6 @@ const ServiceProviderDashboard: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log("Service created successfully:", data);
       toast("Successfully created service");
       setService(data);
       setModalOpen(false);

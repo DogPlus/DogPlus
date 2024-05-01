@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import ProviderCard from './ServiceProviderCard';  // Make sure to import the ProviderCard
 import { ServiceProvider } from '../types/serviceProvider';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const ServiceProviderList: React.FC = () => {
     const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>([]);
@@ -25,7 +26,8 @@ const ServiceProviderList: React.FC = () => {
                 const data: ServiceProvider[] = await response.json();
                 setServiceProviders(data);
             } catch (error) {
-                console.log(error);
+                console.error(error);
+                toast.error("Failed to fetch service providers");
             }
         };
 

@@ -1,4 +1,5 @@
 import react, { useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
 import { ServiceCard } from '../components/ServiceCard';
@@ -28,7 +29,8 @@ export const ServiceProviderDetailPage = () => {
               const data: ServiceProvider = await response.json();
               setServiceProvider(data);
           } catch (error) {
-              console.log(error);
+              console.error(error);
+              toast.error("Failed to fetch service provider");
           }
       };
 
@@ -51,7 +53,8 @@ export const ServiceProviderDetailPage = () => {
               const data: Service = await response.json();
               setServiceProviderService(data);
           } catch (error) {
-              console.log(error);
+              console.error(error);
+              toast.error("Failed to fetch service provider service");
           }
       };
 
