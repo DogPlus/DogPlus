@@ -59,8 +59,7 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
       }
     }
   };
-  console.log(postImage);
-
+  
   return (
     <div>
       <button
