@@ -9,9 +9,9 @@ def create_data(apps, schema_editor):
     user2 = User.objects.create_user(username='Your Dog Enhanced', password='TestPassword123', role=2, is_approved=True)
     user3 = User.objects.create_user(username='admin', password='TestPassword123', role=3, is_approved=True)
 
-    user4 = User.objects.create_user(username='Giovanni Rossi', password='TestPassword123', role=1, is_approved=True, profile_image='demo_profile1.jpg')
+    user4 = User.objects.create_user(username='Giulia Rossi', password='TestPassword123', role=1, is_approved=True, profile_image='demo_profile1.jpg')
     user5 = User.objects.create_user(username='Mario Bianchi', password='TestPassword123', role=1, is_approved=True, profile_image='demo_profile2.jpg')
-    user6 = User.objects.create_user(username='Luca Verdi', password='TestPassword123', role=1, is_approved=True, profile_image='demo_profile3.jpg')
+    user6 = User.objects.create_user(username='Jessica Verdi', password='TestPassword123', role=1, is_approved=True, profile_image='demo_profile3.jpg')
     user7 = User.objects.create_user(username='Francesco Russo', password='TestPassword123', role=1, is_approved=True, profile_image='demo_profile4.jpg')
 
     user8 = User.objects.create_user(username='Paws and Claws', password='TestPassword123', role=2, is_approved=True, profile_image='demo_service1.jpg')

@@ -8,9 +8,9 @@ def create_data(apps, schema_editor):
     Comment = apps.get_model('feed', 'Comment')
 
     user1 = User.objects.get(username='normaluser')
-    user4 = User.objects.get(username='Giovanni Rossi')
+    user4 = User.objects.get(username='Giulia Rossi')
     user5 = User.objects.get(username='Mario Bianchi')
-    user6 = User.objects.get(username='Luca Verdi')
+    user6 = User.objects.get(username='Jessica Verdi')
     user7 = User.objects.get(username='Francesco Russo')
 
     # Create one post for each user, where the post text is a 2 sentence text about their dog. Written in 1st person
