@@ -17,25 +17,25 @@ def create_data(apps, schema_editor):
     post2 = Post.objects.create(
         author=user4,
         text="I have a beautiful golden retriever. He is very friendly and loves to play fetch. 🐶",
-        comments_count=1
+        comment_count=1
     )
     post3 = Post.objects.create(
         author=user5,
         text="I have a cute little pug. He is very energetic and loves to go on long walks. ⚡🥰",
         image="sample_post_image.jpg",
-        comments_count=1
+        comment_count=1
     )
     post4 = Post.objects.create(
         author=user6,
         text="I have a big German Shepherd. He is very protective and loves to play with his toys. 🛡️⚔️",
         image="sample_post_image2.jpg",
-        comments_count=1
+        comment_count=1
     )
     post5 = Post.objects.create(
         author=user7,
         text="I have a small Chihuahua. He is very playful and loves to cuddle. 🐕🥰",
         image="sample_post_image1.jpg",
-        comments_count=1
+        comment_count=1
     )
 
     # Create a comment on each post, from different users. Should be funny and light-hearted
