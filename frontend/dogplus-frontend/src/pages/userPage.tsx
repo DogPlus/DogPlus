@@ -31,7 +31,7 @@ export const UserPage = () => {
   return (
 <div className="m-4">
   <div className="flex items-center mb-2">
-    <img className="w-12 h-12 rounded-full mr-3" src={user.profile_image} alt="Profile Image" />
+    <img className="w-12 h-12 object-cover rounded-full mr-3" src={user.profile_image} alt="Profile Image" />
     <div>
       <h2 className="text-2xl font-semibold">{user.username}</h2>
     </div>
