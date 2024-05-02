@@ -15,7 +15,7 @@ export const HomePage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/posts/user/${localStorage.getItem("user_id")}/`, { //TODO change to an endpoint that fetcehs from following list
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/feed/create-post/`, { //TODO change to an endpoint that fetcehs from following list
           method: "GET",
           headers: {
             "Authorization": "Token "+ localStorage.getItem("token")
