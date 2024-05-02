@@ -12,7 +12,7 @@ def create_data(apps, schema_editor):
     booking1 = Booking.objects.create(
         service=Service.objects.get(name="Dog Training", description="Dog Training Service"),
         user=User.objects.get(username='normaluser'),
-        service_provider=User.objects.get(username='serviceprovider'),
+        service_provider=User.objects.get(username='Your Dog Enhanced'),
         booking_date='2024-04-16',
         start_time='10:00',
         end_time='11:00',

@@ -6,7 +6,7 @@ def create_data(apps, schema_editor):
     User = apps.get_model('authentication', 'CustomUser')
     Service = apps.get_model('services', 'Service')
 
-    user2 = User.objects.get(username='serviceprovider')
+    user2 = User.objects.get(username='Your Dog Enhanced')
     user8 = User.objects.get(username='Paws and Claws')
     user9 = User.objects.get(username='Pet Lovers')
     user10 = User.objects.get(username='Dog Training Inc')
