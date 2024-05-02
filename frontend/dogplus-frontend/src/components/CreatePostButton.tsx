@@ -48,6 +48,18 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
     setPostImage(null);
   };
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      if (file.type.match("image.*")) {
+        // Basic check for an image file
+        setPostImage(file);
+      } else {
+        setPostImage(null);
+      }
+    }
+  };
+  
   return (
     <div>
       <button
