@@ -9,7 +9,7 @@ export const Layout = () => {
   return (
     <div className="flex flex-col h-screen bg-background">
       <Toaster />
-      <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow overflow-y-auto p-2">
         <Outlet />
       </div>
       {location.pathname !== "/auth" && location.pathname !== "/register" && (
