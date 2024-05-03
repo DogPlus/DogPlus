@@ -4,6 +4,7 @@ import { CreatePostButton } from '../components/CreatePostButton';
 import { Post } from '../types/post';
 import UserContext from '../context/UserContext';
 import { toast } from 'react-hot-toast';
+import { logout } from '../utils/authUtils';
 
 export const HomePage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -22,7 +23,10 @@ export const HomePage = () => {
           },
         });
 
-        if (!response.ok) throw new Error('Failed to fetch posts')
+        if (response.status === 401) {
+          logout();
+        }
+        else if (!response.ok) throw new Error('Failed to fetch posts')
         const data = await response.json();
       
         setPosts(data);
