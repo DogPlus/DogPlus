@@ -1,5 +1,6 @@
 import React from 'react';
 import { ServiceProvider } from "../types/serviceProvider";
+import { Label } from './label';
 interface ServiceProviderCardProps {
     serviceProvider: ServiceProvider;
 }
@@ -13,13 +14,10 @@ const ServiceProviderCard: React.FC<ServiceProviderCardProps> = ({ serviceProvid
               <div>
                   <h2 className="text-lg font-semibold">{serviceProvider.username}</h2>
                   <div className="flex flex-row">
-                    <div className={`flex flex-row gap-4 bg-blue-100 text-blue-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-                      <div className="fa-suitcase"/>
-                      Type
-                    </div>
+                    <Label icon="fa-suitcase" color="blue" text="Type"/>
                   </div>
               </div>
-              <div className="ml-auto fa-arrow-right"/>
+              <div className="ml-auto fas fa-arrow-right"/>
           </div>
         </div>
     );

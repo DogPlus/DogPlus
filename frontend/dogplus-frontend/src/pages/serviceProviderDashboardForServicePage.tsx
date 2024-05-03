@@ -1,7 +1,7 @@
-import { Label, Textarea } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Loading } from "../components/common/loading";
+import { Label } from "../components/label";
 import { BookingsOverview } from "../components/serviceProvider/BookingsOverview";
 import useUser from "../hooks/useUser";
 import { ServiceCreationData, ServicePayload } from "../types/service";
@@ -65,23 +65,9 @@ const ServiceProviderServiceDashboard: React.FC = () => {
       <div className="flex flex-row">
           
           <div className="flex flex-col gap-2">
-            <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-              <div className="fa-clock"/>
-              {service.session_time} minutes
-            </div>
-            <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-              <div className="fa-tag"/>
-              {service.fixed_price && (
-                <p>Fixed: {service.fixed_price} €</p>
-              )}
-              {service.price_per_session && (
-                <p>Per session: {service.price_per_session} €</p>
-              )}
-            </div>
-            <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-              <div className="fa-map-marker"/>
-              {service.location} 
-            </div>
+            <Label icon="fa-clock" color="yellow" text={`${service.session_time} minutes`}/>
+            <Label icon="fa-tag" color="yellow" text={service.fixed_price ? `Fixed: ${service.fixed_price} €` : `Per Session: ${service.price_per_session} €`}/>
+            <Label icon="fa-map-marker" color="yellow" text={service.location}/>
           </div>
       </div>
           
