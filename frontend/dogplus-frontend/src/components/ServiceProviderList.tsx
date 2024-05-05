@@ -5,6 +5,7 @@ import ProviderCard from './ServiceProviderCard';  // Make sure to import the Pr
 import { ServiceProvider } from '../types/serviceProvider';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { logout } from '../utils/authUtils';
 
 const ServiceProviderList: React.FC = () => {
     const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>([]);
@@ -20,6 +21,9 @@ const ServiceProviderList: React.FC = () => {
                     },
                   });
 
+                if (response.status === 401) {
+                    logout();
+                }
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

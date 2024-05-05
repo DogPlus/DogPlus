@@ -64,7 +64,7 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
     return (
       <div className="bg-white rounded-lg shadow-md border p-4 mt-4">
         <div className="flex items-center mb-4">
-            <img className="w-12 h-12 rounded-full mr-3" src={post.author.profile_image} alt="Profile Image" />
+            <img className="w-12 h-12 rounded-full mr-3 object-cover" src={post.author.profile_image} alt="Profile Image" />
             <div>
                 <h2 className="text-lg font-semibold">{post.author.username}</h2>
                 <p className="text-gray-500 text-sm">Published on {date}</p>
