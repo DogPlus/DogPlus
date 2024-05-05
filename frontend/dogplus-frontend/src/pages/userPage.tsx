@@ -5,6 +5,8 @@ import { Loading } from "../components/common/loading";
 import { PublicUser } from "../types/user";
 import useUser from "../hooks/useUser";
 import FriendsAndRequests from "../components/social/FriendsAndRequests";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 export const UserPage = () => {
   const { user } = useUser();
@@ -42,6 +44,34 @@ export const UserPage = () => {
         },
       }
     );
+    if (response.ok) {
+      setSearchResults([]);
+      const newUser = searchResults.find((user) => user.id === userId);
+      if (newUser) {
+      }
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_HOST}/api/auth/logout/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        // Assuming the token is stored in localStorage; adjust if using cookies or other methods
+        localStorage.removeItem("token");
+        navigate("/auth"); // Redirect to login page after logout
+      }
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
   if (!user) {
@@ -65,6 +95,13 @@ export const UserPage = () => {
           }
         >
           Edit
+        </button>
+        <button
+          onClick={handleLogout}
+          className="text-red-500 hover:text-white hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm p-2.5"
+          title="Logout"
+        >
+          <FontAwesomeIcon icon={faSignOutAlt} size="lg" />
         </button>
       </div>
       <div className="flex mb-2">
