@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { CommentComponent } from '../components/comment';
 import { Loading } from '../components/common/loading';
@@ -34,6 +35,7 @@ export const PostDetailPage = () => {
         setPost(data);
       } catch (error) {
         console.error("Error fetching post:", error);
+        toast.error("Failed to fetch post");
       }
     };
 
@@ -60,6 +62,7 @@ export const PostDetailPage = () => {
         setComments(data);
       } catch (error) {
         console.error("Error fetching post:", error);
+        toast.error("Failed to fetch post");
       }
     };
 
@@ -88,6 +91,7 @@ export const PostDetailPage = () => {
       setComments([...comments, await response.json()]); // Add the new comment to the list of comments
     } catch (error) {
       console.error("Error fetching post:", error);
+      toast.error("Failed to fetch post");
     }
   };
 

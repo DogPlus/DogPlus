@@ -36,7 +36,7 @@ const TimePicker: React.FC<TimePickerProps> = ({ selectedTime, availableTimes, s
         <button
           key={time}
           className={`p-2 text-center rounded-md ${
-            selectedTime === time ? "bg-purple-blue-500 text-white" : "bg-gray-200"
+            selectedTime === time ? "bg-accent-200 text-white" : "bg-gray-200"
           } ${!isAvailable(time) && "opacity-50 cursor-not-allowed"}`}
           onClick={() => isAvailable(time) && onTimeChange(time)}
           disabled={!isAvailable(time)}

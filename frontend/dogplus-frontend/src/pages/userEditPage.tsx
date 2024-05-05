@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
 import { PublicUser } from '../types/user';
@@ -23,10 +24,12 @@ export const UserEditPage = () => {
         } else {
           // Handle error
           console.error('Failed to fetch user data');
+          toast.error('Failed to fetching user data');
         }
       } catch (error) {
         // Handle fetch error
         console.error('Error fetching user data:', error);
+        toast.error('Failed to fetching user data');
       }
     };
 
@@ -59,14 +62,15 @@ export const UserEditPage = () => {
         } else {
           // Handle error
           console.error('Failed to update user image');
+          toast.error('Failed to update profile image');
         }
       } catch (error) {
         // Handle fetch error
         console.error('Error updating user image:', error);
+        toast.error('Failed to update profile image');
       }
     }
   };
-
   if (!user) {
     return <Loading />;
   }

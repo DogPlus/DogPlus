@@ -5,6 +5,7 @@ import { ServiceData } from "../../types/service";
 import { Loading } from "../common/loading";
 import { addDays, format, parseISO } from "date-fns";
 import ConfirmModal from "../ConfirmModal";
+import { toast } from "react-hot-toast";
 
 interface DashboardData {
   service: ServiceData | null;
@@ -37,6 +38,7 @@ export const BookingsOverview = () => {
         );
 
         if (!response.ok) {
+          toast.error("Oops! Something went wrong on our side!")
           throw new Error("Failed to fetch service and booking data");
         }
 
@@ -44,6 +46,7 @@ export const BookingsOverview = () => {
         setDashboardData(data);
       } catch (error) {
         console.error(error);
+        toast.error("Oops! Something went wrong on our side!")
       } finally {
         setLoading(false);
       }
@@ -53,7 +56,7 @@ export const BookingsOverview = () => {
   }, [user]);
 
   const handleDeleteBooking = async (bookingId: string) => {
-    console.log("Deleting booking with id: ", bookingId);
+    toast.success("Booking deleted successfully!")
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_HOST}/api/booking/${bookingId}/`,
@@ -66,6 +69,7 @@ export const BookingsOverview = () => {
       );
 
       if (!response.ok) {
+        toast.error("Oops! Could not delete booking. Please try again later.")
         throw new Error("Failed to delete booking");
       }
 
@@ -79,6 +83,7 @@ export const BookingsOverview = () => {
       setModalOpen(false);
     } catch (error) {
       console.error("Error deleting booking:", error);
+      toast.error("Oops! Could not delete booking. Please try again later.")
     }
   };
 
@@ -97,6 +102,7 @@ export const BookingsOverview = () => {
       return format(parseISO(dateStr), "PP");
     } catch (error) {
       console.error("Error formatting date: ", error);
+      toast.error("Oops! Something went wrong on our side!")
       return dateStr;
     }
   };
@@ -107,6 +113,7 @@ export const BookingsOverview = () => {
       return format(parseISO(dummyDate), "p").replace(":00", "");
     } catch (error) {
       console.error("Error formatting time: ", error);
+      toast.error("Oops! Something went wrong on our side!")
       return timeStr;
     }
   };
@@ -134,9 +141,6 @@ export const BookingsOverview = () => {
     );
   return (
     <div className="m-3 p-4 bg-white rounded-lg shadow-lg">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">
-        Bookings Overview for {dashboardData?.service?.name || "Service"}
-      </h2>
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={handlePreviousDay}
