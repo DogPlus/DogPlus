@@ -41,6 +41,24 @@ class AcceptFollowRequestAPIView(APIView):
         
         return Response({"status": "Follow accepted and mutual follow created"})
 
+class SentFollowRequestListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Fetches follow requests sent by the current user that are not yet accepted
+        sent_requests = Follow.objects.filter(follower=request.user, is_accepted=False)
+        serializer = FollowSerializer(sent_requests, many=True)
+        return Response(serializer.data)
+    
+class CancelFollowRequestAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, follow_id):
+        # Allow deletion only if the follow request is not accepted yet
+        follow_request = get_object_or_404(Follow, id=follow_id, follower=request.user, is_accepted=False)
+        follow_request.delete()
+        return Response({"status": "follow request cancelled"}, status=status.HTTP_204_NO_CONTENT)
+
 
 class FollowerListView(APIView):
     permission_classes = [IsAuthenticated]
