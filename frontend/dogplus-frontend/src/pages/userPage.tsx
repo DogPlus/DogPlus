@@ -14,6 +14,7 @@ export const UserPage = () => {
   const [searchResults, setSearchResults] = useState<PublicUser[]>([]);
   const [showSearch, setShowSearch] = useState(false);
   const navigate = useNavigate();
+  const [refreshKey, setRefreshKey] = useState<number>(0);
 
   const handleSearchToggle = () => {
     setShowSearch(!showSearch);
@@ -46,9 +47,7 @@ export const UserPage = () => {
     );
     if (response.ok) {
       setSearchResults([]);
-      const newUser = searchResults.find((user) => user.id === userId);
-      if (newUser) {
-      }
+      setRefreshKey((prev) => prev + 1);
     }
   };
 
@@ -139,7 +138,7 @@ export const UserPage = () => {
           </div>
         </div>
       )}
-      <FriendsAndRequests />
+      <FriendsAndRequests refreshKey={refreshKey} />
     </div>
   );
 };
