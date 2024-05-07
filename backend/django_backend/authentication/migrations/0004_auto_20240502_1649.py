@@ -5,9 +5,9 @@ from django.db import migrations
 def create_data(apps, schema_editor):
     User = apps.get_model('authentication', 'CustomUser')
     # Create test users
-    user1 = User.objects.create_user(username='normaluser', password='TestPassword123', role=1, is_approved=True)
-    user2 = User.objects.create_user(username='Your Dog Enhanced', password='TestPassword123', role=2, is_approved=True)
-    user3 = User.objects.create_user(username='admin', password='TestPassword123', role=3, is_approved=True)
+    user1, created = User.objects.get_or_create(username='normaluser', defaults={'password': 'TestPassword123', 'role': 1, 'is_approved': True})
+    user2, created = User.objects.get_or_create(username='Your Dog Enhanced', defaults={'password': 'TestPassword123', 'role': 2, 'is_approved': True})
+    user3, created = User.objects.get_or_create(username='admin', defaults={'password': 'TestPassword123', 'role': 3, 'is_approved': True})
 
     user4 = User.objects.create_user(username='Giulia Rossi', password='TestPassword123', role=1, is_approved=True, profile_image='demo_profile1.jpg')
     user5 = User.objects.create_user(username='Mario Bianchi', password='TestPassword123', role=1, is_approved=True, profile_image='demo_profile2.jpg')
