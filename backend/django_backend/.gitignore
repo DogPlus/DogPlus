@@ -1,0 +1,17 @@
+dog_venv/
+entities_info.txt
+media/*
+!media/sample_post_image.jpg
+!media/sample_post_image1.jpg
+!media/sample_post_image2.jpg
+!media/default_profileimg.png
+!media/demo_profile1.jpg
+!media/demo_profile2.jpg
+!media/demo_profile3.jpg
+!media/demo_profile4.jpg
+!media/demo_service1.jpg
+!media/demo_service2.jpg
+!media/demo_service3.png
+!media/demo_service4.jpg
+
+

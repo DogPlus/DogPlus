@@ -1,6 +1,24 @@
-## Setting up the backend
+# Running the backend on the cloud
+The setup for this project on Google Cloud Platform was made using [this guide](https://cloud.google.com/python/django/run). This website outlines alot of different steps needed to setup the application in the cloud. However, this is already done. So you can safely skip to the headline "Deploying the app to Cloud Run".Following is the commands you are required to run to deploy the backend. Make sure you are in the django_backend folder:
 
-### Running the first time
+## Updating the application on cloud
+1. Run the Cloud Build build and migration script:
+```sh 
+gcloud builds submit --config cloudmigrate.yaml
+```
+2. Deploy the service:
+```sh 
+gcloud run deploy api-service \
+    --platform managed \
+    --region europe-west12 \
+    --image gcr.io/dog-plus-polimi/api-service
+```
+
+
+
+# Local development
+
+## Running the first time
 
 1. Set up virtual environment
    Make sure you are in the `backend` directory and run these commands:
@@ -30,12 +48,24 @@
 3. Create a super user
 
    ```bash
-   python manage.py createsuperuser
+   docker-compose exec backend python3 manage.py createsuperuser
+   docker-compose exec backend python3 manage.py shell
+   ```
+
+   After entering the shell, execute each line at a time:
+   ```bash
+   
+   from django.contrib.auth import get_user_model
+   User = get_user_model()
+   user = User.objects.get(username='your_superuser_username')
+   user.role = User.ADMIN  # Assuming 'ADMIN' corresponds to the appropriate choice in your ROLE_CHOICES
+   user.is_approved = True  # If you want to mark the user as approved
+   user.save()
    ```
 
    **NB**: When you type your password, it might look like nothing is happening, but it is.
 
-4. Start the server
+5. Start the server
    ```bash
    python manage.py runserver
    ```

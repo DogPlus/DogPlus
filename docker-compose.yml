@@ -1,0 +1,58 @@
+services:
+  backend:
+    build:
+      context: ./backend/django_backend/
+      dockerfile: Dockerfile.dev
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/django_backend:/app/backend
+    depends_on:
+      - db
+    environment:
+      - GOOGLE_CLOUD_PROJECT="dog-plus-polimi"
+      - USE_LOCAL_DATABASE=True
+      - DEBUG=True
+
+  frontend:
+    build:
+      context: ./frontend/dogplus-frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/dogplus-frontend:/app/frontend
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: dog
+      POSTGRES_PASSWORD: plus
+      POSTGRES_DB: dogplus_db 
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_DEFAULT_EMAIL: admin@email.com 
+      PGADMIN_DEFAULT_PASSWORD: password
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./.pgadmin_servers.json:/pgadmin4/servers.json
+    depends_on:
+      - db
+    
+volumes:
+  db_data:
+  pgadmin-data:
