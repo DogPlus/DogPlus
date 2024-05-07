@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Post } from '../types/post';
 
@@ -51,6 +52,7 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
       }
     } catch (error) {
       console.error("Error sending like/dislike request:", error);
+      toast.error("Failed to like/dislike post");
     }
   };
 
@@ -62,7 +64,7 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
     return (
       <div className="bg-white rounded-lg shadow-md border p-4 mt-4">
         <div className="flex items-center mb-4">
-            <img className="w-12 h-12 rounded-full mr-3" src={post.author.profile_image} alt="Profile Image" />
+            <img className="w-12 h-12 rounded-full mr-3 object-cover" src={post.author.profile_image} alt="Profile Image" />
             <div>
                 <h2 className="text-lg font-semibold">{post.author.username}</h2>
                 <p className="text-gray-500 text-sm">Published on {date}</p>
@@ -77,7 +79,7 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
         <div className="pt-4 mt-4 border-t border-gray-200">
             <div className="flex justify-between items-center">
                 <button 
-                  className={`flex items-center mr-4 ${liked ? 'text-blue-600' : 'text-gray-700'}`}
+                  className={`flex items-center mr-4 ${liked ? 'text-accent-0' : 'text-gray-700'}`}
                   onClick={onLike}>
                     <i className="fas fa-thumbs-up mr-1"></i>
                     <span>{likeCount} Like(s)</span>

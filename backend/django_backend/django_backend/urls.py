@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/feed/', include('feed.urls')),
     path('api/booking/', include('bookings.urls')),
     path('api/providers/', include('providers.urls')),
+    path('api/social/', include('social.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

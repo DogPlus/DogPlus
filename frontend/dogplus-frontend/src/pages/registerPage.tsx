@@ -7,6 +7,7 @@ import {
 } from "../types/user";
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
+import { toast } from "react-hot-toast";
 
 export const RegisterPage = () => {
   const [username, setUsername] = useState<string>("");
@@ -126,14 +127,14 @@ export const RegisterPage = () => {
     } catch (error) {
       setError("An error occurred during registration. Please try again.");
       console.error("Registration error:", error);
+      toast.error("An error occurred during registration. Please try again.");
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-      <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1 className="text-xl  leading-tight tracking-tight  font-extrabold text-dark-grey-900 md:text-2xl">
+          <h1 className="text-xl  leading-tight tracking-tight  font-extrabold text-textcolor-0 md:text-2xl">
             Create an account
           </h1>
           {error && <div className="text-red-500">{error}</div>}
@@ -149,20 +150,20 @@ export const RegisterPage = () => {
                     setRegisterAsServiceProvider(!registerAsServiceProvider)
                   }
                 />
-                <span className="ml-2">Register as Service Provider</span>
+                <span className="text-textcolor-0 ml-2">Register as Service Provider</span>
               </label>
             </div>
             <div>
               <label
                 htmlFor="email"
-                className="mb-2 text-sm text-start text-grey-900"
+                className="mb-2 text-sm text-start text-textcolor-900"
               >
                 Your email
               </label>
               <input
                 type="email"
                 id="email"
-                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-textcolor-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
                 placeholder="name@company.com"
                 required
                 value={email}
@@ -172,14 +173,14 @@ export const RegisterPage = () => {
             <div>
               <label
                 htmlFor="username"
-                className="mb-2 text-sm text-start text-grey-900"
+                className="mb-2 text-sm text-start text-textcolor-900"
               >
                 Username
               </label>
               <input
                 type="text"
                 id="username"
-                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-textcolor-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
                 placeholder="Your username"
                 required
                 value={username}
@@ -190,7 +191,7 @@ export const RegisterPage = () => {
             <div>
               <label
                 htmlFor="password"
-                className="mb-2 text-sm text-start text-grey-900"
+                className="mb-2 text-sm text-start text-textcolor-900"
               >
                 Password
               </label>
@@ -198,7 +199,7 @@ export const RegisterPage = () => {
                 type="password"
                 id="password"
                 placeholder="••••••••"
-                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-textcolor-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
                 required
                 value={password}
                 onChange={handlePasswordChange}
@@ -207,7 +208,7 @@ export const RegisterPage = () => {
             <div>
               <label
                 htmlFor="confirm-password"
-                className="mb-2 text-sm text-start text-grey-900"
+                className="mb-2 text-sm text-start text-textcolor-900"
               >
                 Confirm password
               </label>
@@ -215,7 +216,7 @@ export const RegisterPage = () => {
                 type="password"
                 id="confirm-password"
                 placeholder="••••••••"
-                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-textcolor-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
                 required
                 value={confirmPassword}
                 onChange={handleConfirmPasswordChange}
@@ -226,7 +227,7 @@ export const RegisterPage = () => {
               <div>
                 <label
                   htmlFor="service-provider-key"
-                  className="mb-2 text-sm text-start text-grey-900"
+                  className="mb-2 text-sm text-start text-textcolor-900"
                 >
                   Service Provider Key
                 </label>
@@ -234,7 +235,7 @@ export const RegisterPage = () => {
                   type="text"
                   id="service-provider-key"
                   placeholder="Enter your service provider key"
-                  className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
+                  className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-textcolor-700 bg-grey-200 text-dark-grey-900 rounded-2xl"
                   required={registerAsServiceProvider}
                   value={serviceProviderKey}
                   onChange={handleServiceProviderKeyChange}
@@ -242,14 +243,13 @@ export const RegisterPage = () => {
               </div>
             )}
             <button
-              className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-purple-blue-600 focus:ring-4 focus:ring-purple-blue-100 bg-purple-blue-500"
+              className="bg-accent-0 w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-purple-blue-600 focus:ring-4 focus:ring-purple-blue-100"
               type="submit"
             >
               Register user
             </button>
           </form>
         </div>
-      </div>
     </div>
   );
 };
