@@ -1,12 +1,12 @@
+import { addDays, format, parseISO } from "date-fns";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import useUser from "../../hooks/useUser";
 import { BookingData } from "../../types/booking";
 import { ServiceData } from "../../types/service";
-import { Loading } from "../common/loading";
-import { addDays, format, parseISO } from "date-fns";
+import { UserRole } from "../../types/user";
 import ConfirmModal from "../ConfirmModal";
-import { toast } from "react-hot-toast";
-
+import { Loading } from "../common/loading";
 interface DashboardData {
   service: ServiceData | null;
   bookings: BookingData[];
@@ -27,26 +27,29 @@ export const BookingsOverview = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_HOST}/api/services/dashboard/`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        let url = `${process.env.REACT_APP_BACKEND_HOST}/api/services/dashboard/`;
+        if (user?.role === UserRole.User) {
+          url += `?user_id=${user.id}`;
+        }
+
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        });
 
         if (!response.ok) {
-          toast.error("Oops! Something went wrong on our side!")
+          toast.error("Oops! Something went wrong on our side!");
           throw new Error("Failed to fetch service and booking data");
         }
 
         const data = await response.json();
-        setDashboardData(data);
+        const parsedData: DashboardData = parseDashboardData(data);
+        setDashboardData(parsedData);
       } catch (error) {
         console.error(error);
-        toast.error("Oops! Something went wrong on our side!")
+        toast.error("Oops! Something went wrong on our side!");
       } finally {
         setLoading(false);
       }
@@ -56,7 +59,7 @@ export const BookingsOverview = () => {
   }, [user]);
 
   const handleDeleteBooking = async (bookingId: string) => {
-    toast.success("Booking deleted successfully!")
+    toast.success("Booking deleted successfully!");
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_HOST}/api/booking/${bookingId}/`,
@@ -69,7 +72,7 @@ export const BookingsOverview = () => {
       );
 
       if (!response.ok) {
-        toast.error("Oops! Could not delete booking. Please try again later.")
+        toast.error("Oops! Could not delete booking. Please try again later.");
         throw new Error("Failed to delete booking");
       }
 
@@ -83,7 +86,51 @@ export const BookingsOverview = () => {
       setModalOpen(false);
     } catch (error) {
       console.error("Error deleting booking:", error);
-      toast.error("Oops! Could not delete booking. Please try again later.")
+      toast.error("Oops! Could not delete booking. Please try again later.");
+    }
+  };
+  const parseDashboardData = (data: any): DashboardData => {
+    if (!data) {
+      throw new Error("Invalid data provided for dashboard parsing.");
+    }
+
+    try {
+      const { service, bookings }: { service: any; bookings: any } = data;
+
+      const parsedBookings: BookingData[] = bookings.map((booking: any) => ({
+        id: booking.id,
+        booking_date: booking.booking_date,
+        start_time: booking.start_time,
+        end_time: booking.end_time,
+        user: booking.user,
+        serviceProviderName: booking.service_provider.username,
+      }));
+
+      // If the user is not a supervisor, service data may not be available
+      let parsedService: ServiceData | null = null;
+
+      if (service) {
+        parsedService = {
+          id: service.id,
+          name: service.name,
+          description: service.description,
+          location: service.location,
+          serviceProviderId: service.service_provider.id,
+          pricePerSession: service.price_per_session,
+          sessionTime: service.session_time,
+          fixedPrice: service.fixed_price,
+          priceType: service.priceType,
+        };
+      }
+
+      console.log(parsedBookings);
+
+      return {
+        service: parsedService,
+        bookings: parsedBookings,
+      };
+    } catch (error) {
+      throw new Error(`Failed to parse dashboard data: ${error}`);
     }
   };
 
@@ -102,7 +149,7 @@ export const BookingsOverview = () => {
       return format(parseISO(dateStr), "PP");
     } catch (error) {
       console.error("Error formatting date: ", error);
-      toast.error("Oops! Something went wrong on our side!")
+      toast.error("Oops! Something went wrong on our side!");
       return dateStr;
     }
   };
@@ -113,7 +160,7 @@ export const BookingsOverview = () => {
       return format(parseISO(dummyDate), "p").replace(":00", "");
     } catch (error) {
       console.error("Error formatting time: ", error);
-      toast.error("Oops! Something went wrong on our side!")
+      toast.error("Oops! Something went wrong on our side!");
       return timeStr;
     }
   };
@@ -139,6 +186,8 @@ export const BookingsOverview = () => {
         No data available.
       </div>
     );
+
+  console.log(bookingsForSelectedDate);
   return (
     <div className="m-3 p-4 bg-white rounded-lg shadow-lg">
       <div className="flex items-center justify-between mb-4">
@@ -155,6 +204,7 @@ export const BookingsOverview = () => {
         <p>{formatDate(format(selectedDate, "yyyy-MM-dd"))}</p>
         <button onClick={handleNextDay}>→</button>
       </div>
+
       {bookingsForSelectedDate.length > 0 ? (
         bookingsForSelectedDate.map((booking) => (
           <div
@@ -162,6 +212,9 @@ export const BookingsOverview = () => {
             className="p-4 mb-3 bg-gray-100 rounded-md border border-gray-300 flex justify-between items-center"
           >
             <div>
+              <p className="text-gray-700">
+                <strong>Serviceprovider:</strong> {booking.serviceProviderName}
+              </p>
               <p className="text-gray-700">
                 <strong>User:</strong> {booking.user.username}
               </p>
