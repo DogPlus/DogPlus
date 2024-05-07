@@ -14,12 +14,16 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
   const [showModal, setShowModal] = useState(false);
   const [postText, setPostText] = useState<string>("");
   const [postImage, setPostImage] = useState<File | null>();
+  const [postVideo, setPostVideo] = useState<File | null>();
 
   const handleCreatePost = async () => {
     try {
       let form_data = new FormData();
       if (postImage) {
         form_data.append("image", postImage, postImage.name);
+      }
+      if (postVideo) {
+        form_data.append("video", postVideo, postVideo.name);
       }
       form_data.append("text", postText);
       const response = await fetch(
@@ -46,17 +50,23 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
     setShowModal(false);
     setPostText("");
     setPostImage(null);
+    setPostVideo(null);
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMediaUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      if (file.type.match("image.*")) {
+      if (file.type.match("image  .*")) {
         // Basic check for an image file
         setPostImage(file);
+      } else if (file.type.match("video.*")) {
+        // Basic check for a video file
+        setPostVideo(file);
       } else {
         setPostImage(null);
-      }
+        setPostVideo(null);
+      } 
+
     }
   };
   
@@ -102,7 +112,24 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
                     </Button>
                   </div>
                 )}
-                {!postImage && (
+                {postVideo && (
+                  <div>
+                    <video
+                      controls
+                      className="w-full h-64 mt-2 object-cover rounded"
+                    >
+                      <source src={URL.createObjectURL(postVideo)} />
+                    </video>
+                    <Button
+                      onClick={() => setPostVideo(null)}
+                      className="mt-2 bg-red-500 text-white p-2 rounded"
+                    >
+                      Remove video
+                    </Button>
+                  </div>
+                )
+                }
+                {(!postImage && !postVideo) && (
                   <div className="mt-2">
                 <div className="flex items-center justify-center w-full">
                     <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -117,8 +144,8 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
                           id="dropzone-file" 
                           type="file" 
                           className="hidden"
-                          onChange={handleImageUpload}
-                          accept="image/png, image/jpeg, image/jpg"
+                          onChange={handleMediaUpload}
+                          accept="image/png, image/jpeg, image/jpg, video/mp4, video/oog, video/webm"
                         />
                     </label>
                 </div>
