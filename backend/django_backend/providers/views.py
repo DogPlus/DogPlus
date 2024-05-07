@@ -52,7 +52,7 @@ def search_for_service_providers(request):
     else:
         service_providers = CustomUser.objects.filter(role=CustomUser.SERVICE_PROVIDER, is_approved=True)
 
-    serializer = UserSerializer(service_providers, many=True)
+    serializer = UserSerializer(service_providers, many=True, context={'request': request})
     return Response(serializer.data)
 
 
