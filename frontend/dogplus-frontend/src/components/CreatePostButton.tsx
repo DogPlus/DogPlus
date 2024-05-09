@@ -119,7 +119,7 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
                     <video
                       controls
                       playsInline
-                      preload="metadata"
+                      preload="auto"
                       className="w-full h-64 mt-2 object-cover rounded"
                     >
                       <source src={URL.createObjectURL(postVideo)} />
