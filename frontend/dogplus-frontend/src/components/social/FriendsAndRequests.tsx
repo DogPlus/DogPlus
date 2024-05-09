@@ -105,7 +105,7 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
         <button
           className={`flex-1 py-2 text-center ${
             activeTab === "friends"
-              ? "border-b-4 border-blue text-blue-500"
+              ? "border-b-4 border-accent-0 text-accent-600"
               : "text-textcolor-600"
           }`}
           onClick={() => setActiveTab("friends")}
@@ -115,7 +115,7 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
         <button
           className={`flex-1 py-2 text-center ${
             activeTab === "requests"
-              ? "border-b-4 border-blue text-blue-500"
+              ? "border-b-4 border-accent-0 text-accent-600"
               : "text-textcolor-600"
           }`}
           onClick={() => setActiveTab("requests")}
@@ -125,7 +125,7 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
         <button
           className={`flex-1 py-2 text-center ${
             activeTab === "sent"
-              ? "border-b-4 border-blue text-blue-500"
+              ? "border-b-4 border-accent-0 text-accent-600"
               : "text-textcolor-600"
           }`}
           onClick={() => setActiveTab("sent")}

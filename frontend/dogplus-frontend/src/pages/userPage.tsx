@@ -7,7 +7,7 @@ import useUser from "../hooks/useUser";
 import FriendsAndRequests from "../components/social/FriendsAndRequests";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 export const UserPage = () => {
   const { user } = useUser();
   const [usernameToFollow, setUsernameToFollow] = useState("");
@@ -93,7 +93,7 @@ export const UserPage = () => {
             navigate(`/user/edit/${localStorage.getItem("user_id")}`)
           }
         >
-          Edit
+          <FontAwesomeIcon icon={faEdit} size="lg" />
         </button>
         <button
           onClick={handleLogout}
@@ -106,7 +106,7 @@ export const UserPage = () => {
       <div className="flex mb-2">
         <button
           type="button"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
+          className="bg-accent-0 hover:bg-accent-100 text-white font-bold py-2 px-4 rounded ml-2"
           onClick={handleSearchToggle}
         >
           Add friend
@@ -123,7 +123,7 @@ export const UserPage = () => {
               className="border p-2 mr-2"
             />
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-accent-0 hover:bg-accent-100 text-white font-bold py-2 px-4 rounded"
               onClick={handleSearch}
             >
               Search
