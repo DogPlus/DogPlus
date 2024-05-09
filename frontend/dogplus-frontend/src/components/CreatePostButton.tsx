@@ -38,15 +38,13 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
         }
       );
       if (!response.ok) {
-        console.error(response);
-        toast.error(`Failed to create new post ${response.body}`);
         throw new Error("Failed to create new post");
       }
 
       const newPost = await response.json();
       onCreatePost(newPost);
     } catch (e) {
-      console.error("Error while posting: ", e);
+      toast.error("Failed to create new post");
     }
 
     setShowModal(false);
@@ -119,7 +117,9 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
                     <video
                       controls
                       playsInline
-                      preload="auto"
+                      loop
+                      muted
+                      autoPlay
                       className="w-full h-64 mt-2 object-cover rounded"
                     >
                       <source src={URL.createObjectURL(postVideo)} />
