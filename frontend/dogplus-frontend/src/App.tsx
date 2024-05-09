@@ -16,6 +16,7 @@ import { ServiceProviderDetailPage } from "./pages/serviceProviderDetailPage";
 
 import { Suspense, lazy } from "react";
 import ServiceProviderServiceDashboard from "./pages/serviceProviderDashboardForServicePage";
+import LandingPage from "./pages/landingPage";
 const ServiceProviderDashboard = lazy(
   () => import("./pages/serviceProviderDashboard")
 );
@@ -23,6 +24,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
+        <Route index element={<LandingPage />} />
         <Route path="auth" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route
@@ -85,13 +87,14 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route 
-          path="user/edit/:user_id" 
+        <Route
+          path="user/edit/:user_id"
           element={
             <RequireAuth>
               <UserEditPage />
             </RequireAuth>
-          } />
+          }
+        />
         <Route
           path="admin"
           element={
