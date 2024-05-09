@@ -2,7 +2,6 @@ import React from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Post } from '../types/post';
-import ReactPlayer from 'react-player'
 
 // Create props interface
 interface PostProps {
@@ -76,9 +75,9 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
         </p>
         {post.image && <img src={post.image} alt="Post" />}
         {post.video && (
-          <video controls>
+          <video controls preload="metadata">
               <source
-                  src="https://storage.googleapis.com/media-dog-plus-polimi-f21e/videos/My%20name%20is%20Jeff.mp4" 
+                  src={post.video} 
               />
           </video>
         )}

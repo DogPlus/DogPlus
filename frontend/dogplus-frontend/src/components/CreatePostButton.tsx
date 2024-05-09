@@ -1,6 +1,7 @@
 import { Button, FileInput, Label, Modal, Textarea } from "flowbite-react";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
+import { v4 as uuidv4 } from 'uuid';
 
 import { Post } from "../types/post";
 
@@ -23,7 +24,7 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
         form_data.append("image", postImage, postImage.name);
       }
       if (postVideo) {
-        form_data.append("video", postVideo, postVideo.name);
+        form_data.append("video", postVideo, uuidv4() + postVideo.name);
       }
       form_data.append("text", postText);
       const response = await fetch(
@@ -31,12 +32,14 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
         {
           method: "POST",
           headers: {
-            Authorization: "Token " + localStorage.getItem("token"), //må kanskje endres?
+            Authorization: "Token " + localStorage.getItem("token"), 
           },
           body: form_data,
         }
       );
       if (!response.ok) {
+        console.error(response);
+        toast.error(`Failed to create new post ${response.body}`);
         throw new Error("Failed to create new post");
       }
 
@@ -44,7 +47,6 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
       onCreatePost(newPost);
     } catch (e) {
       console.error("Error while posting: ", e);
-      toast.error("Failed to create new post");
     }
 
     setShowModal(false);
@@ -56,7 +58,7 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
   const handleMediaUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      if (file.type.match("image  .*")) {
+      if (file.type.match("image.*")) {
         // Basic check for an image file
         setPostImage(file);
       } else if (file.type.match("video.*")) {
@@ -116,6 +118,8 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
                   <div>
                     <video
                       controls
+                      playsInline
+                      preload="metadata"
                       className="w-full h-64 mt-2 object-cover rounded"
                     >
                       <source src={URL.createObjectURL(postVideo)} />

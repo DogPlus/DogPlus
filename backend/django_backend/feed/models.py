@@ -12,7 +12,7 @@ class Post(models.Model):
     )
     text = models.TextField()
     image = models.ImageField(max_length=200, upload_to='post_images/', blank=True, null=True) 
-    video = models.FileField(max_length=200, upload_to='post_videos/', blank=True, null=True) 
+    video = models.FileField(max_length=400,  upload_to='post_videos/', blank=True, null=True) 
     date_posted = models.DateTimeField(auto_now_add=True)
     like_count = models.IntegerField(default=0)
     liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
