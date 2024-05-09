@@ -105,8 +105,8 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
         <button
           className={`flex-1 py-2 text-center ${
             activeTab === "friends"
-              ? "border-b-4 border-blue-500 text-blue-500"
-              : "text-gray-500"
+              ? "border-b-4 border-blue text-blue-500"
+              : "text-textcolor-600"
           }`}
           onClick={() => setActiveTab("friends")}
         >
@@ -115,8 +115,8 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
         <button
           className={`flex-1 py-2 text-center ${
             activeTab === "requests"
-              ? "border-b-4 border-blue-500 text-blue-500"
-              : "text-gray-500"
+              ? "border-b-4 border-blue text-blue-500"
+              : "text-textcolor-600"
           }`}
           onClick={() => setActiveTab("requests")}
         >
@@ -125,8 +125,8 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
         <button
           className={`flex-1 py-2 text-center ${
             activeTab === "sent"
-              ? "border-b-4 border-blue-500 text-blue-500"
-              : "text-gray-500"
+              ? "border-b-4 border-blue text-blue-500"
+              : "text-textcolor-600"
           }`}
           onClick={() => setActiveTab("sent")}
         >
@@ -137,7 +137,7 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
         {activeTab === "friends" && (
           <ul>
             {friends.map((friend) => (
-              <li key={friend.id} className="py-2 border-b">
+              <li key={friend.id} className="py-2 border-b text-textcolor-900">
                 {friend.username}
               </li>
             ))}
@@ -148,18 +148,18 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
             {pendingRequests.map((request) => (
               <li
                 key={request.id}
-                className="py-2 border-b flex justify-between items-center"
+                className="py-2 border-b flex justify-between items-center text-textcolor-900"
               >
                 <span>{request.follower.username}</span>
                 <div>
                   <button
-                    className="mr-2 bg-accent-0 hover:bg-accent-50 text-white font-bold py-1 px-2 rounded"
+                    className="mr-2 bg-accent-0 hover:bg-accent-100 text-white font-bold py-1 px-2 rounded"
                     onClick={() => acceptRequest(request.id)}
                   >
                     Accept
                   </button>
                   <button
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                    className="bg-red-0 hover:bg-red-100 text-white font-bold py-1 px-2 rounded"
                     onClick={() => cancelRequest(request.id)}
                   >
                     Remove
@@ -174,12 +174,12 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
             {sentRequests.map((request) => (
               <li
                 key={request.id}
-                className="py-2 border-b flex justify-between items-center"
+                className="py-2 border-b flex justify-between items-center text-textcolor-900"
               >
                 <span>{request.followed.username}</span>
                 <button
                   onClick={() => cancelRequest(request.id)}
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-red-0 hover:bg-red-100 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
                   Cancel request
                 </button>
