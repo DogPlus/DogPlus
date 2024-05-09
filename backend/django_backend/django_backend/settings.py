@@ -119,6 +119,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'django_backend.urls'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

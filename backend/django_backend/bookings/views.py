@@ -10,8 +10,8 @@ from authentication.models import CustomUser
 from .serializers import BookingSerializer
 from rest_framework import status
 from rest_framework.exceptions import NotFound, PermissionDenied
-
-
+from django.core.mail import send_mail
+from django.conf import settings
 class BookingView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -76,15 +76,30 @@ class BookingView(APIView):
     def delete(self, request, *args, **kwargs):
         booking_id = kwargs.get('booking_id')
         try:
-            # Allow deletion if the request user is the owner or the service provider of the booking
             booking = Booking.objects.get(id=booking_id)
-            if booking.user != request.user and booking.service_provider != request.user:
+            if booking.user.id != request.user.id and booking.service_provider.id != request.user.id:
                 raise PermissionDenied("You do not have permission to delete this booking.")
         except Booking.DoesNotExist:
             raise NotFound("The booking does not exist.")
-            
+        
+        # Determine the recipient of the cancellation email based on who is cancelling the booking
+        if booking.user.id == request.user.id:
+            recipient = booking.service_provider
+        else:
+            recipient = booking.user
+        
+        # Delete the booking
         booking.delete()
-        return Response({"detail": "Booking successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
+
+        # Send an email to the recipient
+        send_mail(
+            subject='Booking Cancelled',
+            message=f'Your booking for {booking.service.name} on {booking.booking_date.strftime("%Y-%m-%d")} from {booking.start_time} to {booking.end_time} has been cancelled.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[recipient.email],
+        )
+
+        return Response({"detail": "Booking successfully deleted and notification sent."}, status=status.HTTP_204_NO_CONTENT)
 
 
 class AvailableBookingsView(APIView):
