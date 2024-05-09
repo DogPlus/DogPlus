@@ -1,25 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
 const InstallPWA: React.FC = () => {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(localStorage.getItem('installed') !== 'true');
   const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
+  
+  const isIOS = () => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod/.test( userAgent );
+  }
 
-  useEffect(() => {
-    const handleBeforeInstallPrompt = (event: Event) => {
-      event.preventDefault();
-      setDeferredPrompt(event);
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
-  }, []);
-
-  useEffect(() => {
-    setShowModal(deferredPrompt !== null);
-  }, [deferredPrompt]);
 
   const handleInstallClick = () => {
     if (deferredPrompt) {
@@ -30,15 +19,15 @@ const InstallPWA: React.FC = () => {
         } else {
           console.log('User dismissed the install prompt');
         }
+        localStorage.setItem('installed', 'true');
         setDeferredPrompt(null);
       });
     }
   };
 
   const handleCloseModal = (e: React.MouseEvent) => {
-      if (e.target === e.currentTarget) {
-          setShowModal(false);
-      }
+        localStorage.setItem('installed', 'true');
+        setShowModal(false);
   };
 
   return (
@@ -48,18 +37,24 @@ const InstallPWA: React.FC = () => {
           <div className="relative top-20 mx-auto mt-20 p-5 border w-96 shadow-lg rounded-md bg-white">
 
             <button 
-              onClick={() => setShowModal(false)} 
+              onClick={handleCloseModal} 
               className="absolute top-0 right-0 mt-2 mr-2 text-gray-700 hover:text-gray-900">
               <i className="fas fa-times"></i> 
             </button>
             
             <p>Dog+ can be installed app to get the best possible experience!</p>
 
-            <div>
-              <button onClick={handleInstallClick} className="mt-4 bg-blue-500 text-white p-2 rounded">
-                Install App
-              </button>
-            </div>
+            {isIOS() && (
+              <p className="text-sm text-gray-500">On IOS, tap the share button and select "Add to Home Screen".</p>
+            )}
+            {!isIOS() && (
+              <div>
+                <p className="text-sm text-gray-500">Click the button below to install the app.</p>
+                <button onClick={handleInstallClick} className="mt-4 bg-blue-500 text-white p-2 rounded">
+                  Install App
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
