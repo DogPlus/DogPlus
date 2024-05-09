@@ -21,7 +21,7 @@ export const ServiceProviderPage = () => {
             });
             const data: ServiceProvider[] = await response.json();
             setServiceProviders(data);
-            setDisplayedServiceProviders(data);
+            filterProviders();
         };
 
         const fetchServices = async () => {
@@ -39,7 +39,7 @@ export const ServiceProviderPage = () => {
         fetchServices();
     }, []);
 
-    useEffect(() => {
+    const filterProviders = (): void => {
         if (selectedServices.length === 0) {
             setDisplayedServiceProviders(serviceProviders);
         } else {
@@ -48,16 +48,26 @@ export const ServiceProviderPage = () => {
                 selectedProviderIds.includes(provider.id));
             setDisplayedServiceProviders(filteredProviders);
         }
+    };
+
+    useEffect(() => {
+        filterProviders();
     }, [selectedServices, serviceProviders]);
 
-    const handleFilterChange = (selectedServices: Service[]) => {
+    const handleSearchResults = (results: ServiceProvider[]): void => {
+        setServiceProviders(results);
+        filterProviders();
+    };
+
+    const handleFilterChange = (selectedServices: Service[]): void => {
         setSelectedServices(selectedServices);
+        filterProviders();
     };
 
     return (
         <div>
             <h1 className="text-3xl font-bold underline">Service Providers</h1>
-            <ServiceProviderSearch onSearchResults={setDisplayedServiceProviders} />
+            <ServiceProviderSearch onSearchResults={handleSearchResults} />
             <ServiceProviderFilter services={services} onFilterChange={handleFilterChange} />
             <ServiceProviderList serviceProviders={displayedServiceProviders} />
         </div>
