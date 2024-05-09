@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
 import { Service } from '../types/services';
 import { toast } from 'react-hot-toast';
+import { Label } from '../components/label';
 
 
 function addMinutesToTime(time: string, minutes: number) {
@@ -138,23 +139,9 @@ export const ServiceProviderBookingPage = () => {
 
           <div className="flex flex-row">
               <div className="flex flex-col gap-2">
-                <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-                  <div className="fa-clock"/>
-                  {serviceInformation.session_time} minutes
-                </div>
-                <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-                  <div className="fa-tag"/>
-                  {serviceInformation.fixed_price && (
-                    <p>Fixed: {serviceInformation.fixed_price} €</p>
-                  )}
-                  {serviceInformation.price_per_session && (
-                    <p>Per session: {serviceInformation.price_per_session} €</p>
-                  )}
-                </div>
-                <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-                  <div className="fa-map-marker"/>
-                  {serviceInformation.location} 
-                </div>
+                <Label icon="fa-clock" color="yellow" text={`${serviceInformation.session_time} minutes`}/>
+                <Label icon="fa-tag" color="yellow" text={serviceInformation.fixed_price ? `Fixed: ${serviceInformation.fixed_price} €` : `Per Session: ${serviceInformation.price_per_session} €`}/>
+                <Label icon="fa-map-marker" color="yellow" text={serviceInformation.location}/>
               </div>
         </div>
         </div>

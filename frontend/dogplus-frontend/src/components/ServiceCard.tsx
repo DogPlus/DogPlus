@@ -1,5 +1,6 @@
 import react from 'react';
 import { Service } from '../types/services';
+import { Label } from './label';
 
 interface ServiceCardProps {
   serviceProviderService: Service;
@@ -21,25 +22,11 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({serviceProviderService:
       <div className="flex flex-row">
           
           <div className="flex flex-col gap-2">
-            <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-              <div className="fa-clock"/>
-              {serviceProviderService.session_time} minutes
-            </div>
-            <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-              <div className="fa-tag"/>
-              {serviceProviderService.fixed_price && (
-                <p>Fixed: {serviceProviderService.fixed_price} €</p>
-              )}
-              {serviceProviderService.price_per_session && (
-                <p>Per session: {serviceProviderService.price_per_session} €</p>
-              )}
-            </div>
-            <div className={`flex flex-row gap-4 bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-              <div className="fa-map-marker"/>
-              {serviceProviderService.location} 
-            </div>
+            <Label icon="fa-clock" color="yellow" text={`${serviceProviderService.session_time} minutes`}/>
+            <Label icon="fa-tag" color="yellow" text={serviceProviderService.fixed_price ? `Fixed: ${serviceProviderService.fixed_price} €` : `Per Session: ${serviceProviderService.price_per_session} €`}/>
+            <Label icon="fa-map-marker" color="yellow" text={serviceProviderService.location}/>
           </div>
-        <div className="ml-auto fa-arrow-right"/>
+          <div className="ml-auto fas fa-arrow-right"/>
       </div>
     </div>
   );

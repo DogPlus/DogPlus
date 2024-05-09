@@ -2,6 +2,7 @@ import react, { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
+import { Label } from '../components/label';
 import { ServiceCard } from '../components/ServiceCard';
 import { ServiceProvider } from '../types/serviceProvider';
 import { Service } from '../types/services';
@@ -72,10 +73,7 @@ export const ServiceProviderDetailPage = () => {
               <div>
                   <h2 className="text-lg font-semibold">{serviceProvider.username}</h2>
                   <div className="flex flex-row">
-                    <div className={`flex flex-row gap-4 bg-blue-100 text-blue-800 text-md font-medium me-2 px-2.5 py-0.5 rounded-full`}>
-                      <div className="fa-suitcase"/>
-                      Type
-                    </div>
+                    <Label icon="fa-suitcase" color="blue" text="Type"/>
                   </div>
               </div>
           </div>
