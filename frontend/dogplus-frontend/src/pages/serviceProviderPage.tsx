@@ -66,7 +66,6 @@ export const ServiceProviderPage = () => {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold underline">Service Providers</h1>
             <ServiceProviderSearch onSearchResults={handleSearchResults} />
             <ServiceProviderFilter services={services} onFilterChange={handleFilterChange} />
             <ServiceProviderList serviceProviders={displayedServiceProviders} />

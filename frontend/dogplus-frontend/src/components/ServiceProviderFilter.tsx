@@ -36,14 +36,7 @@ const ServiceProviderFilter: React.FC<ServiceProviderFilterProps> = ({
                     <button
                         key={service.id}
                         onClick={() => handleServiceClick(service.id)}
-                        style={{
-                            backgroundColor: selectedServices.some(s => s.id === service.id) ? 'blue' : 'gray',
-                            color: 'white',
-                            padding: '8px',
-                            margin: '4px',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                        }}
+            className={`p-2  m-2 rounded-md cursor-pointer ${selectedServices.some(s => s.id === service.id) ? 'bg-accent-0 text-white' : 'ring-2 ring-accent-0 text-black'}`}
                     >
                         {service.name}
                     </button>
