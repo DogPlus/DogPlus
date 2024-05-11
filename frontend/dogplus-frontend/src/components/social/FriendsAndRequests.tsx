@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PublicUser } from "../../types/user";
 import { FriendRequest } from "../../types/social";
+import toast from "react-hot-toast";
 
 interface FriendsAndRequestsProps {
   refreshKey: number;
@@ -66,7 +67,6 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
   };
 
   const cancelRequest = async (requestId: number) => {
-    console.log("Canceling request with ID:", requestId);
     const response = await fetch(
       `${process.env.REACT_APP_BACKEND_HOST}/api/social/cancel-request/${requestId}/`,
       {
@@ -80,6 +80,7 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
       setSentRequests(sentRequests.filter((req) => req.id !== requestId));
     } else {
       console.error("Failed to cancel request:", response.status);
+      toast.error("Failed to cancel friend request");
     }
   };
 
@@ -96,6 +97,7 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
       fetchFriends();
     } else {
       console.error("Failed to accept request:", response.status);
+      toast.error("Failed to accept friend request");
     }
   };
 
