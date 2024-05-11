@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import UserCard from "../components/UserCard";
 import { Loading } from "../components/common/loading";
-import { PublicUser } from "../types/user";
-import useUser from "../hooks/useUser";
 import FriendsAndRequests from "../components/social/FriendsAndRequests";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import useUser from "../hooks/useUser";
+import { PublicUser } from "../types/user";
 export const UserPage = () => {
   const { user } = useUser();
   const [usernameToFollow, setUsernameToFollow] = useState("");
@@ -64,12 +62,12 @@ export const UserPage = () => {
       );
 
       if (response.ok) {
-        // Assuming the token is stored in localStorage; adjust if using cookies or other methods
         localStorage.removeItem("token");
-        navigate("/auth"); // Redirect to login page after logout
+        navigate("/auth");
       }
     } catch (error) {
       console.error("Logout failed", error);
+      toast.error("Failed to logout");
     }
   };
 
@@ -93,14 +91,14 @@ export const UserPage = () => {
             navigate(`/user/edit/${localStorage.getItem("user_id")}`)
           }
         >
-          <FontAwesomeIcon icon={faEdit} size="lg" />
+          <div className="fas fa-edit"></div>
         </button>
         <button
           onClick={handleLogout}
           className="text-red-500 hover:text-white hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm p-2.5"
           title="Logout"
         >
-          <FontAwesomeIcon icon={faSignOutAlt} size="lg" />
+          <div className="fas fa-sign-out-alt"></div>
         </button>
       </div>
       <div className="flex mb-2">
