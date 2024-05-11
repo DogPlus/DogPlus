@@ -62,9 +62,9 @@ export const BookingsOverview = () => {
     toast.success("Booking deleted successfully!");
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_HOST}/api/booking/${bookingId}/`,
+        `${process.env.REACT_APP_BACKEND_HOST}/api/booking/delete/${bookingId}/`,
         {
-          method: "DELETE",
+          method: "POST",
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,
           },
@@ -76,6 +76,7 @@ export const BookingsOverview = () => {
         throw new Error("Failed to delete booking");
       }
 
+      toast.success("Booking deleted successfully!");
       if (!dashboardData) return;
       setDashboardData({
         ...dashboardData,

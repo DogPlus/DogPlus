@@ -73,8 +73,10 @@ class BookingView(APIView):
         )
         return not existing_bookings.exists()
     
-    def delete(self, request, *args, **kwargs):
-        booking_id = kwargs.get('booking_id')
+
+
+class DeleteBookingView(APIView):
+    def post(self, request, booking_id, *args, **kwargs):
         try:
             booking = Booking.objects.get(id=booking_id)
             if booking.user.id != request.user.id and booking.service_provider.id != request.user.id:
@@ -100,7 +102,6 @@ class BookingView(APIView):
         )
 
         return Response({"detail": "Booking successfully deleted and notification sent."}, status=status.HTTP_204_NO_CONTENT)
-
 
 class AvailableBookingsView(APIView):
     permission_classes = [IsAuthenticated]
