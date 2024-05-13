@@ -76,7 +76,7 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
         </p>
         {post.image && <img src={post.image} alt="Post" />}
         {post.video && (
-          <video controls loop autoPlay muted>
+          <video controls loop autoPlay muted playsInline>
               <source
                   src={post.video} 
               />
