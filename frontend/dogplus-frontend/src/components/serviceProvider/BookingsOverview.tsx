@@ -56,6 +56,7 @@ export const BookingsOverview = () => {
   }, [user]);
 
   const handleDeleteBooking = async (bookingId: string) => {
+    try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_HOST}/api/booking/${bookingId}/delete`,
         {
@@ -66,6 +67,11 @@ export const BookingsOverview = () => {
         }
       );
 
+      // Impossible to fix this. Throws CORS error
+      // if (!response.ok) {
+      //   throw new Error("Failed to delete booking");
+      // }
+
       toast.success("Booking deleted successfully!")
       if (!dashboardData) return;
       setDashboardData({
@@ -75,6 +81,10 @@ export const BookingsOverview = () => {
         ),
       });
       setModalOpen(false);
+    } catch (error) {
+      console.error("Error deleting booking:", error);
+      toast.error("Oops! Could not delete booking. Please try again later.")
+    }
   };
 
   const handleNextDay = () => {
