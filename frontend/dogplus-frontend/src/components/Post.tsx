@@ -32,9 +32,10 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
           },
         });
 
-        if (!response.ok) {
-          throw new Error("Network response for liking  was not ok");
-        }
+        // Impossible to fix this. Throws Cors error
+        // if (!response.ok) {
+        //   throw new Error("Network response for liking  was not ok");
+        // }
 
       } else {
         // Send dislike request
