@@ -1,51 +1,145 @@
+import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import UserCard from "../components/UserCard";
 import { Loading } from "../components/common/loading";
-import { BookingsOverview } from "../components/serviceProvider/BookingsOverview";
+import FriendsAndRequests from "../components/social/FriendsAndRequests";
 import useUser from "../hooks/useUser";
-import { UserRole } from "../types/user";
-import { logout } from "../utils/authUtils";
+import { PublicUser, UserRole } from "../types/user";
+import { BookingsOverview } from "../components/serviceProvider/BookingsOverview";
 
 export const UserPage = () => {
   const { user } = useUser();
+  const [usernameToFollow, setUsernameToFollow] = useState("");
+  const [searchResults, setSearchResults] = useState<PublicUser[]>([]);
+  const [showSearch, setShowSearch] = useState(false);
   const navigate = useNavigate();
+  const [refreshKey, setRefreshKey] = useState<number>(0);
+
+  const handleSearchToggle = () => {
+    setShowSearch(!showSearch);
+  };
+
+  const handleSearch = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_HOST}/api/social/search/?username=${usernameToFollow}`,
+      {
+        headers: {
+          Authorization: `Token ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      setSearchResults(data.users);
+    }
+  };
+
+  const handleFollow = async (userId: string) => {
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_HOST}/api/social/follow/${userId}/`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (response.ok) {
+      setSearchResults([]);
+      setRefreshKey((prev) => prev + 1);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_HOST}/api/auth/logout/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        localStorage.removeItem("token");
+        navigate("/auth");
+      }
+    } catch (error) {
+      console.error("Logout failed", error);
+      toast.error("Failed to logout");
+    }
+  };
 
   if (!user) {
     return <Loading />;
   }
 
   return (
-    <div className="m-4 h-full flex flex-col">
-      <div>
-        <div className="flex items-center mb-2">
-          <img
-            className="w-12 h-12 object-cover rounded-full mr-3"
-            src={user.profile_image}
-            alt="Profile Image"
-          />
+    <div className="m-4">
+      <div className="flex items-center mb-2">
+        <img
+          className="w-12 h-12 rounded-full mr-3"
+          src={user?.profile_image}
+          alt="Profile Image"
+        />
+        <h2 className="text-2xl font-semibold">{user?.username}</h2>
+        <button
+          type="button"
+          className="ml-auto text-foreground hover:text-white border bg-accent-0 hover:bg-accent-800 focus:ring-4 focus:outline-none focus:ring-accent-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          onClick={() =>
+            navigate(`/user/edit/${localStorage.getItem("user_id")}`)
+          }
+        >
+          <div className="fas fa-edit"></div>
+        </button>
+        <button
+          onClick={handleLogout}
+          className="text-red-500 hover:text-white hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm p-2.5"
+          title="Logout"
+        >
+          <div className="fas fa-sign-out-alt"></div>
+        </button>
+      </div>
+      <div className="flex mb-2">
+        <button
+          type="button"
+          className="bg-accent-0 hover:bg-accent-100 text-white font-bold py-2 px-4 rounded ml-2"
+          onClick={handleSearchToggle}
+        >
+          Add friend
+        </button>
+      </div>
+      {showSearch && (
+        <div>
+          <div className="flex mb-2">
+            <input
+              type="text"
+              value={usernameToFollow}
+              onChange={(e) => setUsernameToFollow(e.target.value)}
+              placeholder="Enter username to follow"
+              className="border p-2 mr-2"
+            />
+            <button
+              className="bg-accent-0 hover:bg-accent-100 text-white font-bold py-2 px-4 rounded"
+              onClick={handleSearch}
+            >
+              Search
+            </button>
+          </div>
           <div>
-            <h2 className="text-2xl font-semibold">{user.username}</h2>
+            {searchResults.map((user) => {
+              return (
+                <UserCard key={user.id} user={user} onFollow={handleFollow} />
+              );
+            })}
           </div>
         </div>
-        <div className="flex mb-2">
-          <button
-            type="button"
-            className="ml-auto text-foreground hover:text-white border bg-accent-0 hover:bg-accent-800 focus:ring-4 focus:outline-none focus:ring-accent-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            onClick={(e) =>
-              navigate(`/user/edit/${localStorage.getItem("user_id")}`)
-            }
-          >
-            Edit
-          </button>
-        </div>
-      </div>
+      )}
+      <FriendsAndRequests refreshKey={refreshKey} />
       {user.role === UserRole.User && <BookingsOverview />}
-      <button
-        className="mt-auto w-full justify-end bg-red-600 px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl focus:ring-4"
-        type="submit"
-        onClick={logout}
-      >
-        Logout
-      </button>
     </div>
   );
 };
