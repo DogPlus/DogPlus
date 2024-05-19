@@ -14,7 +14,7 @@ export const Navbar = () => {
     <div className="py-1 px-1 pb-3 z-50 w-full min-h-20 bg-white border-t border-gray-200">
       <nav className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium gap-4">
         <NavLink
-          to="/"
+          to="/home"
           className={({ isActive }) =>
             isActive ? navlink_active : navlink_default
           }

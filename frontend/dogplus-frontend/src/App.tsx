@@ -28,7 +28,7 @@ function App() {
         <Route path="auth" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route
-          path="/"
+          path="/home"
           element={
             <RequireAuth>
               <HomePage />
