@@ -86,7 +86,6 @@ export const BookingsOverview = () => {
       });
       setModalOpen(false);
     } catch (error) {
-      console.error("Error deleting booking:", error);
       toast.error("Oops! Could not delete booking. Please try again later.");
     }
   };
