@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 
 interface TimeSelectorProps {
   selectedTime: string;
+  timeInterval: number;
   onTimeChange: (time: string) => void;
 }
 
-const TimeSelector: React.FC<TimeSelectorProps> = ({ selectedTime, onTimeChange}) => {
+const TimeSelector: React.FC<TimeSelectorProps> = ({ selectedTime, timeInterval, onTimeChange}) => {
 
   const generateTimeOptions = (): string[] => {
     const options: string[] = [];
     for (let hour = 7; hour < 24; hour++) {
-      for (let minute = 0; minute < 60; minute += 30) {
+      for (let minute = 0; minute < 60; minute += timeInterval) {
         const formattedHour = hour.toString().padStart(2, '0');
         const formattedMinute = minute.toString().padStart(2, '0');
         options.push(`${formattedHour}:${formattedMinute}`);
