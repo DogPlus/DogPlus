@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import "../styles/DogAnimation.css";
 
 const LandingPage = () => {
   return (
@@ -18,24 +17,6 @@ const LandingPage = () => {
       </div>
 
       <div className="z-10 text-center p-4 flex flex-col items-center">
-        <div className="animation-container">
-          <div className="dog">
-            <div className="dog-torso"></div>
-            <div className="dog-head">
-              <div className="dog-ear dog-ear-left"></div>
-              <div className="dog-ear dog-ear-right"></div>
-              <div className="dog-eye dog-eye-left"></div>
-              <div className="dog-eye dog-eye-right"></div>
-              <div className="dog-nose"></div>
-            </div>
-            <div className="dog-leg dog-leg-front dog-leg-left"></div>
-            <div className="dog-leg dog-leg-front dog-leg-right"></div>
-            <div className="dog-leg dog-leg-back dog-leg-left"></div>
-            <div className="dog-leg dog-leg-back dog-leg-right"></div>
-            <div className="dog-tail"></div>
-          </div>
-          <div className="ball"></div>
-        </div>
         <div className="flex items-center">
           <h1 className="text-4xl font-bold text-brown-900">
             Welcome to DogPlus
