@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-
+import dogPlusLogo from "../assets/icons/dogpluslogo.jpg";
+//import dogPlusVideo from "../assets/videos";
 const LandingPage = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col justify-center items-center">
@@ -11,7 +12,7 @@ const LandingPage = () => {
           className="w-full h-full object-cover"
           style={{ filter: "brightness(50%)" }}
         >
-          <source src="/path/to/your/video.mp4" type="video/mp4" />
+          <source src={"video url"} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
@@ -21,11 +22,7 @@ const LandingPage = () => {
           <h1 className="text-4xl font-bold text-brown-900">
             Welcome to DogPlus
           </h1>
-          <img
-            src="./assets/icons/dogpluslogo.jpg"
-            alt="Dog Plus Logo"
-            className="max-h-16"
-          />
+          <img src={dogPlusLogo} alt="Dog Plus Logo" className="max-h-16" />
         </div>
 
         <div className="flex flex-col space-y-4 mt-6">
