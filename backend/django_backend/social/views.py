@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Follow
 from .serializers import FollowSerializer
+from authentication.serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated
 User = get_user_model()
 
@@ -81,9 +82,9 @@ class UserSearchAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # Search for users by exact match
         query = request.query_params.get('username')
         if query:
-            users = User.objects.filter(username=query)
-            return Response({"users": list(users.values('username', 'id'))})
+            users = User.objects.filter(username__icontains=query)
+            serializer = UserSerializer(users, many=True, context={'request': request})
+            return Response({"users": serializer.data})
         return Response({"users": []})
