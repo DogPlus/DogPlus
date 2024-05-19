@@ -86,3 +86,11 @@ class ServiceProviderDashboardView(APIView):
             'bookings': bookings_data
         })
 
+
+class ServiceListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        services = Service.objects.all()
+        serializer = ServiceSerializer(services, many=True)
+        return Response(serializer.data)
