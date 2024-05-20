@@ -17,6 +17,7 @@ import { ServiceProviderDetailPage } from "./pages/serviceProviderDetailPage";
 import { Suspense, lazy } from "react";
 import ServiceProviderServiceDashboard from "./pages/serviceProviderDashboardForServicePage";
 import LandingPage from "./pages/landingPage";
+import MapPage from "./pages/mapPage";
 const ServiceProviderDashboard = lazy(
   () => import("./pages/serviceProviderDashboard")
 );
@@ -40,6 +41,14 @@ function App() {
           element={
             <RequireAuth>
               <ServiceProviderPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="map"
+          element={
+            <RequireAuth>
+              <MapPage />
             </RequireAuth>
           }
         />
