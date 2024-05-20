@@ -109,8 +109,8 @@ export const UserPage = () => {
           type="button"
           className={`flex-1 py-3 px-6 rounded ${
             activeTab === "friends"
-              ? "bg-accent-200 text-white"
-              : "bg-accent-0 text-black"
+              ? "bg-accent-0 text-white"
+              : "ring-2 ring-accent-0 text-black"
           }`}
           onClick={() => setActiveTab("friends")}
         >
@@ -121,8 +121,8 @@ export const UserPage = () => {
           type="button"
           className={`flex-1 py-3 px-6 rounded ${
             activeTab === "bookings"
-              ? "bg-accent-200 text-white"
-              : "bg-accent-0 text-black"
+              ? "bg-accent-0 text-white"
+              : "ring-2 ring-accent-0 text-black"
           }`}
           onClick={() => setActiveTab("bookings")}
         >
