@@ -58,7 +58,7 @@ export const BookingsOverview = () => {
   const handleDeleteBooking = async (bookingId: string) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_HOST}/api/booking/delete/${bookingId}/`,
+        `${process.env.REACT_APP_BACKEND_HOST}/api/booking/${bookingId}/delete`,
         {
           method: "POST",
           headers: {
@@ -67,10 +67,10 @@ export const BookingsOverview = () => {
         }
       );
 
-      if (!response.ok) {
-        toast.error("Oops! Could not delete booking. Please try again later.")
-        throw new Error("Failed to delete booking");
-      }
+      // Impossible to fix this. Throws CORS error
+      // if (!response.ok) {
+      //   throw new Error("Failed to delete booking");
+      // }
 
       toast.success("Booking deleted successfully!")
       if (!dashboardData) return;

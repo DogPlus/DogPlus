@@ -10,6 +10,7 @@ from authentication.models import CustomUser
 from .serializers import BookingSerializer
 from rest_framework import status
 from rest_framework.exceptions import NotFound, PermissionDenied
+import logging
 
 
 class BookingView(APIView):
@@ -76,15 +77,21 @@ class BookingView(APIView):
 
 
 class DeleteBookingView(APIView):
-    def post(self, request, booking_id, *args, **kwargs):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, booking_id, format=None):
         try:
             # Allow deletion if the request user is the owner or the service provider of the booking
             booking = Booking.objects.get(id=booking_id)
+            logging.info("Deleting Booking: %s", booking)
             if booking.user != request.user and booking.service_provider != request.user:
                 raise PermissionDenied("You do not have permission to delete this booking.")
         except Booking.DoesNotExist:
-            raise NotFound("The booking does not exist.")
-            
+            logging.exception("Booking not found.")
+            return Response({"detail": "Booking not found."}, status=status.HTTP_404_NOT_FOUND)
+        except PermissionDenied as e:
+            logging.exception("Permission Denied: User does not have permission to delete the booking.")
+            return Response({"detail": str(e)}, status=status.HTTP_403_FORBIDDEN)
         booking.delete()
         return Response({"detail": "Booking successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
 
