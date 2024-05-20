@@ -10,9 +10,12 @@ def validate_file_size(file):
 
 def validate_video_file_type(file):
     valid_mime_types = ['video/mp4', 'video/mpeg']
-    file_mime_type = file.file.content_type
-    if file_mime_type not in valid_mime_types:
-        raise ValidationError('Unsupported file type. Only MP4 and MPEG are allowed.')
+    if hasattr(file, 'content_type'):
+        file_mime_type = file.content_type
+        if file_mime_type not in valid_mime_types:
+            raise ValidationError('Unsupported file type. Only MP4 and MPEG are allowed.')
+    else:
+        raise ValidationError('Could not determine file type.')
 
 # need to workout a profile_pic solution
 class Post(models.Model):
