@@ -9,7 +9,7 @@ def validate_file_size(file):
 
 
 def validate_video_file_type(file):
-    valid_mime_types = ['video/mp4', 'video/mpeg']
+    valid_mime_types = ['video/mp4', 'video/mpeg', 'video/quicktime', 'video/x-msvideo', 'video/x-ms-wmv', 'video/webm', 'video/3gpp', 'video/3gpp2', 'video/x-matroska', 'video/ogg']
     if hasattr(file, 'content_type'):
         file_mime_type = file.content_type
         if file_mime_type not in valid_mime_types:

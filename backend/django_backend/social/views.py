@@ -56,7 +56,7 @@ class CancelFollowRequestAPIView(APIView):
 
     def delete(self, request, follow_id):
         # Allow deletion only if the follow request is not accepted yet
-        follow_request = get_object_or_404(Follow, id=follow_id, follower=request.user, is_accepted=False)
+        follow_request = get_object_or_404(Follow, id=follow_id, is_accepted=False)
         follow_request.delete()
         return Response({"status": "follow request cancelled"}, status=status.HTTP_204_NO_CONTENT)
 

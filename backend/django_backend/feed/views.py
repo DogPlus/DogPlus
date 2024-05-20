@@ -31,6 +31,7 @@ class CreatePostAPIView(APIView):
                 serializer.save()
                 logging.info(f'Post created by {request.user.username}')
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+            logging.exception(f'Error creating post: {serializer.errors}')
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logging.exception(f'Error creating post {e}')
