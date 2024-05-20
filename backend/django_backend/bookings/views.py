@@ -85,12 +85,13 @@ class DeleteBookingView(APIView):
             booking = Booking.objects.get(id=booking_id)
             logging.info("Deleting Booking: %s", booking)
             if booking.user != request.user and booking.service_provider != request.user:
-                logging.exception("Permission Denied: User does not have permission to delete the booking.")
-                return Response({"detail": "You do not have permission to delete this booking."}, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied("You do not have permission to delete this booking.")
         except Booking.DoesNotExist:
             logging.exception("Booking not found.")
             return Response({"detail": "Booking not found."}, status=status.HTTP_404_NOT_FOUND)
-            
+        except PermissionDenied as e:
+            logging.exception("Permission Denied: User does not have permission to delete the booking.")
+            return Response({"detail": str(e)}, status=status.HTTP_403_FORBIDDEN)
         booking.delete()
         return Response({"detail": "Booking successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
 
