@@ -8,6 +8,7 @@ import { Service } from '../types/services';
 import { toast } from 'react-hot-toast';
 import { Label } from '../components/label';
 
+const end_time = "23:00";
 
 function addMinutesToTime(time: string, minutes: number) {
     var parts = time.split(":");
@@ -40,7 +41,7 @@ export const ServiceProviderBookingPage = () => {
   useEffect(() => {
     const fetchAvailableTimes = async () => { 
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/booking/available/${id}?date=${selectedDate}&start_time=${selectedStartTime}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/booking/available/${id}?date=${selectedDate}&start_time=${selectedStartTime}&end_time=${end_time}`, {
           method: 'GET',
           headers: {
             'Authorization': `Token ${localStorage.getItem("token")}`,
@@ -156,7 +157,7 @@ export const ServiceProviderBookingPage = () => {
             setSelectedDate(formattedDate);
           }}
         />
-        <TimeSelector selectedTime={selectedStartTime} onTimeChange={setSelectedStartTime} />
+        <TimeSelector selectedTime={selectedStartTime} timeInterval={serviceInformation.session_time ? serviceInformation.session_time : 30} onTimeChange={setSelectedStartTime} />
       </div>
       <div className="mb-3">
         <TimePicker selectedTime={selectedTime} startTime={selectedStartTime} availableTimes={availableTimeslots} interval={serivceTimeInterval} onTimeChange={onTimeChange} />

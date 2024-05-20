@@ -29,7 +29,7 @@ class RegisterUserAPIView(APIView):
         else:
             request.data['is_approved'] = False  # Require admin approval for service providers
 
-        serializer = UserSerializer(data=request.data)
+        serializer = UserSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
             user = serializer.save()
@@ -63,7 +63,7 @@ class LoginAPIView(APIView):
             token, _ = Token.objects.get_or_create(user=user)
 
             # Serialize user data
-            user_data = UserSerializer(user).data
+            user_data = UserSerializer(user, context={'request': request}).data
 
             # Attempt to fetch and serialize the service associated with the user
             try:

@@ -1,10 +1,6 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 import useUser from "../../hooks/useUser"; // Adjust the import path as per your project structure
 
-import { ReactComponent as HomeIcon } from "../../assets/icons/home.svg";
-import { ReactComponent as ServiceProviderIcon } from "../../assets/icons/serviceprovider.svg";
-import { ReactComponent as UserIcon } from "../../assets/icons/user.svg";
 import { UserRole } from "../../types/user";
 
 const navlink_default =
@@ -16,9 +12,9 @@ export const Navbar = () => {
   const { user } = useUser();
   return (
     <div className="py-1 px-1 pb-3 z-50 w-full min-h-20 bg-white border-t border-gray-200">
-        <nav className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium gap-4">
+      <nav className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium gap-4">
         <NavLink
-          to="/"
+          to="/home"
           className={({ isActive }) =>
             isActive ? navlink_active : navlink_default
           }
@@ -44,7 +40,7 @@ export const Navbar = () => {
               isActive ? navlink_active : navlink_default
             }
           >
-          <i className="fas fa-briefcase" />
+            <i className="fas fa-briefcase" />
             <span className="text-sm">Admin</span>
           </NavLink>
         )}
