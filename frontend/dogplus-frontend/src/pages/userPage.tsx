@@ -13,6 +13,7 @@ export const UserPage = () => {
   const [usernameToFollow, setUsernameToFollow] = useState("");
   const [searchResults, setSearchResults] = useState<PublicUser[]>([]);
   const [showSearch, setShowSearch] = useState(false);
+  const [activeTab, setActiveTab] = useState("friends");
   const navigate = useNavigate();
   const [refreshKey, setRefreshKey] = useState<number>(0);
 
@@ -79,7 +80,7 @@ export const UserPage = () => {
 
   return (
     <div className="m-4">
-      <div className="flex items-center mb-2">
+      <div className="flex items-center mb-4">
         <img
           className="w-12 h-12 rounded-full mr-3"
           src={user?.profile_image}
@@ -97,49 +98,85 @@ export const UserPage = () => {
         </button>
         <button
           onClick={handleLogout}
-          className="text-red-500 hover:text-white hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm p-2.5"
+          className="text-red-500 hover:text-white hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 ml-2"
           title="Logout"
         >
           <div className="fas fa-sign-out-alt"></div>
         </button>
       </div>
-      <div className="flex mb-2">
+      <div className="flex mb-6 space-x-4">
         <button
           type="button"
-          className="bg-accent-0 hover:bg-accent-100 text-white font-bold py-2 px-4 rounded ml-2"
-          onClick={handleSearchToggle}
+          className={`flex-1 py-3 px-6 rounded ${
+            activeTab === "friends"
+              ? "bg-accent-200 text-white"
+              : "bg-accent-0 text-black"
+          }`}
+          onClick={() => setActiveTab("friends")}
         >
-          Add friend
+          <div className="fas fa-user-friends mr-2"></div>
+          Friends
+        </button>
+        <button
+          type="button"
+          className={`flex-1 py-3 px-6 rounded ${
+            activeTab === "bookings"
+              ? "bg-accent-200 text-white"
+              : "bg-accent-0 text-black"
+          }`}
+          onClick={() => setActiveTab("bookings")}
+        >
+          <div className="fas fa-calendar-alt mr-2"></div>
+          Bookings
         </button>
       </div>
-      {showSearch && (
-        <div>
+      {activeTab === "friends" && (
+        <>
           <div className="flex mb-2">
-            <input
-              type="text"
-              value={usernameToFollow}
-              onChange={(e) => setUsernameToFollow(e.target.value)}
-              placeholder="Enter username to follow"
-              className="border p-2 mr-2"
-            />
             <button
-              className="bg-accent-0 hover:bg-accent-100 text-white font-bold py-2 px-4 rounded"
-              onClick={handleSearch}
+              type="button"
+              className="bg-accent-0 hover:bg-accent-100 text-white font-bold py-2 px-4 rounded ml-2"
+              onClick={handleSearchToggle}
             >
-              Search
+              Add friend
             </button>
           </div>
-          <div>
-            {searchResults.map((user) => {
-              return (
-                <UserCard key={user.id} user={user} onFollow={handleFollow} />
-              );
-            })}
-          </div>
-        </div>
+          {showSearch && (
+            <div>
+              <div className="flex mb-2">
+                <input
+                  type="text"
+                  value={usernameToFollow}
+                  onChange={(e) => setUsernameToFollow(e.target.value)}
+                  placeholder="Enter username to follow"
+                  className="border p-2 mr-2"
+                />
+                <button
+                  className="bg-accent-0 hover:bg-accent-100 text-white font-bold py-2 px-4 rounded"
+                  onClick={handleSearch}
+                >
+                  Search
+                </button>
+              </div>
+              <div>
+                {searchResults.map((user) => {
+                  return (
+                    <UserCard
+                      key={user.id}
+                      user={user}
+                      onFollow={handleFollow}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          <FriendsAndRequests refreshKey={refreshKey} />
+        </>
       )}
-      <FriendsAndRequests refreshKey={refreshKey} />
-      {user.role === UserRole.User && <BookingsOverview />}
+      {activeTab === "bookings" && user.role === UserRole.User && (
+        <BookingsOverview />
+      )}
     </div>
   );
 };
