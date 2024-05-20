@@ -6,4 +6,5 @@ export interface BookingData {
   start_time: string;
   end_time: string;
   user: UserData;
+  serviceProviderName: string;
 }

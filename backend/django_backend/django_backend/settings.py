@@ -149,6 +149,19 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'django_backend.urls'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'
+
+## Production settings for email
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_HOST = 'your-smtp-host.com'  # The SMTP server address
+#EMAIL_PORT = 587  # Commonly 587 for TLS, 465 for SSL, 25 for non-secure
+#EMAIL_USE_TLS = True  # Use True for TLS (recommended), False for non-secure
+#EMAIL_USE_SSL = False  # Use True for SSL (alternative to TLS), False otherwise
+#EMAIL_HOST_USER = 'your-email-username'  # Your SMTP server username
+#EMAIL_HOST_PASSWORD = 'your-email-password'  # Your SMTP server password
+#DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'  # Default 'from' address
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
