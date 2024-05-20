@@ -7,6 +7,7 @@ export interface Post  {
   date_posted: string
   text: string,
   image?: string,
+  video?: string,
   id: number,
   profile_pic: string;
   like_count: number;

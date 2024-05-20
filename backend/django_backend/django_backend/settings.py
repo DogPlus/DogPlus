@@ -17,6 +17,8 @@ import io
 from urllib.parse import urlparse
 import google.auth
 from google.cloud import secretmanager
+import google.cloud.logging
+import logging
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -77,11 +79,39 @@ if CLOUDRUN_SERVICE_URL and CLOUDRUN_API_URL:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     CORS_ALLOWED_ORIGINS = [CLOUDRUN_SERVICE_URL]
     ALLOWED_HOSTS = [urlparse(CLOUDRUN_API_URL).netloc]
+
+    # Configure Google Cloud Logging
+    print("Configuring Google Cloud Logging")
+    # Configure the client to use the Stackdriver Logging API
+    client = google.cloud.logging.Client()
+    client.setup_logging()
+
 else:
     print("Using default allowed hosts (all hosts allowed)")
     CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
     CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
     ALLOWED_HOSTS = ["*"]
+
+    print("Configuring local logging")
+    # Configure the logging settings
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'level': 'INFO',  # Set the logging level to INFO
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'level': 'INFO',
+                'propagate': True,
+            },
+        },
+    }
+
 # [END cloudrun_django_csrf]
 
 
@@ -118,6 +148,19 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'django_backend.urls'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'
+
+## Production settings for email
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_HOST = 'your-smtp-host.com'  # The SMTP server address
+#EMAIL_PORT = 587  # Commonly 587 for TLS, 465 for SSL, 25 for non-secure
+#EMAIL_USE_TLS = True  # Use True for TLS (recommended), False for non-secure
+#EMAIL_USE_SSL = False  # Use True for SSL (alternative to TLS), False otherwise
+#EMAIL_HOST_USER = 'your-email-username'  # Your SMTP server username
+#EMAIL_HOST_PASSWORD = 'your-email-password'  # Your SMTP server password
+#DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'  # Default 'from' address
 
 TEMPLATES = [
     {
@@ -244,4 +287,5 @@ else:
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
+FILE_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024 # 10 Mb limit
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

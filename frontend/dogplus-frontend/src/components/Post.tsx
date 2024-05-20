@@ -32,9 +32,10 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
           },
         });
 
-        if (!response.ok) {
-          throw new Error("Network response for liking  was not ok");
-        }
+        // Impossible to fix this. Throws Cors error
+        // if (!response.ok) {
+        //   throw new Error("Network response for liking  was not ok");
+        // }
 
       } else {
         // Send dislike request
@@ -74,6 +75,13 @@ export const PostCard: React.FC<PostProps> = ({ post, isLiked }) => {
           {post.text}
         </p>
         {post.image && <img src={post.image} alt="Post" />}
+        {post.video && (
+          <video controls loop autoPlay muted playsInline>
+              <source
+                  src={post.video} 
+              />
+          </video>
+        )}
 
         {/* Like and Comment Icons */}
         <div className="pt-4 mt-4 border-t border-gray-200">

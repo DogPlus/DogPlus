@@ -10,6 +10,9 @@ from authentication.models import CustomUser
 from .serializers import BookingSerializer
 from rest_framework import status
 from rest_framework.exceptions import NotFound, PermissionDenied
+from django.core.mail import send_mail
+from django.conf import settings
+import logging
 
 
 class BookingView(APIView):
@@ -73,28 +76,51 @@ class BookingView(APIView):
         )
         return not existing_bookings.exists()
     
-    def delete(self, request, *args, **kwargs):
-        booking_id = kwargs.get('booking_id')
+
+
+class DeleteBookingView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, booking_id, format=None):
         try:
-            # Allow deletion if the request user is the owner or the service provider of the booking
             booking = Booking.objects.get(id=booking_id)
+            logging.info("Deleting Booking: %s", booking)
             if booking.user != request.user and booking.service_provider != request.user:
                 raise PermissionDenied("You do not have permission to delete this booking.")
         except Booking.DoesNotExist:
-            raise NotFound("The booking does not exist.")
+            logging.exception("Booking not found.")
+            return Response({"detail": "Booking not found."}, status=status.HTTP_404_NOT_FOUND)
+        except PermissionDenied as e:
+            logging.exception("Permission Denied: User does not have permission to delete the booking.")
+            return Response({"detail": str(e)}, status=status.HTTP_403_FORBIDDEN)
+        
+         # Determine the recipient of the cancellation email based on who is cancelling the booking
+        if booking.user.id == request.user.id:
+            recipient = booking.service_provider
+        else:
+            recipient = booking.user
             
         booking.delete()
-        return Response({"detail": "Booking successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
 
+        # Send an email to the recipient
+        send_mail(
+            subject='Booking Cancelled',
+            message=f'Your booking for {booking.service.name} on {booking.booking_date.strftime("%Y-%m-%d")} from {booking.start_time} to {booking.end_time} has been cancelled.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[recipient.email],
+        )
+
+        return Response({"detail": "Booking successfully deleted and notification sent."}, status=status.HTTP_204_NO_CONTENT)
 
 class AvailableBookingsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get_available_timeslots(self, service_id, date, start_time, interval):
+    def get_available_timeslots(self, service_id, date, start_time, end_time, interval):
         # Parse date string to datetime object
         date_obj = datetime.strptime(date, '%Y-%m-%d').date()
         # Parse start time string to time object
         start_time_obj = datetime.strptime(start_time, '%H:%M').time()
+        end_time_obj = datetime.strptime(end_time, '%H:%M').time()
         
         # Get bookings for the service provider for the specified date
         bookings = Booking.objects.filter(
@@ -103,22 +129,27 @@ class AvailableBookingsView(APIView):
         ).values_list('start_time', 'end_time')
 
         start_time = datetime.combine(date_obj, start_time_obj)
-        end_time = datetime.combine(date_obj, start_time_obj) + timedelta(hours=3)
+        end_time = datetime.combine(date_obj, end_time_obj)
         
         timeslots = generate_possible_timeslots(start_time, end_time, interval=interval)
         # Filter out timeslots that are already booked
+        print("Possible timeslots")
+        print(timeslots)
         available_timeslots = filter_out_unavailable_timeslots(bookings, timeslots)
         return available_timeslots
 
     def get(self, request, service_id, *args, **kwargs):
         date = request.query_params.get('date')
         start_time = request.query_params.get('start_time')
+        end_time = request.query_params.get('end_time')
         if not date:
             return Response({"error": "Date parameter is missing"}, status=400)
         if not start_time:
             return Response({"error": "start_time parameter is missing"}, status=400)
+        if not end_time:
+            return Response({"error": "end_time parameter is missing"}, status=400)
         interval = Service.objects.get(id=service_id).session_time
-        available_timeslots = self.get_available_timeslots(service_id, date, start_time, interval)
+        available_timeslots = self.get_available_timeslots(service_id, date, start_time, end_time, interval)
         return Response({
             "timeslots": available_timeslots,
             "interval": interval

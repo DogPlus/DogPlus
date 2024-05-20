@@ -86,3 +86,54 @@ class ServiceProviderDashboardView(APIView):
             'bookings': bookings_data
         })
 
+
+class DashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        user_id = request.query_params.get('user_id')
+
+        if user_id:
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if user.is_superuser:
+            return self.get_supervisor_dashboard(user)
+        else:
+            return self.get_user_dashboard(user)
+
+    def get_supervisor_dashboard(self, user):
+        try:
+            service = Service.objects.get(service_provider=user)
+            service_data = ServiceSerializer(service).data
+            bookings = Booking.objects.filter(service_provider=user).order_by('-booking_date')
+            bookings_data = BookingSerializer(bookings, many=True).data
+        except Service.DoesNotExist:
+            service_data = None 
+            bookings_data = []
+
+        return Response({
+            'service': service_data,
+            'bookings': bookings_data
+        })    
+
+    def get_user_dashboard(self, user):
+        try:
+            bookings = Booking.objects.filter(user=user).order_by('-booking_date')
+            bookings_data = BookingSerializer(bookings, many=True).data
+        except Booking.DoesNotExist:
+            bookings_data = []
+
+        return Response({'bookings': bookings_data})
+
+
+class ServiceListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        services = Service.objects.all()
+        serializer = ServiceSerializer(services, many=True)
+        return Response(serializer.data)
