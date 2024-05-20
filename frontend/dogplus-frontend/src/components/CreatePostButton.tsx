@@ -63,6 +63,7 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
         // Basic check for a video file
         setPostVideo(file);
       } else {
+        toast.error("Invalid file type. Must be either video or image");
         setPostImage(null);
         setPostVideo(null);
       } 
