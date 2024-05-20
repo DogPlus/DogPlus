@@ -22,6 +22,8 @@ const headerRender = (location: Location, navigate: NavigateFunction) => {
     return <Header title="Service Booking" back={true} />;
   } else if (location.pathname.includes("/serviceproviders/")) {
     return <Header title="Service Provider" back={true} />;
+  } else if (location.pathname.includes("/map")) {
+    return <Header title="Map" back={true} />;
   }
 };
 
