@@ -123,8 +123,6 @@ export const BookingsOverview = () => {
         };
       }
 
-      console.log(parsedBookings);
-
       return {
         service: parsedService,
         bookings: parsedBookings,
@@ -187,7 +185,6 @@ export const BookingsOverview = () => {
       </div>
     );
 
-  console.log(bookingsForSelectedDate);
   return (
     <div className="m-3 p-4 bg-white rounded-lg shadow-lg">
       <div className="flex items-center justify-between mb-4">
