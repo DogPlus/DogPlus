@@ -4,12 +4,15 @@ import ServiceProviderSearch from "../components/ServiceProviderSearch";
 import { ServiceProvider } from '../types/serviceProvider';
 import ServiceProviderFilter from '../components/ServiceProviderFilter';
 import { Service } from '../types/services';
+import { useNavigate } from 'react-router-dom';
 
 export const ServiceProviderPage = () => {
     const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>([]);
     const [displayedServiceProviders, setDisplayedServiceProviders] = useState<ServiceProvider[]>([]);
     const [services, setServices] = useState<Service[]>([]);
     const [selectedServices, setSelectedServices] = useState<Service[]>([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProviders = async () => {
@@ -66,6 +69,15 @@ export const ServiceProviderPage = () => {
 
     return (
         <div>
+
+            <div className="flex justify-center items-center p-2">
+              <button 
+                onClick={() => navigate("/map")}
+                className='flex justify-center items-center w-4/5 p-2 rounded-md font-bold text-white cursor-pointer bg-accent-0'>
+                  <i className="fas fa-map-marker-alt mr-2"></i>
+                  Search on map
+              </button>
+            </div>
             <ServiceProviderSearch onSearchResults={handleSearchResults} />
             <ServiceProviderFilter services={services} onFilterChange={handleFilterChange} />
             <ServiceProviderList serviceProviders={displayedServiceProviders} />
