@@ -56,12 +56,12 @@ export const CreatePostButton: React.FC<CreatePostButtonProps> = ({
   const handleMediaUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      if (file.type.match("image.*")) {
-        // Basic check for an image file
+      if (file.type.startsWith("image/")) {
         setPostImage(file);
-      } else if (file.type.match("video.*")) {
-        // Basic check for a video file
+        setPostVideo(null); // clear video if an image is uploaded
+      } else if (file.type.startsWith("video/")) {
         setPostVideo(file);
+        setPostImage(null); // clear image if a video is uploaded
       } else {
         toast.error("Invalid file type. Must be either video or image");
         setPostImage(null);
