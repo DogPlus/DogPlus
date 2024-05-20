@@ -8,6 +8,7 @@ from .models import Post
 from authentication.models import CustomUser
 from .serializers import CommentSerializer, PostSerializer
 from django.contrib.auth.models import User
+import logging
 
 class CreatePostAPIView(APIView):
     def get(self, request, format=None):
@@ -16,19 +17,24 @@ class CreatePostAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        # Create a mutable copy of the request.data
-        mutable_data = request.data.copy()
-        mutable_data['author'] = request.user.id
+        try:    
+            # Create a mutable copy of the request.data
+            mutable_data = request.data.copy()
+            mutable_data['author'] = request.user.id
 
-        serializer = PostSerializer(data=mutable_data, context={'request': request, 'nested': True})
-        if serializer.is_valid():
-            # Get the CustomUser instance corresponding to the request.user.id
-            author_instance = CustomUser.objects.get(id=request.user.id)
-            # Set the author field to the author instance
-            serializer.validated_data['author'] = author_instance
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer = PostSerializer(data=mutable_data, context={'request': request, 'nested': True})
+            if serializer.is_valid():
+                # Get the CustomUser instance corresponding to the request.user.id
+                author_instance = CustomUser.objects.get(id=request.user.id)
+                # Set the author field to the author instance
+                serializer.validated_data['author'] = author_instance
+                serializer.save()
+                logging.info(f'Post created by {request.user.username}')
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logging.exception(f'Error creating post {e}')
+            return Response({'error': f'Error creating post {e}'}, status=status.HTTP_400_BAD_REQUEST)
 
 class AllPostsFromSpecificUserAPIView(generics.ListAPIView):
     serializer_class = PostSerializer

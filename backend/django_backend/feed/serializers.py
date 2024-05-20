@@ -13,7 +13,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'author', 'text', 'image', 'date_posted', 'like_count', 'comment_count']
+        fields = ['id', 'author', 'text', 'image', 'video', 'date_posted', 'like_count', 'comment_count']
 
     def get_author(self, obj):
         if self.context.get('nested', False):

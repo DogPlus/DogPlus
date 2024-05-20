@@ -17,6 +17,7 @@ def create_data(apps, schema_editor):
     post2 = Post.objects.create(
         author=user4,
         text="I have a beautiful golden retriever. He is very friendly and loves to play fetch. 🐶",
+        video="samplevideo.mp4",
         comment_count=1
     )
     post3 = Post.objects.create(
@@ -65,6 +66,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('authentication', '0004_auto_20240502_1649'),
         ('feed', '0003_alter_post_image'),
+        ('feed', '0005_post_video'),
     ]
 
     operations = [
