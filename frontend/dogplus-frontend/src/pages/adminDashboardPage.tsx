@@ -90,7 +90,7 @@ export const AdminDashboard = () => {
             <div className="flex flex-row justify-center items-center">
               <button
                 onClick={() => approveServiceProvider(user.id)}
-                className="px-4 py-2 text-sm font-medium leading-none text-white transition duration-300 rounded-md hover:bg-purple-blue-600 focus:outline-none focus:ring-2 focus:ring-purple-blue-100 bg-purple-blue-500 mr-2"
+                className="px-4 py-2 text-sm font-medium leading-none text-white transition duration-300 rounded-md hover:bg-purple-blue-600 focus:outline-none focus:ring-2 focus:ring-purple-blue-100 bg-blue-500 mr-2"
               >
                 Approve
               </button>
