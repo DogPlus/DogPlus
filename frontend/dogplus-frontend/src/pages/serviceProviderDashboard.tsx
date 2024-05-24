@@ -107,7 +107,7 @@ const ServiceProviderDashboard: React.FC = () => {
       {!service ? (
         <button
           onClick={() => setModalOpen(true)}
-          className="bg-purple-blue-500 hover:bg-purple-blue-600 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-purple-blue-600 text-white font-bold py-2 px-4 rounded"
         >
           Create Service
         </button>
