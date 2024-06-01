@@ -2,39 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../components/common/loading';
-import { PublicUser } from '../types/user';
+import useUser from '../hooks/useUser';
+import { ServiceProviderData, UserData } from '../types/user';
+
+// Type guard to check if 'user' is of type 'UserData'
+function isUserData(user: any): user is UserData {
+  return 'role' in user && 'id' in user && 'username' in user && 'email' in user;
+}
+
+// Type guard to check if 'user' is of type 'ServiceProviderData'
+function isServiceProviderData(user: any): user is ServiceProviderData {
+  return 'role' in user && 'id' in user && 'username' in user && 'email' in user;
+}
 
 export const UserEditPage = () => {
-  const [user, setUser] = useState<PublicUser | null>(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/api/auth/user/${localStorage.getItem('user_id')}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Token ${localStorage.getItem('token')}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data);
-        } else {
-          // Handle error
-          console.error('Failed to fetch user data');
-          toast.error('Failed to fetching user data');
-        }
-      } catch (error) {
-        // Handle fetch error
-        console.error('Error fetching user data:', error);
-        toast.error('Failed to fetching user data');
-      }
-    };
-
-    fetchUser();
-  }, []);
+  const { user, setUser } = useUser();
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -57,8 +40,13 @@ export const UserEditPage = () => {
         if (response.ok) {
           // Assuming the response contains updated user data
           const data = await response.json();
-          setUser(data);
-          navigate(`/user`);
+          if (data && (isUserData(user) || isServiceProviderData(user))) {
+            // Update profile image on user
+            // What is wrong here? 
+            const userData : UserData | ServiceProviderData = { ...user, profile_image: data.profile_image };
+            setUser(userData);
+            navigate(`/user`);
+          }
         } else {
           // Handle error
           console.error('Failed to update user image');
@@ -71,6 +59,8 @@ export const UserEditPage = () => {
       }
     }
   };
+
+
   if (!user) {
     return <Loading />;
   }
