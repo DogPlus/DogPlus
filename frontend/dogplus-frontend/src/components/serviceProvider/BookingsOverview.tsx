@@ -59,7 +59,6 @@ export const BookingsOverview = () => {
   }, [user]);
 
   const handleDeleteBooking = async (bookingId: string) => {
-    toast.success("Booking deleted successfully!");
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_HOST}/api/booking/${bookingId}/delete`,
@@ -81,7 +80,6 @@ export const BookingsOverview = () => {
       //toast.error("Oops! Could not delete booking. Please try again later.");
     }
 
-    toast.success("Booking deleted successfully!");
     if (!dashboardData) return;
     setDashboardData({
       ...dashboardData,
@@ -89,6 +87,7 @@ export const BookingsOverview = () => {
         (booking) => booking.id !== bookingId
       ),
     });
+    toast.success("Booking deleted successfully!");
     setModalOpen(false);
   };
   const parseDashboardData = (data: any): DashboardData => {
