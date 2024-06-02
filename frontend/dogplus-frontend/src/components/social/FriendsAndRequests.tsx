@@ -67,18 +67,22 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
   };
 
   const cancelRequest = async (requestId: number) => {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_HOST}/api/social/cancel-request/${requestId}/`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Token ${localStorage.getItem("token")}`,
-        },
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_HOST}/api/social/cancel-request/${requestId}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to cancel request: ${response.status}`);
       }
-    );
-    if (!response.ok) {
-      console.error("Failed to cancel request:", response.status);
-      //toast.error("Failed to cancel friend request");
+    }
+    catch (error) {
+      console.error("Failed to cancel request:", error);
     }
     setSentRequests(sentRequests.filter((req) => req.id !== requestId));
   };
