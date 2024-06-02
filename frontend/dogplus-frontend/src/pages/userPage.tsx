@@ -64,14 +64,13 @@ export const UserPage = () => {
         }
       );
 
-      if (response.ok) {
-        localStorage.removeItem("token");
-        navigate("/auth");
-      }
     } catch (error) {
       console.error("Logout failed", error);
-      toast.error("Failed to logout");
+      //toast.error("Failed to logout");
     }
+
+    localStorage.removeItem("token");
+    navigate("/auth");
   };
 
   if (!user) {

@@ -76,12 +76,11 @@ const FriendsAndRequests = (props: FriendsAndRequestsProps) => {
         },
       }
     );
-    if (response.ok) {
-      setSentRequests(sentRequests.filter((req) => req.id !== requestId));
-    } else {
+    if (!response.ok) {
       console.error("Failed to cancel request:", response.status);
-      toast.error("Failed to cancel friend request");
+      //toast.error("Failed to cancel friend request");
     }
+    setSentRequests(sentRequests.filter((req) => req.id !== requestId));
   };
 
   const acceptRequest = async (requestId: number) => {
