@@ -12,7 +12,7 @@ const UserCard = (props: UserCardProps) => {
         <img
           src={props.user.profile_image}
           alt="Profile"
-          className="w-10 h-10 rounded-full mr-3"
+          className="w-10 h-10 rounded-full mr-3 object-cover"
         />
         <div>
           <h3 className="text-lg font-semibold">{props.user.username}</h3>

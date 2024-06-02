@@ -64,14 +64,13 @@ export const UserPage = () => {
         }
       );
 
-      if (response.ok) {
-        localStorage.removeItem("token");
-        navigate("/auth");
-      }
     } catch (error) {
       console.error("Logout failed", error);
-      toast.error("Failed to logout");
+      //toast.error("Failed to logout");
     }
+
+    localStorage.removeItem("token");
+    navigate("/auth");
   };
 
   if (!user) {
@@ -82,7 +81,7 @@ export const UserPage = () => {
     <div className="m-4">
       <div className="flex items-center mb-4">
         <img
-          className="w-12 h-12 rounded-full mr-3"
+          className="w-12 h-12 rounded-full mr-3 object-cover"
           src={user?.profile_image}
           alt="Profile Image"
         />

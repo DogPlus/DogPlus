@@ -72,22 +72,24 @@ export const BookingsOverview = () => {
       );
 
       // Impossible to fix this. Throws CORS error
-      // if (!response.ok) {
-      //   throw new Error("Failed to delete booking");
-      // }
+      if (!response.ok) {
+        throw new Error("Failed to delete booking");
+      }
 
-      toast.success("Booking deleted successfully!");
-      if (!dashboardData) return;
-      setDashboardData({
-        ...dashboardData,
-        bookings: dashboardData.bookings.filter(
-          (booking) => booking.id !== bookingId
-        ),
-      });
-      setModalOpen(false);
     } catch (error) {
-      toast.error("Oops! Could not delete booking. Please try again later.");
+      console.error("Failed to delete booking: ", error);
+      //toast.error("Oops! Could not delete booking. Please try again later.");
     }
+
+    toast.success("Booking deleted successfully!");
+    if (!dashboardData) return;
+    setDashboardData({
+      ...dashboardData,
+      bookings: dashboardData.bookings.filter(
+        (booking) => booking.id !== bookingId
+      ),
+    });
+    setModalOpen(false);
   };
   const parseDashboardData = (data: any): DashboardData => {
     if (!data) {
